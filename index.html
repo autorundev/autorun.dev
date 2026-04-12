@@ -121,11 +121,12 @@
   .terminal{
     max-width:60ch;
     width:100%;
+    margin:0 auto;
   }
   @media(min-width:640px){
     .terminal{max-width:80ch}
   }
-  .line{white-space:pre-wrap;word-break:break-all;overflow-wrap:anywhere}
+  .line{white-space:pre-wrap;overflow-wrap:anywhere;padding-left:4ch;text-indent:-4ch}
   .cmd{color:var(--fg-0);font-weight:500}
   .dim{color:var(--fg-2)}
   .blank{height:var(--lh)}
@@ -155,7 +156,7 @@
   .proj-link:hover .proj-arrow{opacity:1}
 
   /* interactive input */
-  .input-line{display:flex;align-items:center}
+  .input-line{display:flex;align-items:flex-start}
   .input-line::before{
     content:'[>]';
     color:var(--state-action);
@@ -163,7 +164,7 @@
     margin-right:.6em;
   }
   .input-wrap{display:flex;align-items:center;min-width:0;position:relative}
-  #ghost{color:var(--fg-3);font:inherit;font-weight:500;pointer-events:none;white-space:nowrap}
+  #ghost{color:var(--fg-3);font:inherit;font-weight:500;pointer-events:none;white-space:nowrap;display:inline-block;width:0;overflow:visible}
   #input{
     background:none;
     border:none;
@@ -172,7 +173,7 @@
     font-weight:500;
     outline:none;
     caret-color:transparent;
-    white-space:nowrap;
+    overflow-wrap:anywhere;
     padding:0;margin:0;
     min-height:var(--lh);
     -webkit-user-modify:read-write-plaintext-only;
@@ -565,6 +566,16 @@ input.addEventListener('keydown', async e => {
 
   if (e.key !== 'Enter' || processing) return;
   e.preventDefault();
+
+  // \ + Enter = line continuation
+  if (input.textContent.endsWith('\\')) {
+    input.textContent = input.textContent.slice(0, -1);
+    const sel = window.getSelection();
+    sel.selectAllChildren(input);
+    sel.collapseToEnd();
+    return;
+  }
+
   clearSuggest();
   const raw = input.textContent.trim();
   const val = raw.toLowerCase();
