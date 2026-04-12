@@ -440,10 +440,22 @@ input.addEventListener('keydown', async e => {
       });
     }
   } else {
-    const out = document.createElement('div');
-    out.className = 'line';
-    out.innerHTML = `<span class="st st-alert">[?]</span> <span class="dim">command not found: ${esc(val)}. try</span> <span class="cmd">help</span>`;
-    term.insertBefore(out, inputLine);
+    // ask backend for easter eggs
+    try {
+      const res = await fetch('/api/cmd', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({input: val, lang: 'en'}),
+      });
+      const data = await res.json();
+      if (data.lines && data.lines.length > 0) {
+        renderLines(data.lines);
+      } else {
+        renderNotFound(val);
+      }
+    } catch {
+      renderNotFound(val);
+    }
   }
 
   const blank = document.createElement('div');
@@ -452,6 +464,35 @@ input.addEventListener('keydown', async e => {
 
   inputLine.scrollIntoView({block:'nearest'});
 });
+
+// ── render helpers ───────────────────────────────
+function renderLines(lines) {
+  lines.forEach(l => {
+    const out = document.createElement('div');
+    out.className = 'line';
+    let html = '';
+    if (l.mark) html += `<span class="st st-${markClass(l.mark)}">${esc(l.mark)}</span> `;
+    if (l.indent) html += '   ';
+    const text = l.muted ? `<span class="dim">${esc(l.text)}</span>` : esc(l.text);
+    html += l.bold ? `<strong>${text}</strong>` : text;
+    if (l.state) out.innerHTML = html.replace(esc(l.text), `<span class="st st-${l.state}">${esc(l.text)}</span>`);
+    else out.innerHTML = html;
+    term.insertBefore(out, inputLine);
+  });
+}
+
+function renderNotFound(val) {
+  const out = document.createElement('div');
+  out.className = 'line';
+  out.innerHTML = `<span class="st st-alert">[?]</span> <span class="dim">command not found: ${esc(val)}. try</span> <span class="cmd">help</span>`;
+  term.insertBefore(out, inputLine);
+}
+
+function markClass(mark) {
+  const m = mark.replace(/[\[\]]/g, '');
+  const map = {'*':'core','>':'action',':':'presence','.':'idle','!':'alert','x':'stop','+':'live','?':'alert','-':'idle','/':'core','\\':'core'};
+  return map[m] || 'core';
+}
 
 // ── focus management ──────────────────────────────
 function focusEnd() {
