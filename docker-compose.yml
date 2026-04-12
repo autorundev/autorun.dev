@@ -8,6 +8,7 @@ services:
       - ./og.png:/usr/share/nginx/html/og.png:ro
       - ./favicon.ico:/usr/share/nginx/html/favicon.ico:ro
       - ./favicon-32.png:/usr/share/nginx/html/favicon-32.png:ro
+      - ./fonts:/usr/share/nginx/html/fonts:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - autorun-api

@@ -16,10 +16,21 @@
 <meta name="twitter:title" content="[*] autorun.dev">
 <meta name="twitter:description" content="ai-native tools & products">
 <meta name="twitter:image" content="https://autorun.dev/og.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
 <style>
+  @font-face{
+    font-family:'JetBrains Mono';
+    src:url('/fonts/JetBrainsMono-Medium.woff2') format('woff2');
+    font-weight:500;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:'JetBrains Mono';
+    src:url('/fonts/JetBrainsMono-ExtraBold.woff2') format('woff2');
+    font-weight:800;
+    font-style:normal;
+    font-display:swap;
+  }
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
   /* === DARK THEME === */
@@ -91,19 +102,19 @@
     }
   }
 
-  html{font-size:14px}
+  html{--lh:18px;font-size:14px}
   body{
     background:var(--bg-0);
     color:var(--fg-0);
     font-family:'JetBrains Mono',ui-monospace,monospace;
     font-size:14px;
-    line-height:18px;
+    line-height:var(--lh);
     letter-spacing:0;
     font-variant-ligatures:none;
     font-feature-settings:'liga' 0,'calt' 0;
     min-height:100dvh;
     margin:0;
-    padding:max(24px,4vh) max(16px,4vw);
+    padding:calc(var(--lh)*2) max(1ch,4vw);
     -webkit-font-smoothing:antialiased;
     transition:background .3s ease-out,color .3s ease-out;
   }
@@ -117,7 +128,7 @@
   .line{white-space:pre-wrap;word-break:break-all;overflow-wrap:anywhere}
   .cmd{color:var(--fg-0);font-weight:500}
   .dim{color:var(--fg-2)}
-  .blank{height:18px}
+  .blank{height:var(--lh)}
 
   /* state marks */
   .st{font-weight:500;display:inline;}
@@ -171,7 +182,7 @@
     caret-color:transparent;
     white-space:nowrap;
     padding:0;margin:0;
-    min-height:18px;
+    min-height:var(--lh);
     -webkit-user-modify:read-write-plaintext-only;
   }
   #input br{display:none}
@@ -179,7 +190,7 @@
   /* block cursor */
   .cursor{
     display:inline-block;
-    width:1ch;height:18px;
+    width:1ch;height:var(--lh);
     background:var(--fg-0);
     vertical-align:baseline;
     animation:blink 1s steps(1) infinite;
