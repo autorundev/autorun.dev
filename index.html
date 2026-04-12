@@ -15,7 +15,7 @@
     --link:#93c5fd;
     --prompt:#a78bfa;
   }
-  html{font-size:clamp(8px,calc((100vw - 32px)/43),15px)}
+  html{font-size:clamp(8px,calc((100vw - 32px)/36),15px)}
   body{
     background:var(--bg);
     color:var(--fg);
@@ -107,11 +107,13 @@
 <body>
 <div class="terminal" id="term">
 
-  <div class="intro"><span class="accent">            _                          _            _</span></div>
-  <div class="intro"><span class="accent">  __ _ _  _| |_ ___ _ _ _  _ _ _    __| |_____ __  | |_ ___ __ _ _ __</span></div>
-  <div class="intro"><span class="accent"> / _` | || |  _/ _ \ '_| || | ' \ _/ _` / -_) V /  |  _/ -_) _` | '  \</span></div>
-  <div class="intro"><span class="accent"> \__,_|\_,_|\__\___/_|  \_,_|_||_(_)__,_\___|\_/    \__\___\__,_|_|_|_|</span></div>
-  <div class="line dim" style="margin-top:.3rem"> v0.1.0 — ai-native tools &amp; products</div>
+  <div class="intro"><span class="accent">           _                          _</span></div>
+  <div class="intro"><span class="accent"> __ _ _  _| |_ ___ _ _ _  _ _ _    __| |_____ __</span></div>
+  <div class="intro"><span class="accent">/ _` | || |  _/ _ \ '_| || | ' \ _/ _` / -_) V /</span></div>
+  <div class="intro"><span class="accent">\__,_|\_,_|\__\___/_|  \_,_|_||_(_)__,_\___|\_/</span></div>
+  <div class="blank"></div>
+  <div class="line indent dim">autorun.dev — ai-native tools &amp; products</div>
+  <div class="line indent dim">v0.1.0</div>
   <div class="blank"></div>
   <div class="line"><span class="prompt"></span><span class="dim">booting autorun.dev ...</span> <span class="accent">ok</span></div>
   <div class="line"><span class="prompt"></span><span class="dim">agents online:</span> 3</div>
@@ -140,29 +142,32 @@
       '<span class="dim indent">clear</span>    — wipe the screen',
 
     about: () =>
-      '<span class="indent">autorun.dev builds ai-native products that run</span>\n' +
-      '<span class="indent">where people already live — messengers, games,</span>\n' +
-      '<span class="indent">markets. small crew. tight loops. no meetings</span>\n' +
-      '<span class="indent">that could\'ve been a commit.</span>\n' +
+      '<span class="indent">autorun.dev builds ai-native products that</span>\n' +
+      '<span class="indent">run where people already live — messengers,</span>\n' +
+      '<span class="indent">games, markets. small crew. tight loops.</span>\n' +
+      '<span class="indent">no meetings that could\'ve been a commit.</span>\n' +
       '\n' +
-      '<span class="indent dim">thesis: the best software in 2026 doesn\'t have</span>\n' +
-      '<span class="indent dim">a ui. it has an agent.</span>',
+      '<span class="indent dim">thesis: the best software in 2026 doesn\'t</span>\n' +
+      '<span class="indent dim">have a ui. it has an agent.</span>',
 
     team: () =>
-      '<span class="indent">small, senior, remote. product engineers who</span>\n' +
-      '<span class="indent">ship end-to-end — design, code, growth, ops.</span>\n' +
+      '<span class="indent">small, senior, remote. product engineers</span>\n' +
+      '<span class="indent">who ship end-to-end — design, code, growth,</span>\n' +
+      '<span class="indent">ops.</span>\n' +
       '\n' +
       '<span class="indent prompt"></span><span class="dim">whoami</span>\n' +
-      '<span class="indent2">founder:   <span style="color:var(--fg)">anton frolov</span> — vibe coder (unironically)</span>\n' +
-      '<span class="indent2">crew:      engineers, designers, degens</span>\n' +
-      '<span class="indent2">hiring:    always, if you\'re the real thing.</span>\n' +
-      '<span class="indent2">           → <a href="mailto:hello@autorun.dev" style="color:var(--link);text-decoration:none">hello@autorun.dev</a></span>',
+      '<span class="indent2">founder:  <span style="color:var(--fg)">anton frolov</span></span>\n' +
+      '<span class="indent2">          vibe coder (unironically)</span>\n' +
+      '<span class="indent2">crew:     engineers, designers, degens</span>\n' +
+      '<span class="indent2">hiring:   always, if you\'re the real thing.</span>\n' +
+      '<span class="indent2">          → <a href="mailto:hello@autorun.dev" style="color:var(--link);text-decoration:none">hello@autorun.dev</a></span>',
 
     projects: () => '__projects__',
 
     stack: () =>
-      '<span class="indent">claude · typescript · python · telegram · sqlite-and-prayers</span>\n' +
-      '<span class="indent dim">vps + tmux + vibes. we deploy on fridays.</span>',
+      '<span class="indent">claude · typescript · python · telegram</span>\n' +
+      '<span class="indent">sqlite-and-prayers · vps · tmux · vibes</span>\n' +
+      '<span class="indent dim">we deploy on fridays.</span>',
 
     clear: () => '__clear__',
   };
@@ -184,7 +189,6 @@
       <div class="project-status stealth">[status: stealth]</div>
     </div>`;
 
-  // prevent paste formatting, line breaks
   input.addEventListener('paste', e => {
     e.preventDefault();
     const text = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\n/g,'');
