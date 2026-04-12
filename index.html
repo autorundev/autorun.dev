@@ -149,6 +149,11 @@
   }
 
 
+  /* project links */
+  .proj-link{display:block;text-decoration:none;color:inherit;cursor:pointer}
+  .proj-arrow{color:var(--fg-0);opacity:0;transition:opacity .15s}
+  .proj-link:hover .proj-arrow{opacity:1}
+
   /* interactive input */
   .input-line{display:flex;align-items:center}
   .input-line::before{
@@ -461,15 +466,19 @@ const commands = {
 const projectsHTML = `
   <div class="line"><span class="st st-core">[*]</span> things we ship</div>
   <div class="blank"></div>
-  <a href="https://vectoros.ai" target="_blank" rel="noopener" class="line" style="display:block;text-decoration:none;color:inherit"><span class="st st-presence">[:]</span> <span style="color:var(--brand-vectoros)">vectoros</span></a>
-  <div class="line">    ai companion for telegram.</div>
-  <div class="line">    second brain powered by claude.</div>
-  <div class="line">    <span class="st st-live">[status: live]</span></div>
+  <a href="https://vectoros.ai" target="_blank" rel="noopener" class="proj-link">
+    <div class="line"><span class="st st-presence">[:]</span> <span style="color:var(--brand-vectoros)">vectoros</span><span class="proj-arrow"> -></span></div>
+    <div class="line">    ai companion for telegram.</div>
+    <div class="line">    second brain powered by claude.</div>
+    <div class="line">    <span class="st st-live">[status: live]</span></div>
+  </a>
   <div class="blank"></div>
-  <a href="https://playsnap.bot" target="_blank" rel="noopener" class="line" style="display:block;text-decoration:none;color:inherit"><span class="st st-presence">[:]</span> <span style="color:var(--brand-playsnap-play)">play</span><span style="color:var(--brand-playsnap-snap)">snap</span></a>
-  <div class="line">    minimalist hockey for telegram.</div>
-  <div class="line">    one button. perfect timing. no tutorial.</div>
-  <div class="line">    <span class="st st-live">[status: live]</span></div>
+  <a href="https://playsnap.bot" target="_blank" rel="noopener" class="proj-link">
+    <div class="line"><span class="st st-presence">[:]</span> <span style="color:var(--brand-playsnap-play)">play</span><span style="color:var(--brand-playsnap-snap)">snap</span><span class="proj-arrow"> -></span></div>
+    <div class="line">    minimalist hockey for telegram.</div>
+    <div class="line">    one button. perfect timing. no tutorial.</div>
+    <div class="line">    <span class="st st-live">[status: live]</span></div>
+  </a>
   <div class="blank"></div>
   <div class="line"><span class="st st-idle">[.]</span> <span style="color:var(--fg-1)">********</span></div>
   <div class="line" style="color:var(--fg-1)">    ********* *** ******.</div>
