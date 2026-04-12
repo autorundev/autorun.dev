@@ -102,18 +102,20 @@
     font-variant-ligatures:none;
     font-feature-settings:'liga' 0,'calt' 0;
     min-height:100dvh;
-    display:flex;
-    justify-content:center;
-    padding:2rem 16px;
+    margin:0;
+    padding:max(24px,4vh) max(16px,4vw);
     -webkit-font-smoothing:antialiased;
     transition:background .3s ease-out,color .3s ease-out;
   }
   .terminal{
-    max-width:640px;
+    max-width:60ch;
     width:100%;
     overflow-x:hidden;
   }
-  .line{margin-bottom:.15rem;white-space:pre-wrap}
+  @media(min-width:640px){
+    .terminal{max-width:80ch}
+  }
+  .line{white-space:pre-wrap;word-break:break-all;overflow-wrap:anywhere}
   .cmd{color:var(--fg-0);font-weight:500}
   .dim{color:var(--fg-2)}
   .blank{height:18px}
@@ -184,10 +186,10 @@
   /* block cursor */
   .cursor{
     display:inline-block;
-    width:8px;height:18px;
+    width:1ch;height:18px;
     background:var(--fg-0);
     vertical-align:baseline;
-    animation:blink 1s step-end infinite;
+    animation:blink 1s steps(1) infinite;
     flex-shrink:0;
   }
   @keyframes blink{50%{opacity:0}}
@@ -203,45 +205,98 @@
 </head>
 <body>
 <div class="terminal" id="term">
-
-  <div class="logo-wrap" id="logo">
-    <div class="logo-mark"><span class="mark-char" id="mark">[*]</span>autorun.dev</div>
-  </div>
-  <div class="line dim">ai-native tools &amp; products</div>
-  <div class="line dim">v0.1.0</div>
-  <div class="blank"></div>
-  <div class="line"><span class="st st-idle">[.]</span> <span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span></div>
-  <div class="line"><span class="st st-presence">[:]</span> <span class="dim">agents online:</span> 3</div>
-  <div class="line"><span class="st st-presence">[:]</span> <span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>
-  <div class="blank"></div>
-
-  <div class="input-line">
+  <div class="input-line" style="display:none">
     <div class="input-wrap">
       <div id="input" contenteditable="true" role="textbox" spellcheck="false" autocorrect="off" autocapitalize="off"></div><span class="cursor" id="cursor"></span>
     </div>
   </div>
-
 </div>
 
-<template id="boot-template">
-  <div class="logo-wrap" id="logo">
-    <div class="logo-mark"><span class="mark-char" id="mark">[*]</span>autorun.dev</div>
-  </div>
-  <div class="line dim">ai-native tools &amp; products</div>
-  <div class="line dim">v0.1.0</div>
-  <div class="blank"></div>
-  <div class="line"><span class="st st-idle">[.]</span> <span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span></div>
-  <div class="line"><span class="st st-presence">[:]</span> <span class="dim">agents online:</span> 3</div>
-  <div class="line"><span class="st st-presence">[:]</span> <span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>
-  <div class="blank"></div>
-</template>
 
 <script>
 const term = document.getElementById('term');
 const input = document.getElementById('input');
 const inputLine = input.closest('.input-line');
-let markEl = document.getElementById('mark');
-let logoEl = document.getElementById('logo');
+let markEl, logoEl;
+
+// ── reduced motion ──────────────────────────────
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const CHAR_DELAY = reducedMotion ? 0 : 15;
+const LINE_PAUSE = reducedMotion ? 0 : 200;
+const LINE_DELAY = reducedMotion ? 0 : 40;
+
+// ── follow-tail scroll ──────────────────────────
+let isFollowing = true;
+window.addEventListener('scroll', () => {
+  const dist = document.documentElement.scrollHeight - window.scrollY - window.innerHeight;
+  isFollowing = dist < 50;
+});
+function scrollToBottom() {
+  window.scrollTo(0, document.documentElement.scrollHeight);
+}
+function forceFollow() {
+  isFollowing = true;
+  scrollToBottom();
+}
+
+// ── boot sequence (typewriter) ──────────────────
+const bootLines = [
+  {html: '<div class="logo-wrap" id="logo"><div class="logo-mark"><span class="mark-char" id="mark">[*]</span>autorun.dev</div></div>', raw: '[*] autorun.dev', isLogo: true},
+  {html: '<div class="line dim">ai-native tools &amp; products</div>', raw: 'ai-native tools & products'},
+  {html: '<div class="line dim">v0.1.0</div>', raw: 'v0.1.0'},
+  {html: '<div class="blank"></div>', raw: '', noType: true},
+  {html: '<div class="line"><span class="st st-idle">[.]</span> <span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span></div>', raw: '[.] booting autorun.dev ... ok'},
+  {html: '<div class="line"><span class="st st-presence">[:]</span> <span class="dim">agents online:</span> 3</div>', raw: '[:] agents online: 3'},
+  {html: '<div class="line"><span class="st st-presence">[:]</span> <span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>', raw: '[:] type help to see available commands.'},
+  {html: '<div class="blank"></div>', raw: '', noType: true},
+];
+
+async function renderBoot() {
+  for (const line of bootLines) {
+    if (line.noType) {
+      const el = document.createElement('div');
+      el.className = 'blank';
+      term.insertBefore(el, inputLine);
+      await sleep(LINE_PAUSE);
+      continue;
+    }
+    if (line.isLogo) {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = line.html;
+      const logoNode = wrap.firstElementChild;
+      term.insertBefore(logoNode, inputLine);
+      markEl = document.getElementById('mark');
+      logoEl = document.getElementById('logo');
+      logoEl.addEventListener('mouseenter', () => animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 200));
+      logoEl.addEventListener('click', () => animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 150));
+      await sleep(LINE_PAUSE);
+      continue;
+    }
+    // typewriter: create element, type char by char
+    const el = document.createElement('div');
+    el.className = 'line';
+    el.style.whiteSpace = 'pre-wrap';
+    term.insertBefore(el, inputLine);
+    for (const ch of line.raw) {
+      el.textContent += ch;
+      if (isFollowing) scrollToBottom();
+      await sleep(CHAR_DELAY);
+    }
+    // swap to styled HTML
+    const styled = document.createElement('div');
+    styled.innerHTML = line.html;
+    el.replaceWith(styled.firstElementChild);
+    if (isFollowing) scrollToBottom();
+    await sleep(LINE_PAUSE);
+  }
+  // show input
+  inputLine.style.display = '';
+  if (isFollowing) scrollToBottom();
+  focusEnd();
+  scheduleBreath();
+}
+
+renderBoot();
 
 // ── state mark animation ──────────────────────────
 const RUNTIME_LOOP = ['[*]','[/]','[-]','[\\]'];
@@ -284,16 +339,7 @@ function scheduleBreath() {
     }
   }, delay);
 }
-scheduleBreath();
-
-// hover/tap triggers runtime loop
-logoEl.addEventListener('mouseenter', () => {
-  animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 200);
-});
-logoEl.addEventListener('click', e => {
-  if (e.target.closest('.input-line')) return;
-  animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 150);
-});
+// logo events bound in renderBoot()
 
 // ── processing spinner on [>] ─────────────────────
 function showProcessing(cmdLineEl) {
@@ -429,6 +475,9 @@ input.addEventListener('keydown', async e => {
   input.textContent = '';
   if (!val) return;
 
+  // force follow on new command input
+  isFollowing = true;
+
   // echo command
   const cmdLine = document.createElement('div');
   cmdLine.className = 'line';
@@ -458,12 +507,15 @@ input.addEventListener('keydown', async e => {
       wrap.innerHTML = projectsHTML;
       term.insertBefore(wrap, inputLine);
     } else {
-      result.split('\n').forEach(l => {
+      const lines = result.split('\n');
+      for (const l of lines) {
         const out = document.createElement('div');
         out.className = 'line';
         out.innerHTML = l;
         term.insertBefore(out, inputLine);
-      });
+        if (isFollowing) scrollToBottom();
+        await sleep(LINE_DELAY);
+      }
     }
   } else {
     // ask backend for easter eggs
@@ -490,7 +542,7 @@ input.addEventListener('keydown', async e => {
   blank.className = 'blank';
   term.insertBefore(blank, inputLine);
   inputLine.style.display = '';
-  inputLine.scrollIntoView({block:'nearest'});
+  forceFollow();
 
   // run effect after layout is settled
   if (typeof backendData !== 'undefined' && backendData?.effect) {
@@ -704,30 +756,21 @@ async function fxGlitch() {
 
 // reboot — clear + re-run boot
 async function fxReboot() {
-  const el = document.querySelector('.terminal');
-  el.style.transition = 'opacity .3s';
-  el.style.opacity = '0';
-  await sleep(400);
-
-  // remove everything except input line
-  while (term.firstChild !== inputLine) term.removeChild(term.firstChild);
-
-  // re-insert boot sequence
-  const tpl = document.getElementById('boot-template').content.cloneNode(true);
-  term.insertBefore(tpl, inputLine);
-
-  // re-bind logo animation
-  const newLogo = document.getElementById('logo');
-  const newMark = document.getElementById('mark');
-  if (newLogo && newMark) {
-    markEl = newMark;
-    logoEl = newLogo;
-    newLogo.addEventListener('mouseenter', () => animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 200));
-    newLogo.addEventListener('click', () => animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 150));
-  }
-
-  el.style.opacity = '1';
+  term.style.transition = 'opacity .3s ease-out';
+  term.style.opacity = '0';
   await sleep(300);
+
+  // clear everything except input line
+  while (term.firstChild !== inputLine) term.removeChild(term.firstChild);
+  inputLine.style.display = 'none';
+  window.scrollTo(0, 0);
+  isFollowing = true;
+
+  term.style.opacity = '1';
+  await sleep(200);
+
+  // replay boot with typewriter
+  await renderBoot();
 }
 
 // ── focus management ──────────────────────────────
