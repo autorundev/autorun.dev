@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>[*] autorun.dev</title>
-<meta name="description" content="autorun.dev — ai-native tools & products">
+<meta name="description" content="autorun.dev - ai-native tools & products">
 <meta property="og:title" content="[*] autorun.dev">
 <meta property="og:description" content="ai-native tools & products">
 <meta property="og:image" content="https://autorun.dev/og.png">
@@ -18,20 +18,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  @font-face{
-    font-family:'Ioskeley Mono';
-    src:url('/fonts/IoskeleyMono-Regular.woff2') format('woff2');
-    font-weight:400;
-    font-style:normal;
-    font-display:swap;
-  }
-  @font-face{
-    font-family:'Ioskeley Mono';
-    src:url('/fonts/IoskeleyMono-Bold.woff2') format('woff2');
-    font-weight:700;
-    font-style:normal;
-    font-display:swap;
-  }
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
   /* === DARK THEME (default) === */
@@ -91,7 +77,7 @@
   body{
     background:var(--bg);
     color:var(--fg);
-    font-family:'Ioskeley Mono','JetBrains Mono',ui-monospace,monospace;
+    font-family:'JetBrains Mono',ui-monospace,monospace;
     line-height:1.7;
     min-height:100dvh;
     display:flex;
@@ -106,7 +92,7 @@
     overflow-x:hidden;
   }
   .line{margin-bottom:.15rem}
-  .cmd{color:var(--fg);font-weight:700}
+  .cmd{color:var(--fg);font-weight:400}
   .dim{color:var(--fg-2)}
   .blank{height:1.7em}
 
@@ -165,7 +151,7 @@
     border:none;
     color:var(--fg);
     font:inherit;
-    font-weight:700;
+    font-weight:400;
     outline:none;
     caret-color:transparent;
     white-space:nowrap;
@@ -199,7 +185,7 @@
 <div class="terminal" id="term">
 
   <div class="logo-wrap" id="logo">
-    <div class="logo-mark"><span class="mark-char" id="mark">[*]</span><span class="dim">autorun.dev</span></div>
+    <div class="logo-mark"><span class="mark-char" id="mark">[*]</span>autorun.dev</div>
   </div>
   <div class="line dim">ai-native tools &amp; products</div>
   <div class="line dim">v0.1.0</div>
@@ -282,7 +268,7 @@ function showProcessing(cmdLineEl) {
     inputLine.style.display = 'none';
     const inner = cmdLineEl.querySelector('.st-inner');
     const mark = cmdLineEl.querySelector('.st');
-    const frames = ['/','—','\\','—','*'];
+    const frames = ['/','-','\\','-','*'];
     let i = 0;
     mark.classList.remove('st-action');
     mark.classList.add('st-core');
@@ -315,16 +301,16 @@ applyTheme(getTheme());
 // ── commands ──────────────────────────────────────
 const commands = {
   help: () =>
-    '<span class="dim">about</span>     — what we do\n' +
-    '<span class="dim">projects</span>  — things we ship\n' +
-    '<span class="dim">team</span>     — who\'s behind the terminal\n' +
-    '<span class="dim">stack</span>    — how we build\n' +
-    '<span class="dim">config</span>   — settings\n' +
-    '<span class="dim">clear</span>    — wipe the screen',
+    'about     <span style="color:var(--fg-3)">- what we do</span>\n' +
+    'projects  <span style="color:var(--fg-3)">- things we ship</span>\n' +
+    'team      <span style="color:var(--fg-3)">- who\'s behind the terminal</span>\n' +
+    'stack     <span style="color:var(--fg-3)">- how we build</span>\n' +
+    'config    <span style="color:var(--fg-3)">- settings</span>\n' +
+    'clear     <span style="color:var(--fg-3)">- wipe the screen</span>',
 
   about: () =>
     'autorun.dev builds ai-native products that\n' +
-    'run where people already live — messengers,\n' +
+    'run where people already live - messengers,\n' +
     'games, markets. small crew. tight loops.\n' +
     'no meetings that could\'ve been a commit.\n' +
     '\n' +
@@ -333,7 +319,7 @@ const commands = {
 
   team: () =>
     'small, senior, remote. product engineers\n' +
-    'who ship end-to-end — design, code, growth,\n' +
+    'who ship end-to-end - design, code, growth,\n' +
     'ops.\n' +
     '\n' +
     'founder:  <span style="color:var(--fg)">anton frolov</span>\n' +
