@@ -1,34 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="system">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>autorun.dev</title>
+<title>[*] autorun.dev</title>
 <meta name="description" content="autorun.dev — ai-native tools & products">
+<meta property="og:title" content="[*] autorun.dev">
+<meta property="og:description" content="ai-native tools & products">
+<meta property="og:image" content="https://autorun.dev/og.png">
+<meta property="og:url" content="https://autorun.dev">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="[*] autorun.dev">
+<meta name="twitter:description" content="ai-native tools & products">
+<meta name="twitter:image" content="https://autorun.dev/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+  /* === DARK THEME (default) === */
   :root{
-    --bg:#0a0a0a;
-    --fg:#c8c8c8;
-    --dim:#555;
-    --accent:#6ee7b7;
-    --link:#93c5fd;
-    --prompt:#a78bfa;
+    --bg:#0A0A0A;
+    --bg-1:#111111;
+    --fg:#E8E8E8;
+    --fg-1:#A0A0A0;
+    --fg-2:#606060;
+    --fg-3:#404040;
+    --core:#7DD3FC;
+    --action:#E8E8E8;
+    --presence:#A78BFA;
+    --live:#4ADE80;
+    --alert:#FBBF24;
+    --stop:#F87171;
+    --stealth:#A0A0A0;
   }
+
+  /* === LIGHT THEME === */
+  [data-theme="light"]{
+    --bg:#FAFAFA;
+    --bg-1:#F4F4F4;
+    --fg:#0A0A0A;
+    --fg-1:#404040;
+    --fg-2:#707070;
+    --fg-3:#B0B0B0;
+    --core:#0284C7;
+    --action:#0A0A0A;
+    --presence:#7C3AED;
+    --live:#16A34A;
+    --alert:#D97706;
+    --stop:#DC2626;
+    --stealth:#707070;
+  }
+
+  /* === SYSTEM THEME === */
+  @media(prefers-color-scheme:light){
+    [data-theme="system"]{
+      --bg:#FAFAFA;
+      --bg-1:#F4F4F4;
+      --fg:#0A0A0A;
+      --fg-1:#404040;
+      --fg-2:#707070;
+      --fg-3:#B0B0B0;
+      --core:#0284C7;
+      --action:#0A0A0A;
+      --presence:#7C3AED;
+      --live:#16A34A;
+      --alert:#D97706;
+      --stop:#DC2626;
+      --stealth:#707070;
+    }
+  }
+
   html{font-size:clamp(8px,calc((100vw - 32px)/36),15px)}
   body{
     background:var(--bg);
     color:var(--fg);
-    font-family:'JetBrains Mono','SF Mono','Cascadia Code','Fira Code',monospace;
+    font-family:'JetBrains Mono',ui-monospace,monospace;
     line-height:1.7;
     min-height:100dvh;
     display:flex;
     justify-content:center;
     padding:2rem 16px;
     -webkit-font-smoothing:antialiased;
+    transition:background .3s ease-out,color .3s ease-out;
   }
   .terminal{
     max-width:640px;
@@ -38,18 +94,46 @@
   .line{margin-bottom:.15rem}
   .indent{padding-left:1.2em}
   .indent2{padding-left:2.4em}
+
+  /* state marks */
+  .st{font-weight:400;display:inline;min-width:3ch}
+  .st-core{color:var(--core)}
+  .st-action{color:var(--action)}
+  .st-presence{color:var(--presence)}
+  .st-live{color:var(--live)}
+  .st-alert{color:var(--alert)}
+  .st-stop{color:var(--stop)}
+  .st-stealth{color:var(--stealth)}
+  .st-idle{color:var(--fg-2)}
+
   .prompt::before{
     content:'>';
-    color:var(--prompt);
+    color:var(--presence);
     margin-right:.6em;
   }
-  .cmd{color:#fff;font-weight:600}
-  .dim{color:var(--dim)}
-  .accent{color:var(--accent)}
+  .cmd{color:var(--fg);font-weight:700}
+  .dim{color:var(--fg-2)}
+  .fg1{color:var(--fg-1)}
   .blank{height:1.7em}
 
-  /* intro */
-  .intro{margin-bottom:0;white-space:pre;line-height:1.2}
+  /* logo */
+  .logo-wrap{position:relative;cursor:pointer;display:inline-block}
+  .intro{margin-bottom:0;white-space:pre;line-height:1.2;color:var(--core);transition:color .15s}
+  .logo-wrap:hover .intro{color:var(--live)}
+  .logo-mark{
+    font-size:1em;
+    font-weight:700;
+    margin-bottom:.3rem;
+    display:flex;
+    align-items:center;
+    gap:.4em;
+  }
+  .logo-mark .mark-char{
+    color:var(--core);
+    transition:color .1s;
+    display:inline-block;
+    min-width:3ch;
+  }
 
   /* projects */
   .project{
@@ -57,41 +141,35 @@
     margin:.5rem 0 .5rem 1.2em;
     text-decoration:none;
     color:var(--fg);
-    border-left:2px solid var(--dim);
+    border-left:2px solid var(--fg-3);
     padding-left:1rem;
-    transition:border-color .2s,color .2s;
+    transition:border-color .2s;
   }
-  .project:hover{border-color:var(--accent)}
-  .project-name{color:var(--link);font-weight:600}
+  .project:hover{border-color:var(--core)}
+  .project-name{color:var(--core);font-weight:700}
   .project:hover .project-name{text-decoration:underline;text-underline-offset:3px}
-  .project-desc{color:var(--dim);font-size:.87rem}
-  .project-status{color:var(--accent);font-size:.87rem}
-  .project-status.stealth{color:var(--dim)}
+  .project-desc{color:var(--fg-2);font-size:.87rem}
+  .project-status{font-size:.87rem}
 
   /* interactive input */
   .input-line{display:flex;align-items:center}
   .input-line::before{
     content:'>';
-    color:var(--prompt);
+    color:var(--presence);
     flex-shrink:0;
     margin-right:.6em;
   }
-  .input-wrap{
-    display:flex;
-    align-items:center;
-    min-width:0;
-  }
+  .input-wrap{display:flex;align-items:center;min-width:0}
   #input{
     background:none;
     border:none;
-    color:#fff;
+    color:var(--fg);
     font:inherit;
-    font-weight:600;
+    font-weight:700;
     outline:none;
     caret-color:transparent;
     white-space:nowrap;
-    padding:0;
-    margin:0;
+    padding:0;margin:0;
     min-height:1.7em;
     -webkit-user-modify:read-write-plaintext-only;
   }
@@ -100,28 +178,39 @@
   /* block cursor */
   .cursor{
     display:inline-block;
-    width:.6em;
-    height:1.15em;
+    width:.6em;height:1.15em;
     background:var(--fg);
     vertical-align:text-bottom;
     animation:blink 1s step-end infinite;
     flex-shrink:0;
   }
   @keyframes blink{50%{opacity:0}}
+
+  /* processing spinner */
+  .processing{color:var(--core);margin-bottom:.15rem}
+
+  /* reduced motion */
+  @media(prefers-reduced-motion:reduce){
+    .cursor{animation:none}
+    .logo-wrap:hover .intro{color:var(--core)}
+  }
 </style>
 </head>
 <body>
 <div class="terminal" id="term">
 
-  <div class="intro"><span class="accent">           _                          _</span></div>
-  <div class="intro"><span class="accent"> __ _ _  _| |_ ___ _ _ _  _ _ _    __| |_____ __</span></div>
-  <div class="intro"><span class="accent">/ _` | || |  _/ _ \ '_| || | ' \ _/ _` / -_) V /</span></div>
-  <div class="intro"><span class="accent">\__,_|\_,_|\__\___/_|  \_,_|_||_(_)__,_\___|\_/</span></div>
+  <div class="logo-wrap" id="logo">
+    <div class="logo-mark"><span class="mark-char" id="mark">[*]</span><span class="dim">autorun.dev</span></div>
+    <div class="intro">           _                          _</div>
+    <div class="intro"> __ _ _  _| |_ ___ _ _ _  _ _ _    __| |_____ __</div>
+    <div class="intro">/ _` | || |  _/ _ \ '_| || | ' \ _/ _` / -_) V /</div>
+    <div class="intro">\__,_|\_,_|\__\___/_|  \_,_|_||_(_)__,_\___|\_/</div>
+  </div>
   <div class="blank"></div>
-  <div class="line indent dim">autorun.dev — ai-native tools &amp; products</div>
+  <div class="line indent dim">ai-native tools &amp; products</div>
   <div class="line indent dim">v0.1.0</div>
   <div class="blank"></div>
-  <div class="line"><span class="prompt"></span><span class="dim">booting autorun.dev ...</span> <span class="accent">ok</span></div>
+  <div class="line"><span class="prompt"></span><span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span></div>
   <div class="line"><span class="prompt"></span><span class="dim">agents online:</span> 3</div>
   <div class="line"><span class="prompt"></span><span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>
   <div class="blank"></div>
@@ -135,136 +224,257 @@
 </div>
 
 <script>
-  const term = document.getElementById('term');
-  const input = document.getElementById('input');
-  const inputLine = input.closest('.input-line');
+const term = document.getElementById('term');
+const input = document.getElementById('input');
+const inputLine = input.closest('.input-line');
+const markEl = document.getElementById('mark');
+const logoEl = document.getElementById('logo');
 
-  const commands = {
-    help: () =>
-      '<span class="dim indent">about</span>     — what we do\n' +
-      '<span class="dim indent">projects</span>  — things we ship\n' +
-      '<span class="dim indent">team</span>     — who\'s behind the terminal\n' +
-      '<span class="dim indent">stack</span>    — how we build\n' +
-      '<span class="dim indent">clear</span>    — wipe the screen',
+// ── state mark animation ──────────────────────────
+const RUNTIME_LOOP = ['[*]','[/]','[-]','[\\]'];
+const RUNTIME_COLORS = ['st-core','st-core','st-idle','st-core'];
+let logoAnimating = false;
 
-    about: () =>
-      '<span class="indent">autorun.dev builds ai-native products that</span>\n' +
-      '<span class="indent">run where people already live — messengers,</span>\n' +
-      '<span class="indent">games, markets. small crew. tight loops.</span>\n' +
-      '<span class="indent">no meetings that could\'ve been a commit.</span>\n' +
-      '\n' +
-      '<span class="indent dim">thesis: the best software in 2026 doesn\'t</span>\n' +
-      '<span class="indent dim">have a ui. it has an agent.</span>',
+function animateMark(sequence, colors, stepMs, onDone) {
+  if (logoAnimating) return;
+  logoAnimating = true;
+  let i = 0;
+  const prev = markEl.className.replace(/st-\w+/g,'').trim();
+  function step() {
+    if (i >= sequence.length) {
+      markEl.textContent = '[*]';
+      markEl.className = 'mark-char st-core';
+      logoAnimating = false;
+      if (onDone) onDone();
+      return;
+    }
+    markEl.textContent = sequence[i];
+    markEl.className = 'mark-char ' + (colors[i] || 'st-core');
+    i++;
+    setTimeout(step, stepMs);
+  }
+  step();
+}
 
-    team: () =>
-      '<span class="indent">small, senior, remote. product engineers</span>\n' +
-      '<span class="indent">who ship end-to-end — design, code, growth,</span>\n' +
-      '<span class="indent">ops.</span>\n' +
-      '\n' +
-      '<span class="indent prompt"></span><span class="dim">whoami</span>\n' +
-      '<span class="indent2">founder:  <span style="color:var(--fg)">anton frolov</span></span>\n' +
-      '<span class="indent2">          vibe coder (unironically)</span>\n' +
-      '<span class="indent2">crew:     engineers, designers, degens</span>\n' +
-      '<span class="indent2">hiring:   always, if you\'re the real thing.</span>\n' +
-      '<span class="indent2">          → <a href="mailto:hello@autorun.dev" style="color:var(--link);text-decoration:none">hello@autorun.dev</a></span>',
+// periodic idle breath: every 8-15s
+function scheduleBreath() {
+  const delay = 8000 + Math.random() * 7000;
+  setTimeout(() => {
+    if (!logoAnimating) {
+      // idle loop: [*] → [.] → [:] → [_] → [*]
+      animateMark(
+        ['[.]','[:]','[_]','[*]'],
+        ['st-idle','st-presence','st-idle','st-core'],
+        800,
+        scheduleBreath
+      );
+    } else {
+      scheduleBreath();
+    }
+  }, delay);
+}
+scheduleBreath();
 
-    projects: () => '__projects__',
+// hover/tap triggers runtime loop
+logoEl.addEventListener('mouseenter', () => {
+  animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 200);
+});
+logoEl.addEventListener('click', e => {
+  if (e.target.closest('.input-line')) return;
+  animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 150);
+});
 
-    stack: () =>
-      '<span class="indent">claude · typescript · python · telegram</span>\n' +
-      '<span class="indent">sqlite-and-prayers · vps · tmux · vibes</span>\n' +
-      '<span class="indent dim">we deploy on fridays.</span>',
-
-    clear: () => '__clear__',
-  };
-
-  const projectsHTML = `
-    <a href="https://vectoros.ai" target="_blank" rel="noopener" class="project">
-      <div class="project-name">vectoros.ai</div>
-      <div class="project-desc">ai companion for telegram.<br>second brain powered by claude.</div>
-      <div class="project-status">[status: live]</div>
-    </a>
-    <a href="https://t.me/playsnap_bot/app" target="_blank" rel="noopener" class="project">
-      <div class="project-name">playsnap.bot</div>
-      <div class="project-desc">minimalist hockey for telegram.<br>one button. perfect timing. no tutorial.</div>
-      <div class="project-status">[status: live]</div>
-    </a>
-    <div class="project" style="cursor:default">
-      <div class="project-name" style="color:var(--dim)">[redacted]</div>
-      <div class="project-desc">something for traders.</div>
-      <div class="project-status stealth">[status: stealth]</div>
-    </div>`;
-
-  input.addEventListener('paste', e => {
-    e.preventDefault();
-    const text = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\n/g,'');
-    document.execCommand('insertText', false, text);
-  });
-
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const val = input.textContent.trim().toLowerCase();
-      input.textContent = '';
-      if (!val) return;
-
-      const cmdLine = document.createElement('div');
-      cmdLine.className = 'line';
-      cmdLine.innerHTML = `<span class="prompt"></span><span class="cmd">${esc(val)}</span>`;
-      term.insertBefore(cmdLine, inputLine);
-
-      if (val === 'clear') {
-        while (term.firstChild !== inputLine) term.removeChild(term.firstChild);
+// ── processing spinner before output ──────────────
+function showProcessing() {
+  return new Promise(resolve => {
+    const el = document.createElement('div');
+    el.className = 'line processing';
+    term.insertBefore(el, inputLine);
+    const frames = ['[/]','[-]','[\\]','[-]','[*]'];
+    let i = 0;
+    const iv = setInterval(() => {
+      if (i >= frames.length) {
+        clearInterval(iv);
+        el.remove();
+        resolve();
         return;
       }
+      el.textContent = frames[i];
+      i++;
+    }, 120);
+  });
+}
 
-      const handler = commands[val];
-      if (handler) {
-        const result = handler();
-        if (result === '__projects__') {
-          const wrap = document.createElement('div');
-          wrap.innerHTML = projectsHTML;
-          term.insertBefore(wrap, inputLine);
-        } else {
-          result.split('\n').forEach(l => {
-            const out = document.createElement('div');
-            out.className = 'line';
-            out.innerHTML = l;
-            term.insertBefore(out, inputLine);
-          });
-        }
-      } else {
-        const out = document.createElement('div');
-        out.className = 'line dim';
-        out.textContent = `command not found: ${val}. try "help"`;
-        term.insertBefore(out, inputLine);
-      }
+// ── theme system ──────────────────────────────────
+function getTheme() {
+  return localStorage.getItem('autorun-theme') || 'system';
+}
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('autorun-theme', t);
+}
+applyTheme(getTheme());
 
-      const blank = document.createElement('div');
-      blank.className = 'blank';
-      term.insertBefore(blank, inputLine);
+// ── commands ──────────────────────────────────────
+const commands = {
+  help: () =>
+    '<span class="dim indent">about</span>     — what we do\n' +
+    '<span class="dim indent">projects</span>  — things we ship\n' +
+    '<span class="dim indent">team</span>     — who\'s behind the terminal\n' +
+    '<span class="dim indent">stack</span>    — how we build\n' +
+    '<span class="dim indent">config</span>   — settings\n' +
+    '<span class="dim indent">clear</span>    — wipe the screen',
 
-      inputLine.scrollIntoView({block:'nearest'});
+  about: () =>
+    '<span class="indent">autorun.dev builds ai-native products that</span>\n' +
+    '<span class="indent">run where people already live — messengers,</span>\n' +
+    '<span class="indent">games, markets. small crew. tight loops.</span>\n' +
+    '<span class="indent">no meetings that could\'ve been a commit.</span>\n' +
+    '\n' +
+    '<span class="indent dim">thesis: the best software in 2026 doesn\'t</span>\n' +
+    '<span class="indent dim">have a ui. it has an agent.</span>',
+
+  team: () =>
+    '<span class="indent">small, senior, remote. product engineers</span>\n' +
+    '<span class="indent">who ship end-to-end — design, code, growth,</span>\n' +
+    '<span class="indent">ops.</span>\n' +
+    '\n' +
+    '<span class="indent prompt"></span><span class="dim">whoami</span>\n' +
+    '<span class="indent2">founder:  <span style="color:var(--fg)">anton frolov</span></span>\n' +
+    '<span class="indent2">          vibe coder (unironically)</span>\n' +
+    '<span class="indent2">crew:     engineers, designers, degens</span>\n' +
+    '<span class="indent2">hiring:   always, if you\'re the real thing.</span>\n' +
+    '<span class="indent2">          → <a href="mailto:hello@autorun.dev" style="color:var(--core);text-decoration:none">hello@autorun.dev</a></span>',
+
+  projects: () => '__projects__',
+
+  stack: () =>
+    '<span class="indent">claude · typescript · python · telegram</span>\n' +
+    '<span class="indent">sqlite-and-prayers · vps · tmux · vibes</span>\n' +
+    '<span class="indent dim">we deploy on fridays.</span>',
+
+  config: (args) => {
+    if (!args) {
+      return '<span class="indent dim">current theme:</span> <span class="indent">' + getTheme() + '</span>\n' +
+        '\n' +
+        '<span class="indent dim">usage:</span>\n' +
+        '<span class="indent2">config theme dark</span>\n' +
+        '<span class="indent2">config theme light</span>\n' +
+        '<span class="indent2">config theme system</span>';
     }
-  });
+    const parts = args.split(/\s+/);
+    if (parts[0] === 'theme' && ['dark','light','system'].includes(parts[1])) {
+      applyTheme(parts[1]);
+      return '<span class="indent st st-live">[+]</span> theme set to <span style="color:var(--fg)">' + parts[1] + '</span>';
+    }
+    return '<span class="indent st st-alert">[?]</span> <span class="dim">unknown config. try:</span> config theme dark|light|system';
+  },
 
-  function focusEnd() {
-    input.focus();
-    const sel = window.getSelection();
-    sel.selectAllChildren(input);
-    sel.collapseToEnd();
+  clear: () => '__clear__',
+};
+
+const projectsHTML = `
+  <a href="https://vectoros.ai" target="_blank" rel="noopener" class="project">
+    <div class="project-name">vectoros.ai</div>
+    <div class="project-desc">ai companion for telegram.<br>second brain powered by claude.</div>
+    <div class="project-status st-live">[status: live]</div>
+  </a>
+  <a href="https://t.me/playsnap_bot/app" target="_blank" rel="noopener" class="project">
+    <div class="project-name">playsnap.bot</div>
+    <div class="project-desc">minimalist hockey for telegram.<br>one button. perfect timing. no tutorial.</div>
+    <div class="project-status st-live">[status: live]</div>
+  </a>
+  <div class="project" style="cursor:default">
+    <div class="project-name st-stealth">[redacted]</div>
+    <div class="project-desc">something for traders.</div>
+    <div class="project-status st-stealth">[status: stealth]</div>
+  </div>`;
+
+// ── input handling ────────────────────────────────
+input.addEventListener('paste', e => {
+  e.preventDefault();
+  const text = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\n/g,'');
+  document.execCommand('insertText', false, text);
+});
+
+let processing = false;
+
+input.addEventListener('keydown', async e => {
+  if (e.key !== 'Enter' || processing) return;
+  e.preventDefault();
+  const raw = input.textContent.trim();
+  const val = raw.toLowerCase();
+  input.textContent = '';
+  if (!val) return;
+
+  // echo command
+  const cmdLine = document.createElement('div');
+  cmdLine.className = 'line';
+  cmdLine.innerHTML = `<span class="prompt"></span><span class="cmd">${esc(raw)}</span>`;
+  term.insertBefore(cmdLine, inputLine);
+
+  if (val === 'clear') {
+    while (term.firstChild !== inputLine) term.removeChild(term.firstChild);
+    return;
   }
 
-  document.addEventListener('click', e => {
-    if (!input.contains(e.target)) focusEnd();
-  });
-  requestAnimationFrame(focusEnd);
+  // spinner
+  processing = true;
+  await showProcessing();
+  processing = false;
 
-  function esc(s) {
-    const d = document.createElement('div');
-    d.textContent = s;
-    return d.innerHTML;
+  // parse command + args
+  const spaceIdx = val.indexOf(' ');
+  const cmd = spaceIdx > -1 ? val.slice(0, spaceIdx) : val;
+  const args = spaceIdx > -1 ? val.slice(spaceIdx + 1).trim() : '';
+
+  const handler = commands[cmd];
+  if (handler) {
+    const result = handler(args || undefined);
+    if (result === '__projects__') {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = projectsHTML;
+      term.insertBefore(wrap, inputLine);
+    } else {
+      result.split('\n').forEach(l => {
+        const out = document.createElement('div');
+        out.className = 'line';
+        out.innerHTML = l;
+        term.insertBefore(out, inputLine);
+      });
+    }
+  } else {
+    const out = document.createElement('div');
+    out.className = 'line';
+    out.innerHTML = `<span class="indent st st-alert">[?]</span> <span class="dim">command not found: ${esc(val)}. try</span> <span class="cmd">help</span>`;
+    term.insertBefore(out, inputLine);
   }
+
+  const blank = document.createElement('div');
+  blank.className = 'blank';
+  term.insertBefore(blank, inputLine);
+
+  inputLine.scrollIntoView({block:'nearest'});
+});
+
+// ── focus management ──────────────────────────────
+function focusEnd() {
+  input.focus();
+  const sel = window.getSelection();
+  sel.selectAllChildren(input);
+  sel.collapseToEnd();
+}
+
+document.addEventListener('click', e => {
+  if (!input.contains(e.target) && !e.target.closest('a')) focusEnd();
+});
+requestAnimationFrame(focusEnd);
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
 </script>
 </body>
 </html>
