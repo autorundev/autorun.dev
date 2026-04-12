@@ -1,44 +1,81 @@
 # CLAUDE.md — autorun.dev
 
-Landing page для autorun.dev в стиле интерактивного терминала.
+Interactive terminal-style landing page for autorun.dev.
 
 ## Tech Stack
 
 - **Frontend:** Single-file `index.html` (vanilla HTML/CSS/JS)
-- **Font:** JetBrains Mono (Google Fonts, weights 400/600)
-- **Hosting:** nginx:alpine контейнер → NPM reverse proxy → `https://autorun.dev`
-- **SSL:** Let's Encrypt (auto-renew через NPM)
+- **Backend:** Hono + @hono/node-server (Node 20, port 8787)
+- **Font:** JetBrains Mono self-hosted (weights 500/800)
+- **Hosting:** nginx:alpine (web) + node:alpine (api) → NPM → `https://autorun.dev`
+- **SSL:** Let's Encrypt via NPM
+- **AI:** Claude Haiku (PRD ~10% on unknown commands)
 
 ## Structure
 
 ```
-index.html              — единственная страница, всё inline
-docker-compose.yml      — nginx:alpine в сети proxy
-docs/brand/             — brand system (identity, motion, social, OG)
+index.html              — single page, all inline
+docker-compose.yml      — autorun-web + autorun-api
+nginx.conf              — static + /api/ proxy
+favicon.ico, og.png     — brand assets
+fonts/                  — JetBrains Mono woff2 (self-hosted)
+backend/
+  server.js             — Hono API (easter eggs + Haiku)
+  easter_eggs.js        — ~30 hidden commands
+  Dockerfile
+og/
+  og_template.html      — OG image template (1200x630)
+  og_generate.js        — Puppeteer generator
+docs/
+  README.md             — brand system overview
+  autorun_brand_system_spec.md
+  autorun_motion_spec.md
+  autorun_layout_spec.md
+  autorun_social_spec.md
+  tasks.md              — deferred work
+  site/                 — architecture reference
 ```
 
-## Команды терминала
+## Commands
 
-Интерактивный ввод через contenteditable div. Доступные команды:
-`help`, `about`, `projects`, `team`, `stack`, `clear`
+Public: `help`, `about`, `projects`, `team`, `stack`, `config`, `clear`
+Hidden: ~30 easter eggs via `/api/cmd` (matrix, hello, red pill, 42, etc.)
 
-## Design Constraints
+## Dialogue Grammar
 
-- **60 символов** — максимальная ширина контента. Font-size: `clamp(8px, calc((100vw - 32px)/36), 15px)`
-- **Monospace only** — JetBrains Mono, fallback: SF Mono, Cascadia Code, Fira Code
-- **Цвета из brand system:** bg `#0A0A0A`, fg `#C8C8C8`, accent `#6EE7B7`, link `#93C5FD`, prompt `#A78BFA`
-- **Brand:** `docs/brand/` — полная спека (identity, motion, social, OG-images)
-- **Lowercase bias** — весь текст строчными
+- `[>]` = user input (always)
+- `[*]` = system output (uses description from help, not command name)
+- `[.]` boot, `[:]` ready/presence, `[!]` error, `[x]` fatal, `[+]` unlock
+- `[/][-][\][-]` spinner frames
+- No blank between `[>]` and `[*]`, blank before next `[>]`
+- 4-char hanging indent for continuation lines
+
+## Design
+
+- **Layout:** flush-left with `margin: 0 auto`, 60ch mobile / 80ch desktop
+- **Colors:** brand spec vars `--bg-0`, `--fg-0`, `--state-core`, etc.
+- **Themes:** dark / light / system (CSS vars + localStorage)
+- **Sub-brands:** vectoros (white), playsnap (two-tone), ******** (stealth)
+- **Boot:** typewriter 15ms/char, 200ms/line
+- **Output:** 40ms between lines, spinner before marked lines
+- **Scroll:** follow-tail (auto near bottom, manual ignores)
+- **Effects:** matrix rain (inline overlay), CRT glitch, reboot
 
 ## Deploy
 
 ```bash
-docker restart autorun-web    # index.html подмонтирован как volume, достаточно рестарта
+docker restart autorun-web                    # frontend changes
+docker compose up -d --build autorun-api      # backend changes
+docker logs -f autorun-api                    # watch all user input
 ```
 
-## Current State
+## Key CSS vars
 
-- Landing page live: `https://autorun.dev`
-- Brand system задокументирован в `docs/brand/`
-- OG-image генератор готов (puppeteer), но не задеплоен
-- Нет favicon / OG-image на самом сайте (TODO)
+```
+--lh: 18px          (line height, used everywhere)
+--bg-0, --fg-0      (base colors)
+--state-core         #7DD3FC / #0284C7
+--state-live         #4ADE80 / #16A34A
+--brand-vectoros     #FFFFFF / #0A0A0A
+--brand-playsnap-*   play + snap colors
+```
