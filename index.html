@@ -520,118 +520,156 @@ async function runEffect(name) {
   if (fx[name]) await fx[name]();
 }
 
-// matrix rain — single <pre>, one innerHTML per frame
+// matrix rain — inline terminal effect, grows downward
 async function fxMatrix() {
-  const pool = 'abcdefghijklmnopqrstuvwxyz0123456789@#$%&*+-=~[]{}()/\\|.:;!?абвгдежзиклмнопрстуфхцчшщэюя';
+  const pool = 'abcdefghijklmnopqrstuvwxyz0123456789@#$%&*+-=~[]{}()/|.:;!?абвгдежзиклмнопрстуфхцчшщэюя';
+  const rc = () => pool[Math.floor(Math.random() * pool.length)];
   const COLS = 60;
-  const style = getComputedStyle(document.body);
-  const lineH = parseFloat(style.lineHeight) || 18;
-  const ROWS = Math.ceil(window.innerHeight / lineH);
-  const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-0').trim();
-  const green = getComputedStyle(document.documentElement).getPropertyValue('--state-live').trim();
+  const RAIN_ROWS = 20;
 
-  // state: char + color per cell
-  const cells = [];
-  for (let r = 0; r < ROWS; r++) {
-    const row = [];
-    for (let c = 0; c < COLS; c++) row.push({ch:' ', color: bg});
-    cells.push(row);
+  // find the response line (last .line before inputLine)
+  let responseLine = inputLine.previousElementSibling;
+  while (responseLine && responseLine.classList.contains('blank')) responseLine = responseLine.previousElementSibling;
+  if (!responseLine) return;
+  const origHTML = responseLine.innerHTML;
+  const origText = responseLine.textContent;
+
+  // pad original text to COLS
+  const origPadded = origText.padEnd(COLS).slice(0, COLS);
+
+  // create rain rows below response line
+  const rainEls = [];
+  const blankBefore = responseLine.nextElementSibling; // the .blank
+  for (let i = 0; i < RAIN_ROWS; i++) {
+    const row = document.createElement('div');
+    row.className = 'line';
+    row.style.whiteSpace = 'pre';
+    row.style.color = 'var(--state-live)';
+    row.textContent = ' '.repeat(COLS);
+    term.insertBefore(row, inputLine);
+    rainEls.push(row);
   }
 
-  // drops
+  // grid: row 0 = response line, rows 1..RAIN_ROWS = rain lines
+  const totalRows = 1 + RAIN_ROWS;
+
+  // drops per column — staggered start
   const drops = [];
   for (let c = 0; c < COLS; c++) {
     drops.push({
-      y: -1 - Math.floor(Math.random() * ROWS),
-      speed: 0.4 + Math.random() * 0.6,
-      trail: 3 + Math.floor(Math.random() * 6),
+      y: -1 - Math.floor(Math.random() * 12),
+      speed: 0.3 + Math.random() * 0.5,
+      trail: 3 + Math.floor(Math.random() * 5),
       acc: 0,
+      done: false,
     });
   }
 
-  // overlay: single <pre>
-  const pre = document.createElement('pre');
-  Object.assign(pre.style, {
-    position:'fixed', inset:'0', zIndex:'9999',
-    margin:'0', padding: style.padding,
-    background: bg,
-    font: style.font,
-    fontSize: style.fontSize,
-    lineHeight: lineH + 'px',
-    letterSpacing:'0',
-    fontVariantLigatures:'none',
-    overflow:'hidden',
-    pointerEvents:'none',
-    opacity:'0',
-    transition:'opacity .15s',
-  });
-  document.body.appendChild(pre);
+  // char buffers
+  const buf = [];
+  for (let r = 0; r < totalRows; r++) buf.push(new Array(COLS).fill(' '));
+  // init row 0 from original
+  for (let c = 0; c < COLS; c++) buf[0][c] = origPadded[c];
 
-  // progressive reveal: track highest y per column to know when bg is "earned"
-  const revealed = new Float32Array(COLS).fill(ROWS + 10);
+  // color buffer: 0=normal, 1=head(white), 2=trail(green), 3=dim
+  const colors = [];
+  for (let r = 0; r < totalRows; r++) colors.push(new Uint8Array(COLS));
 
-  const totalTicks = 55;
-  const rc = (c) => pool[Math.floor(Math.random() * pool.length)];
-
-  function render() {
-    let html = '';
-    for (let r = 0; r < ROWS; r++) {
-      for (let c = 0; c < COLS; c++) {
-        const cell = cells[r][c];
-        if (cell.color === bg || cell.ch === ' ') {
-          html += ' ';
-        } else {
-          html += `<span style="color:${cell.color}">${cell.ch}</span>`;
-        }
-      }
-      html += '\n';
-    }
-    pre.innerHTML = html;
-  }
-
-  // fade in progressively via first pass
-  pre.style.opacity = '1';
-
-  for (let t = 0; t < totalTicks; t++) {
-    // advance drops
+  // phase 1: rain falls (45 ticks)
+  const tickMs = 60;
+  for (let t = 0; t < 45; t++) {
     for (let c = 0; c < COLS; c++) {
       const d = drops[c];
       d.acc += d.speed;
       while (d.acc >= 1) { d.y++; d.acc -= 1; }
-      if (d.y - d.trail > ROWS) {
-        d.y = -1 - Math.floor(Math.random() * 4);
-        d.trail = 3 + Math.floor(Math.random() * 6);
-        d.speed = 0.4 + Math.random() * 0.6;
-      }
     }
 
-    // update cells
-    for (let r = 0; r < ROWS; r++) {
-      for (let c = 0; c < COLS; c++) {
-        const d = drops[c];
+    // update buffers
+    for (let c = 0; c < COLS; c++) {
+      const d = drops[c];
+      for (let r = 0; r < totalRows; r++) {
         const dist = d.y - r;
-        const cell = cells[r][c];
         if (dist === 0) {
-          cell.ch = rc(); cell.color = '#fff';
+          buf[r][c] = rc();
+          colors[r][c] = 1;
         } else if (dist > 0 && dist <= d.trail) {
-          if (Math.random() < 0.25) cell.ch = rc();
-          const fade = 1 - dist / d.trail;
-          const g = Math.round(180 + 75 * fade);
-          cell.color = `rgb(0,${g},60)`;
-        } else if (dist > d.trail) {
-          cell.ch = ' '; cell.color = bg;
+          if (Math.random() < 0.3) buf[r][c] = rc();
+          colors[r][c] = dist <= 2 ? 2 : 3;
+        } else if (dist > d.trail + 1) {
+          if (r > 0) { buf[r][c] = ' '; colors[r][c] = 0; }
         }
       }
     }
 
-    render();
-    await sleep(55);
+    // render row 0 (response line) as HTML with colors
+    renderRow(responseLine, buf[0], colors[0]);
+    // render rain rows as HTML
+    for (let i = 0; i < RAIN_ROWS; i++) {
+      renderRow(rainEls[i], buf[i + 1], colors[i + 1]);
+    }
+
+    inputLine.scrollIntoView({block:'nearest'});
+    await sleep(tickMs);
   }
 
-  // fade out
-  pre.style.opacity = '0';
-  await sleep(300);
-  pre.remove();
+  // phase 2: rain ends — streams drain down and disappear (25 ticks)
+  // stop spawning new chars, let trails drain
+  for (let t = 0; t < 25; t++) {
+    for (let c = 0; c < COLS; c++) {
+      const d = drops[c];
+      d.acc += d.speed;
+      while (d.acc >= 1) { d.y++; d.acc -= 1; }
+      // clear cells above trail
+      for (let r = 0; r < totalRows; r++) {
+        const dist = d.y - r;
+        if (dist > d.trail) {
+          if (r === 0) {
+            buf[0][c] = origPadded[c];
+            colors[0][c] = 0;
+          } else {
+            buf[r][c] = ' ';
+            colors[r][c] = 0;
+          }
+        } else if (dist >= 0 && dist <= d.trail) {
+          if (Math.random() < 0.3) buf[r][c] = rc();
+          colors[r][c] = dist === 0 ? 1 : dist <= 2 ? 2 : 3;
+        }
+      }
+    }
+
+    renderRow(responseLine, buf[0], colors[0]);
+    for (let i = 0; i < RAIN_ROWS; i++) {
+      renderRow(rainEls[i], buf[i + 1], colors[i + 1]);
+    }
+    await sleep(tickMs);
+  }
+
+  // cleanup: restore response, remove rain rows
+  responseLine.innerHTML = origHTML;
+  rainEls.forEach(el => el.remove());
+
+  function renderRow(el, chars, clrs) {
+    let html = '';
+    let cur = -1;
+    let seg = '';
+    for (let c = 0; c < COLS; c++) {
+      const cl = clrs[c];
+      if (cl !== cur) {
+        if (seg) html += wrapSeg(seg, cur);
+        seg = ''; cur = cl;
+      }
+      seg += chars[c] === '<' ? '&lt;' : chars[c] === '&' ? '&amp;' : chars[c];
+    }
+    if (seg) html += wrapSeg(seg, cur);
+    el.innerHTML = html;
+  }
+
+  function wrapSeg(s, cl) {
+    if (cl === 0) return s;
+    if (cl === 1) return `<span style="color:#fff">${s}</span>`;
+    if (cl === 2) return `<span style="color:var(--state-live)">${s}</span>`;
+    return `<span style="color:var(--state-live);opacity:.4">${s}</span>`;
+  }
 }
 
 // glitch — CRT distortion
