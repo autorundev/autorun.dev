@@ -534,9 +534,17 @@ async function fxMatrix() {
   const origHTML = responseLine.innerHTML;
   const origPadded = responseLine.textContent.padEnd(COLS).slice(0, COLS);
 
-  // fixed rain area: 20 rows
+  // row 1 = static fake prompt, rows 2+ = rain
   const RAIN_ROWS = 20;
-  const totalRows = 1 + RAIN_ROWS;
+  const totalRows = 2 + RAIN_ROWS; // row 0=response, row 1=fake prompt, rows 2..=rain
+
+  // fake static [>] (no cursor, no input)
+  const fakePrompt = document.createElement('div');
+  fakePrompt.className = 'line';
+  fakePrompt.style.whiteSpace = 'pre';
+  fakePrompt.innerHTML = '<span class="st st-action">[>]</span>';
+  term.insertBefore(fakePrompt, inputLine);
+
   const rainEls = [];
   for (let i = 0; i < RAIN_ROWS; i++) {
     const row = document.createElement('div');
@@ -563,7 +571,7 @@ async function fxMatrix() {
     });
   }
 
-  // char + color buffers
+  // buffers: row 0=response, row 1=fake prompt, rows 2+=rain
   const buf = [];
   const clr = [];
   for (let r = 0; r < totalRows; r++) {
@@ -571,11 +579,13 @@ async function fxMatrix() {
     clr.push(new Uint8Array(COLS));
   }
   for (let c = 0; c < COLS; c++) buf[0][c] = origPadded[c];
+  // row 1 init: "[>]" + spaces
+  const fakeText = '[>]'.padEnd(COLS);
+  for (let c = 0; c < COLS; c++) buf[1][c] = fakeText[c];
 
   const tickMs = 60;
-  let row0restored = false;
+  let activated = false;
 
-  // run until all trails exit past the last rain row
   let done = false;
   while (!done) {
     for (const d of drops) {
@@ -583,42 +593,46 @@ async function fxMatrix() {
       while (d.acc >= 1) { d.y++; d.acc -= 1; }
     }
 
-    // update only within fixed grid
+    // update within fixed grid
     for (const d of drops) {
       const c = d.col;
       for (let r = 0; r < totalRows; r++) {
         const dist = d.y - r;
-        if (dist === 0 && r < totalRows) {
+        if (dist === 0) {
           buf[r][c] = rc(); clr[r][c] = 1;
         } else if (dist > 0 && dist <= d.trail) {
           buf[r][c] = rc(); clr[r][c] = dist <= 2 ? 2 : 3;
         } else if (dist > d.trail) {
           if (r === 0) { buf[0][c] = origPadded[c]; clr[0][c] = 0; }
+          else if (r === 1) { buf[1][c] = fakeText[c]; clr[1][c] = 0; }
           else { buf[r][c] = ' '; clr[r][c] = 0; }
         }
       }
     }
 
-    // render
+    // render row 0 (response)
     renderRow(responseLine, buf[0], clr[0]);
+    // render row 1 (fake prompt) — only while not activated
+    if (!activated) renderRow(fakePrompt, buf[1], clr[1]);
+    // render rain rows (row 2+)
     for (let i = 0; i < RAIN_ROWS; i++) {
-      renderRow(rainEls[i], buf[i + 1], clr[i + 1]);
+      renderRow(rainEls[i], buf[i + 2], clr[i + 2]);
     }
 
-    // show [>] as soon as row 0 is fully restored
-    if (!row0restored && drops.every(d => (d.y - d.trail) > 0)) {
-      row0restored = true;
+    // when trails clear row 2: swap fake prompt for real input
+    if (!activated && drops.every(d => (d.y - d.trail) > 2)) {
+      activated = true;
       responseLine.innerHTML = origHTML;
+      fakePrompt.remove();
       inputLine.style.display = '';
     }
 
-    // done when all trails past last rain row
     if (drops.every(d => (d.y - d.trail) >= totalRows)) done = true;
 
     await sleep(tickMs);
   }
 
-  // cleanup rain rows
+  // cleanup
   rainEls.forEach(el => el.remove());
 
   function renderRow(el, chars, clrs) {
