@@ -157,6 +157,7 @@
 
   /* interactive input */
   .input-line{display:flex;align-items:flex-start}
+  .input-line.hidden{opacity:0;height:0;overflow:hidden;pointer-events:none}
   .input-line::before{
     content:'[>]';
     color:var(--state-action);
@@ -202,7 +203,7 @@
 </head>
 <body>
 <div class="terminal" id="term">
-  <div class="input-line" style="display:none">
+  <div class="input-line hidden">
     <div class="input-wrap">
       <div id="input" contenteditable="true" role="textbox" spellcheck="false" autocorrect="off" autocapitalize="off"></div><span id="ghost"></span><span class="cursor" id="cursor"></span>
     </div>
@@ -315,13 +316,15 @@ async function renderBoot() {
     await sleep(LINE_PAUSE);
   }
   // show input
-  inputLine.style.display = '';
+  inputLine.classList.remove('hidden');
   if (isFollowing) scrollToBottom();
   focusEnd();
   scheduleBreath();
   resetIdleTimer();
 }
 
+// focus early so iOS keyboard appears during boot
+input.focus();
 renderBoot();
 
 // ── state mark animation ──────────────────────────
@@ -370,7 +373,7 @@ function scheduleBreath() {
 // ── processing spinner on [>] ─────────────────────
 function showProcessing(cmdLineEl) {
   return new Promise(resolve => {
-    inputLine.style.display = 'none';
+    inputLine.classList.add('hidden');
     const mark = cmdLineEl.querySelector('.st');
     const frames = ['[/]','[-]','[\\]','[-]','[>]'];
     let i = 0;
@@ -656,8 +659,9 @@ input.addEventListener('keydown', async e => {
   const blank = document.createElement('div');
   blank.className = 'blank';
   term.insertBefore(blank, inputLine);
-  inputLine.style.display = '';
+  inputLine.classList.remove('hidden');
   forceFollow();
+  focusEnd();
 
   // run effect after layout is settled
   if (typeof backendData !== 'undefined' && backendData?.effect) {
@@ -666,6 +670,7 @@ input.addEventListener('keydown', async e => {
     await runEffect(backendData.effect);
   }
   resetIdleTimer();
+  focusEnd();
 });
 
 // ── render helpers ───────────────────────────────
@@ -924,7 +929,7 @@ async function fxReboot() {
 
   // clear everything except input line
   while (term.firstChild !== inputLine) term.removeChild(term.firstChild);
-  inputLine.style.display = 'none';
+  inputLine.classList.add('hidden');
   window.scrollTo(0, 0);
   isFollowing = true;
 
