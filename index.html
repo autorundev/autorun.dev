@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>[*] autorun.dev</title>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <meta name="description" content="autorun.dev - ai-native tools & products">
 <meta property="og:title" content="[*] autorun.dev">
 <meta property="og:description" content="ai-native tools & products">
@@ -16,7 +18,7 @@
 <meta name="twitter:image" content="https://autorun.dev/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
 <style>
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
@@ -73,12 +75,16 @@
     }
   }
 
-  html{font-size:clamp(8px,calc((100vw - 32px)/36),15px)}
+  html{font-size:14px}
   body{
     background:var(--bg);
     color:var(--fg);
     font-family:'JetBrains Mono',ui-monospace,monospace;
-    line-height:1.7;
+    font-size:14px;
+    line-height:18px;
+    letter-spacing:0;
+    font-variant-ligatures:none;
+    font-feature-settings:'liga' 0,'calt' 0;
     min-height:100dvh;
     display:flex;
     justify-content:center;
@@ -92,12 +98,12 @@
     overflow-x:hidden;
   }
   .line{margin-bottom:.15rem}
-  .cmd{color:var(--fg);font-weight:400}
+  .cmd{color:var(--fg);font-weight:500}
   .dim{color:var(--fg-2)}
-  .blank{height:1.7em}
+  .blank{height:18px}
 
   /* state marks */
-  .st{font-weight:400;display:inline;}
+  .st{font-weight:500;display:inline;}
   .st-core{color:var(--core)}
   .st-action{color:var(--action)}
   .st-presence{color:var(--presence)}
@@ -110,7 +116,7 @@
   /* logo */
   .logo-wrap{cursor:pointer;display:inline-block}
   .logo-mark{
-    font-weight:700;
+    font-weight:800;
     display:flex;
     align-items:center;
     gap:.4em;
@@ -118,8 +124,6 @@
   .logo-mark .mark-char{
     color:var(--core);
     transition:color .1s;
-    display:inline-block;
-    min-width:3ch;
   }
 
   /* projects */
@@ -133,7 +137,7 @@
     transition:border-color .2s;
   }
   .project:hover{border-color:var(--core)}
-  .project-name{color:var(--core);font-weight:700}
+  .project-name{color:var(--core);font-weight:800}
   .project-desc{color:var(--fg-2)}
   .project-status{}
 
@@ -151,12 +155,12 @@
     border:none;
     color:var(--fg);
     font:inherit;
-    font-weight:400;
+    font-weight:500;
     outline:none;
     caret-color:transparent;
     white-space:nowrap;
     padding:0;margin:0;
-    min-height:1.7em;
+    min-height:18px;
     -webkit-user-modify:read-write-plaintext-only;
   }
   #input br{display:none}
@@ -164,9 +168,9 @@
   /* block cursor */
   .cursor{
     display:inline-block;
-    width:.6em;height:1.15em;
+    width:8px;height:18px;
     background:var(--fg);
-    vertical-align:text-bottom;
+    vertical-align:baseline;
     animation:blink 1s step-end infinite;
     flex-shrink:0;
   }
@@ -262,27 +266,26 @@ logoEl.addEventListener('click', e => {
   animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 150);
 });
 
-// ── processing spinner replaces inner char of [>] ─
+// ── processing spinner on [>] ─────────────────────
 function showProcessing(cmdLineEl) {
   return new Promise(resolve => {
     inputLine.style.display = 'none';
-    const inner = cmdLineEl.querySelector('.st-inner');
     const mark = cmdLineEl.querySelector('.st');
-    const frames = ['/','-','\\','-','*'];
+    const frames = ['[/]','[-]','[\\]','[-]','[>]'];
     let i = 0;
     mark.classList.remove('st-action');
     mark.classList.add('st-core');
     const iv = setInterval(() => {
       if (i >= frames.length) {
         clearInterval(iv);
-        inner.textContent = '>';
+        mark.textContent = '[>]';
         mark.classList.remove('st-core');
         mark.classList.add('st-action');
         inputLine.style.display = '';
         resolve();
         return;
       }
-      inner.textContent = frames[i];
+      mark.textContent = frames[i];
       i++;
     }, 120);
   });
@@ -301,12 +304,12 @@ applyTheme(getTheme());
 // ── commands ──────────────────────────────────────
 const commands = {
   help: () =>
-    'about     <span style="color:var(--fg-3)">- what we do</span>\n' +
-    'projects  <span style="color:var(--fg-3)">- things we ship</span>\n' +
-    'team      <span style="color:var(--fg-3)">- who\'s behind the terminal</span>\n' +
-    'stack     <span style="color:var(--fg-3)">- how we build</span>\n' +
-    'config    <span style="color:var(--fg-3)">- settings</span>\n' +
-    'clear     <span style="color:var(--fg-3)">- wipe the screen</span>',
+    'about    <span style="color:var(--fg-3)"> - what we do</span>\n' +
+    'projects <span style="color:var(--fg-3)"> - things we ship</span>\n' +
+    'team     <span style="color:var(--fg-3)"> - who\'s behind the terminal</span>\n' +
+    'stack    <span style="color:var(--fg-3)"> - how we build</span>\n' +
+    'config   <span style="color:var(--fg-3)"> - settings</span>\n' +
+    'clear    <span style="color:var(--fg-3)"> - wipe the screen</span>',
 
   about: () =>
     'autorun.dev builds ai-native products that\n' +
@@ -393,7 +396,7 @@ input.addEventListener('keydown', async e => {
   // echo command
   const cmdLine = document.createElement('div');
   cmdLine.className = 'line';
-  cmdLine.innerHTML = `<span class="st st-action">[<span class="st-inner">></span>]</span> <span class="cmd">${esc(raw)}</span>`;
+  cmdLine.innerHTML = `<span class="st st-action">[>]</span> <span class="cmd">${esc(raw)}</span>`;
   term.insertBefore(cmdLine, inputLine);
 
   if (val === 'clear') {
