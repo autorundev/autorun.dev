@@ -20,8 +20,12 @@ import Anthropic from '@anthropic-ai/sdk';
 
 const anthropic = new Anthropic();
 // PRD (pseudo-random distribution) — chance grows each miss, resets on proc
-const PRD_C = 0.03; // base increment (~10% avg over 10 attempts)
+const PRD_C = 0.03;
 let prdCounter = 0;
+
+// track found easter eggs per IP
+const totalEggs = Object.keys(commands).length;
+const foundEggs = new Map(); // ip -> Set of found commands
 
 const SYSTEM_PROMPT = `You are a hidden presence inside autorun.dev terminal. You only appear when someone keeps typing random nonsense instead of using \`help\`.
 
@@ -34,6 +38,9 @@ Rules:
 - never use [>] — that's user input.
 - you're a machine that's mildly annoyed by being summoned for nothing.
 - think "sarcastic unix fortune cookie", not "helpful assistant".
+- you receive [easter eggs found: X / Y]. occasionally mention the score to tease them.
+  e.g. "[:] 3 / 35 found. you're not even trying." or "[*] 0 found. help is free."
+  don't mention it every time — maybe 30% of responses.
 
 Examples of tone:
 [*] you've been typing random things for a while.
@@ -109,8 +116,16 @@ app.post('/api/cmd', async (c) => {
   // Omit on production or pipe to analytics.
   console.log(`[>] ${input} (lang=${lang})`);
 
+  // Track per IP
+  const ip = c.req.header('x-forwarded-for') || c.req.header('x-real-ip') || 'unknown';
+  if (!foundEggs.has(ip)) foundEggs.set(ip, new Set());
+  const found = foundEggs.get(ip);
+
   // Look up in easter egg registry.
-  const handler = commands[input] || commands[normalizeInput(input)];
+  const key = input in commands ? input : normalizeInput(input);
+  const handler = commands[key];
+
+  if (handler) found.add(key);
 
   if (!handler) {
     // PRD: chance = C * N, resets on proc
@@ -123,7 +138,7 @@ app.post('/api/cmd', async (c) => {
           model: 'claude-haiku-4-5-20251001',
           max_tokens: 150,
           system: SYSTEM_PROMPT,
-          messages: [{ role: 'user', content: input }],
+          messages: [{ role: 'user', content: `[user input: ${input}]\n[easter eggs found: ${found.size} / ${totalEggs}]` }],
         });
         const text = msg.content[0]?.text || '';
         const lines = text.split('\n').filter(l => l.trim()).map(l => {
