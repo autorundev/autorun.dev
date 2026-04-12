@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>[*] autorun.dev</title>
+<title>autorun.dev</title>
 <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <meta name="description" content="autorun.dev - ai-native tools & products">
-<meta property="og:title" content="[*] autorun.dev">
+<meta property="og:title" content="autorun.dev">
 <meta property="og:description" content="ai-native tools & products">
 <meta property="og:image" content="https://autorun.dev/og.png">
 <meta property="og:url" content="https://autorun.dev">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="[*] autorun.dev">
+<meta name="twitter:title" content="autorun.dev">
 <meta name="twitter:description" content="ai-native tools & products">
 <meta name="twitter:image" content="https://autorun.dev/og.png">
 <style>
@@ -148,20 +148,6 @@
     transition:color .1s;
   }
 
-  /* projects */
-  .project{
-    display:block;
-    margin:.5rem 0 .5rem 0;
-    text-decoration:none;
-    color:var(--fg-0);
-    border-left:2px solid var(--fg-3);
-    padding-left:1rem;
-    transition:border-color .2s;
-  }
-  .project:hover{border-color:var(--state-core)}
-  .project-name{color:var(--state-core);font-weight:800}
-  .project-desc{color:var(--fg-2)}
-  .project-status{}
 
   /* interactive input */
   .input-line{display:flex;align-items:center}
@@ -474,21 +460,20 @@ const commands = {
 
 const projectsHTML = `
   <div class="line"><span class="st st-core">[*]</span> things we ship</div>
-  <a href="https://vectoros.ai" target="_blank" rel="noopener" class="project">
-    <div class="project-name"><span class="st st-presence">[:]</span> <span style="color:var(--brand-vectoros)">vectoros</span></div>
-    <div class="project-desc">ai companion for telegram.<br>second brain powered by claude.</div>
-    <div class="project-status st-live">[status: live]</div>
-  </a>
-  <a href="https://playsnap.bot" target="_blank" rel="noopener" class="project">
-    <div class="project-name"><span class="st st-presence">[:]</span> <span style="color:var(--brand-playsnap-play)">play</span><span style="color:var(--brand-playsnap-snap)">snap</span></div>
-    <div class="project-desc">minimalist hockey for telegram.<br>one button. perfect timing. no tutorial.</div>
-    <div class="project-status st-live">[status: live]</div>
-  </a>
-  <div class="project" style="cursor:default">
-    <div class="project-name"><span class="st st-idle">[.]</span> <span style="color:var(--fg-1)">********</span></div>
-    <div class="project-desc" style="color:var(--fg-1)">********* *** ******.</div>
-    <div class="project-status st-stealth">[status: stealth]</div>
-  </div>`;
+  <div class="blank"></div>
+  <a href="https://vectoros.ai" target="_blank" rel="noopener" class="line" style="display:block;text-decoration:none;color:inherit"><span class="st st-presence">[:]</span> <span style="color:var(--brand-vectoros)">vectoros</span></a>
+  <div class="line">    ai companion for telegram.</div>
+  <div class="line">    second brain powered by claude.</div>
+  <div class="line">    <span class="st st-live">[status: live]</span></div>
+  <div class="blank"></div>
+  <a href="https://playsnap.bot" target="_blank" rel="noopener" class="line" style="display:block;text-decoration:none;color:inherit"><span class="st st-presence">[:]</span> <span style="color:var(--brand-playsnap-play)">play</span><span style="color:var(--brand-playsnap-snap)">snap</span></a>
+  <div class="line">    minimalist hockey for telegram.</div>
+  <div class="line">    one button. perfect timing. no tutorial.</div>
+  <div class="line">    <span class="st st-live">[status: live]</span></div>
+  <div class="blank"></div>
+  <div class="line"><span class="st st-idle">[.]</span> <span style="color:var(--fg-1)">********</span></div>
+  <div class="line" style="color:var(--fg-1)">    ********* *** ******.</div>
+  <div class="line">    <span class="st st-stealth">[status: stealth]</span></div>`;
 
 // ── input handling ────────────────────────────────
 input.addEventListener('paste', e => {
