@@ -1,38 +1,38 @@
 [
   {
     "slug": "home",
-    "title": "ai-native tools & products",
-    "subtitle": "software that runs where people already are.",
-    "status": "[status: live]"
+    "mark": "[*]",
+    "primary": "ai-native tools & products.",
+    "secondary": "for people. not the other way."
   },
   {
     "slug": "vectoros",
-    "title": "vectoros.ai",
-    "subtitle": "ai companion for telegram. second brain powered by claude.",
-    "status": "[status: live]"
+    "mark": "[:]",
+    "primary": "vectoros.",
+    "secondary": "ai companion for telegram."
   },
   {
     "slug": "playsnap",
-    "title": "playsnap.bot",
-    "subtitle": "minimalist hockey for telegram. one button. perfect timing.",
-    "status": "[status: live]"
+    "mark": "[:]",
+    "primary": "playsnap.",
+    "secondary": "one button. perfect timing."
   },
   {
     "slug": "redacted",
-    "title": "[redacted]",
-    "subtitle": "something for traders.",
-    "status": "[status: stealth]"
+    "mark": "[.]",
+    "primary": "********",
+    "secondary": "********* *** ******."
   },
   {
-    "slug": "ship-log-007",
-    "title": "ship log 007",
-    "subtitle": "agent now remembers things. we finally fixed that bug.",
-    "status": "[status: live]"
+    "slug": "ship-007",
+    "mark": "[+]",
+    "primary": "ship log 007.",
+    "secondary": "agent now remembers things."
   },
   {
     "slug": "careers",
-    "title": "we're hiring.",
-    "subtitle": "senior product engineers. remote, async, ship-focused.",
-    "status": "[status: live]"
+    "mark": "[*]",
+    "primary": "we're hiring.",
+    "secondary": "remote. async. ship-focused."
   }
 ]

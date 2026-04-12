@@ -1,6 +1,6 @@
 # autorun — Brand System
 
-**Version:** 1.4
+**Version:** 1.5
 **Status:** Final
 
 ---
@@ -163,7 +163,7 @@ PRODUCT ALPHABET (+7)
 
 TYPOGRAPHY
   Berkeley Mono / JetBrains Mono
-  Regular 400, Bold 700
+  Medium 500, ExtraBold 800
   lowercase bias, no italic, no tracking
 
 COLOR

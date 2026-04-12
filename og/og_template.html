@@ -5,7 +5,7 @@
 <title>autorun.dev — og</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -31,173 +31,106 @@
     background: var(--bg-0);
     color: var(--fg-0);
     font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 1.4;
+    font-weight: 500;
     letter-spacing: 0;
-    padding: 72px 80px;
+    padding: 80px 96px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-  }
-
-  /* Subtle terminal grid background */
-  body::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-    background-size: 24px 24px;
-    pointer-events: none;
-  }
-
-  .header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    font-size: 26px;
-    font-weight: 700;
+    justify-content: center;
     position: relative;
   }
 
-  .mark  { color: var(--state-core); }
-  .brand { color: var(--fg-0); }
-
-  .content {
+  .statement {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 1040px;
+    align-items: flex-start;
+    gap: 16px;
+    max-width: 960px;
     position: relative;
   }
 
-  .title {
-    font-size: 64px;
-    font-weight: 700;
-    line-height: 1.1;
+  .mark {
+    color: var(--state-core);
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 1.3;
+    flex-shrink: 0;
+  }
+
+  .lines {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .line-primary {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1.3;
     color: var(--fg-0);
     letter-spacing: -0.01em;
   }
 
-  .title.small    { font-size: 52px; }
-  .title.xsmall   { font-size: 42px; }
-
-  .subtitle {
-    font-size: 26px;
-    font-weight: 400;
-    line-height: 1.45;
+  .line-secondary {
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 1.3;
     color: var(--fg-1);
-    max-width: 920px;
+    letter-spacing: -0.01em;
   }
 
-  .footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    font-size: 20px;
-    color: var(--fg-2);
-    position: relative;
-  }
-
-  .prompt {
-    color: var(--fg-0);
-  }
-
-  .status {
-    color: var(--state-live);
-    font-weight: 700;
-  }
-
-  .status.stealth { color: var(--state-stealth); }
-  .status.alert   { color: var(--state-alert); }
-  .status.stop    { color: var(--state-stop); }
-  .status.core    { color: var(--state-core); }
-
-  .meta {
-    color: var(--fg-2);
-    font-size: 18px;
-  }
-
-  /* Variant: announcement with boot lines */
-  .boot {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    color: var(--fg-2);
-    font-size: 18px;
-    margin-top: 24px;
-  }
-
-  .boot .ok { color: var(--state-live); }
-  .boot .core { color: var(--state-core); }
+  /* Auto-scale for long text */
+  .line-primary.small,
+  .line-secondary.small   { font-size: 38px; }
+  .line-primary.xsmall,
+  .line-secondary.xsmall  { font-size: 32px; }
 </style>
 </head>
 <body>
 
-  <div class="header">
-    <span class="mark">[*]</span>
-    <span class="brand" id="brand">autorun.dev</span>
-  </div>
-
-  <div class="content">
-    <div class="title" id="title">ai-native tools &amp; products</div>
-    <div class="subtitle" id="subtitle">software that runs where people already are.</div>
-    <div class="boot" id="boot" style="display:none;">
-      <div>&gt; booting <span class="core" id="boot-name">autorun.dev</span> ... <span class="ok">ok</span></div>
-      <div>&gt; agents online: <span id="boot-agents">3</span></div>
-      <div>&gt; <span id="boot-line">ready.</span></div>
+  <div class="statement">
+    <span class="mark" id="mark">[*]</span>
+    <div class="lines">
+      <div class="line-primary" id="primary">ai-native tools &amp; products.</div>
+      <div class="line-secondary" id="secondary">for people. not the other way.</div>
     </div>
-  </div>
-
-  <div class="footer">
-    <span class="prompt">[&gt;] _</span>
-    <span class="status" id="status">[status: live]</span>
   </div>
 
 <script>
   const params = new URLSearchParams(window.location.search);
 
-  // Text content
+  // Text parameters
   const setText = (id, key) => {
     const v = params.get(key);
     if (v !== null) document.getElementById(id).textContent = v;
   };
 
-  setText('brand', 'brand');
-  setText('title', 'title');
-  setText('subtitle', 'subtitle');
+  setText('primary', 'primary');
+  setText('secondary', 'secondary');
+  setText('mark', 'mark');
 
-  // Auto-scale title based on length
-  const titleEl = document.getElementById('title');
-  const len = titleEl.textContent.length;
-  if (len > 80) titleEl.classList.add('xsmall');
-  else if (len > 50) titleEl.classList.add('small');
-
-  // Status with color mapping
-  const statusEl = document.getElementById('status');
-  if (params.has('status')) {
-    const s = params.get('status');
-    statusEl.textContent = s;
-    const lower = s.toLowerCase();
-    statusEl.classList.remove('stealth', 'alert', 'stop', 'core');
-    if      (lower.includes('stealth') || lower.includes('redacted')) statusEl.classList.add('stealth');
-    else if (lower.includes('alert')   || lower.includes('warning'))  statusEl.classList.add('alert');
-    else if (lower.includes('abort')   || lower.includes('fail')
-          || lower.includes('down')    || lower.includes('stop'))     statusEl.classList.add('stop');
-    else if (lower.includes('wip')     || lower.includes('building')
-          || lower.includes('soon'))                                  statusEl.classList.add('core');
-    // default: live (green)
+  // Auto-scale both lines together based on longest
+  const primaryEl = document.getElementById('primary');
+  const secondaryEl = document.getElementById('secondary');
+  const maxLen = Math.max(
+    primaryEl.textContent.length,
+    secondaryEl.textContent.length
+  );
+  if (maxLen > 60) {
+    primaryEl.classList.add('xsmall');
+    secondaryEl.classList.add('xsmall');
+  } else if (maxLen > 40) {
+    primaryEl.classList.add('small');
+    secondaryEl.classList.add('small');
   }
 
-  // Boot variant
-  if (params.get('variant') === 'boot') {
-    document.getElementById('boot').style.display = 'flex';
-    if (params.has('agents')) document.getElementById('boot-agents').textContent = params.get('agents');
-    if (params.has('bootline')) document.getElementById('boot-line').textContent = params.get('bootline');
-    if (params.has('brand')) document.getElementById('boot-name').textContent = params.get('brand');
-  }
+  // Mark color mapping for variants
+  const markEl = document.getElementById('mark');
+  const markText = markEl.textContent;
+  if      (markText === '[!]')  markEl.style.color = 'var(--state-alert)';
+  else if (markText === '[x]')  markEl.style.color = 'var(--state-stop)';
+  else if (markText === '[+]')  markEl.style.color = 'var(--state-live)';
+  else if (markText === '[:]')  markEl.style.color = 'var(--state-core)';
+  // default [*] stays --state-core
 
   // Signal ready for headless screenshot
   document.fonts.ready.then(() => {

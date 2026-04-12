@@ -1,29 +1,21 @@
 #!/usr/bin/env node
 /**
- * autorun — og image generator
+ * autorun — og image generator v2
  *
  * Usage:
- *   node og_generate.js --title "new drop: vectoros v0.4" \
- *                       --subtitle "agent now remembers things." \
- *                       --status "[status: live]" \
- *                       --out ./out/vectoros-v04.png
+ *   node og_generate.js --primary "ai-native tools." \
+ *                       --secondary "for people." \
+ *                       --out ./og.png
  *
- *   node og_generate.js --preset project \
- *                       --title "[redacted]" \
- *                       --subtitle "something for traders." \
- *                       --status "[status: stealth]"
- *
- *   node og_generate.js --variant boot \
- *                       --title "autorun.dev" \
- *                       --subtitle "ai-native tools & products" \
- *                       --agents 3 \
- *                       --bootline "ready."
+ *   node og_generate.js --mark "[:]" \
+ *                       --primary "vectoros." \
+ *                       --secondary "ai companion for telegram."
  *
  *   # batch mode:
- *   node og_generate.js --batch ./posts.json --outdir ./out/
+ *   node og_generate.js --batch ./posts.example.json --outdir ./out/
  *
  * posts.json format:
- *   [{ "slug": "ship-007", "title": "ship log 007", "subtitle": "...", "status": "[status: live]" }]
+ *   [{ "slug": "home", "mark": "[*]", "primary": "...", "secondary": "..." }]
  */
 
 const puppeteer = require('puppeteer');
@@ -48,33 +40,12 @@ const parseArgs = () => {
 };
 
 // ─────────────────────────────────────────────────────
-// presets
+// defaults
 
-const presets = {
-  default: {
-    title: 'ai-native tools & products',
-    subtitle: 'software that runs where people already are.',
-    status: '[status: live]',
-  },
-  project: {
-    status: '[status: live]',
-  },
-  stealth: {
-    title: '[redacted]',
-    subtitle: 'something for traders.',
-    status: '[status: stealth]',
-  },
-  ship: {
-    status: '[status: live]',
-  },
-  boot: {
-    variant: 'boot',
-    title: 'autorun.dev',
-    subtitle: 'ai-native tools & products',
-    agents: '3',
-    bootline: 'ready.',
-    status: '[status: live]',
-  },
+const defaults = {
+  mark: '[*]',
+  primary: 'ai-native tools & products.',
+  secondary: 'for people. not the other way.',
 };
 
 // ─────────────────────────────────────────────────────
@@ -123,21 +94,15 @@ async function renderOne(browser, params, outPath) {
       for (const post of posts) {
         const { slug, ...params } = post;
         const out = path.join(outdir, `${slug}.png`);
-        await renderOne(browser, params, out);
+        await renderOne(browser, { ...defaults, ...params }, out);
       }
     } else {
       // single mode
-      const preset = args.preset ? presets[args.preset] || {} : {};
       const params = {
-        ...presets.default,
-        ...preset,
-        title: args.title || preset.title || presets.default.title,
-        subtitle: args.subtitle || preset.subtitle || presets.default.subtitle,
-        status: args.status || preset.status || presets.default.status,
-        brand: args.brand,
-        variant: args.variant || preset.variant,
-        agents: args.agents || preset.agents,
-        bootline: args.bootline || preset.bootline,
+        ...defaults,
+        mark: args.mark || defaults.mark,
+        primary: args.primary || defaults.primary,
+        secondary: args.secondary || defaults.secondary,
       };
       const out = args.out || './og.png';
       await renderOne(browser, params, out);
