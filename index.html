@@ -15,7 +15,7 @@
     --link:#93c5fd;
     --prompt:#a78bfa;
   }
-  html{font-size:15px}
+  html{font-size:clamp(10px,2.5vw,15px)}
   body{
     background:var(--bg);
     color:var(--fg);
@@ -30,6 +30,7 @@
   .terminal{
     max-width:640px;
     width:100%;
+    overflow-x:hidden;
   }
   .line{margin-bottom:.15rem}
   .prompt::before{
@@ -115,7 +116,6 @@
   @keyframes blink{50%{opacity:0}}
 
   @media(max-width:480px){
-    html{font-size:14px}
     body{padding:1.5rem 1rem}
   }
 </style>
