@@ -22,63 +22,67 @@
 <style>
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
-  /* === DARK THEME (default) === */
-  :root{
-    --bg:#0A0A0A;
+  /* === DARK THEME === */
+  :root,
+  [data-theme="dark"]{
+    --bg-0:#0A0A0A;
     --bg-1:#111111;
-    --fg:#E8E8E8;
+    --bg-2:#1A1A1A;
+    --fg-0:#E8E8E8;
     --fg-1:#A0A0A0;
     --fg-2:#606060;
     --fg-3:#404040;
-    --core:#7DD3FC;
-    --action:#E8E8E8;
-    --presence:#A78BFA;
-    --live:#4ADE80;
-    --alert:#FBBF24;
-    --stop:#F87171;
-    --stealth:#A0A0A0;
+    --state-core:#7DD3FC;
+    --state-action:#E8E8E8;
+    --state-presence:#A78BFA;
+    --state-live:#4ADE80;
+    --state-alert:#FBBF24;
+    --state-stop:#F87171;
+    --state-stealth:#A0A0A0;
   }
 
   /* === LIGHT THEME === */
   [data-theme="light"]{
-    --bg:#FAFAFA;
+    --bg-0:#FAFAFA;
     --bg-1:#F4F4F4;
-    --fg:#0A0A0A;
+    --bg-2:#EDEDED;
+    --fg-0:#0A0A0A;
     --fg-1:#404040;
     --fg-2:#707070;
     --fg-3:#B0B0B0;
-    --core:#0284C7;
-    --action:#0A0A0A;
-    --presence:#7C3AED;
-    --live:#16A34A;
-    --alert:#D97706;
-    --stop:#DC2626;
-    --stealth:#707070;
+    --state-core:#0284C7;
+    --state-action:#0A0A0A;
+    --state-presence:#7C3AED;
+    --state-live:#16A34A;
+    --state-alert:#D97706;
+    --state-stop:#DC2626;
+    --state-stealth:#707070;
   }
 
   /* === SYSTEM THEME === */
   @media(prefers-color-scheme:light){
     [data-theme="system"]{
-      --bg:#FAFAFA;
+      --bg-0:#FAFAFA;
       --bg-1:#F4F4F4;
-      --fg:#0A0A0A;
+      --bg-2:#EDEDED;
+      --fg-0:#0A0A0A;
       --fg-1:#404040;
       --fg-2:#707070;
       --fg-3:#B0B0B0;
-      --core:#0284C7;
-      --action:#0A0A0A;
-      --presence:#7C3AED;
-      --live:#16A34A;
-      --alert:#D97706;
-      --stop:#DC2626;
-      --stealth:#707070;
+      --state-core:#0284C7;
+      --state-action:#0A0A0A;
+      --state-presence:#7C3AED;
+      --state-live:#16A34A;
+      --state-alert:#D97706;
+      --state-stop:#DC2626;
+      --state-stealth:#707070;
     }
   }
 
   html{font-size:14px}
   body{
-    background:var(--bg);
-    color:var(--fg);
+    background:var(--bg-0);
+    color:var(--fg-0);
     font-family:'JetBrains Mono',ui-monospace,monospace;
     font-size:14px;
     line-height:18px;
@@ -98,19 +102,19 @@
     overflow-x:hidden;
   }
   .line{margin-bottom:.15rem;white-space:pre-wrap}
-  .cmd{color:var(--fg);font-weight:500}
+  .cmd{color:var(--fg-0);font-weight:500}
   .dim{color:var(--fg-2)}
   .blank{height:18px}
 
   /* state marks */
   .st{font-weight:500;display:inline;}
-  .st-core{color:var(--core)}
-  .st-action{color:var(--action)}
-  .st-presence{color:var(--presence)}
-  .st-live{color:var(--live)}
-  .st-alert{color:var(--alert)}
-  .st-stop{color:var(--stop)}
-  .st-stealth{color:var(--stealth)}
+  .st-core{color:var(--state-core)}
+  .st-action{color:var(--state-action)}
+  .st-presence{color:var(--state-presence)}
+  .st-live{color:var(--state-live)}
+  .st-alert{color:var(--state-alert)}
+  .st-stop{color:var(--state-stop)}
+  .st-stealth{color:var(--state-stealth)}
   .st-idle{color:var(--fg-2)}
 
   /* logo */
@@ -122,7 +126,7 @@
     gap:.4em;
   }
   .logo-mark .mark-char{
-    color:var(--core);
+    color:var(--state-core);
     transition:color .1s;
   }
 
@@ -131,13 +135,13 @@
     display:block;
     margin:.5rem 0 .5rem 0;
     text-decoration:none;
-    color:var(--fg);
+    color:var(--fg-0);
     border-left:2px solid var(--fg-3);
     padding-left:1rem;
     transition:border-color .2s;
   }
-  .project:hover{border-color:var(--core)}
-  .project-name{color:var(--core);font-weight:800}
+  .project:hover{border-color:var(--state-core)}
+  .project-name{color:var(--state-core);font-weight:800}
   .project-desc{color:var(--fg-2)}
   .project-status{}
 
@@ -145,7 +149,7 @@
   .input-line{display:flex;align-items:center}
   .input-line::before{
     content:'[>]';
-    color:var(--action);
+    color:var(--state-action);
     flex-shrink:0;
     margin-right:.6em;
   }
@@ -153,7 +157,7 @@
   #input{
     background:none;
     border:none;
-    color:var(--fg);
+    color:var(--fg-0);
     font:inherit;
     font-weight:500;
     outline:none;
@@ -169,7 +173,7 @@
   .cursor{
     display:inline-block;
     width:8px;height:18px;
-    background:var(--fg);
+    background:var(--fg-0);
     vertical-align:baseline;
     animation:blink 1s step-end infinite;
     flex-shrink:0;
@@ -177,7 +181,7 @@
   @keyframes blink{50%{opacity:0}}
 
   /* processing spinner */
-  .processing{color:var(--core);margin-bottom:.15rem}
+  .processing{color:var(--state-core);margin-bottom:.15rem}
 
   /* reduced motion */
   @media(prefers-reduced-motion:reduce){
@@ -328,12 +332,12 @@ const commands = {
     '   who ship end-to-end - design, code, growth,\n' +
     '   ops.\n' +
     '\n' +
-    '   founder:  <span style="color:var(--fg)">anton frolov</span>\n' +
+    '   founder:  <span style="color:var(--fg-0)">anton frolov</span>\n' +
     '             vibe coder (unironically)\n' +
     '\n' +
     '   crew:     engineers, designers, degens\n' +
     '   hiring:   always, if you\'re the real thing.\n' +
-    '             → <a href="mailto:hello@autorun.dev" style="color:var(--core);text-decoration:none">hello@autorun.dev</a>',
+    '             → <a href="mailto:hello@autorun.dev" style="color:var(--state-core);text-decoration:none">hello@autorun.dev</a>',
 
   projects: () => '__projects__',
 
@@ -357,7 +361,7 @@ const commands = {
     const parts = args.split(/\s+/);
     if (parts[0] === 'theme' && ['dark','light','system'].includes(parts[1])) {
       applyTheme(parts[1]);
-      return '<span class="st st-live">[+]</span> theme set to <span style="color:var(--fg)">' + parts[1] + '</span>';
+      return '<span class="st st-live">[+]</span> theme set to <span style="color:var(--fg-0)">' + parts[1] + '</span>';
     }
     return '<span class="st st-alert">[?]</span> <span class="dim">unknown config. try:</span> config theme dark|light|system';
   },

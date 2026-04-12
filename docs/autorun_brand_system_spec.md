@@ -456,6 +456,8 @@ Light mode (вторичный):
 Цвета привязаны к семантике state-алфавита. Не используются
 декоративно.
 
+Dark mode:
+
 ```
 --state-core     #7DD3FC   [*]  cyan/blue — active intelligence
 --state-action   #E8E8E8   [>]  fg-0     — neutral, ready
@@ -466,8 +468,22 @@ Light mode (вторичный):
 --state-stealth  #A0A0A0   fg-1     — redacted, hidden
 ```
 
+Light mode:
+
+```
+--state-core     #0284C7   [*]  darker cyan — WCAG AA on #FAFAFA
+--state-action   #0A0A0A   [>]  fg-0     — neutral, ready
+--state-presence #7C3AED   [:]  deeper violet
+--state-live     #16A34A   green     — status: live, ok
+--state-alert    #D97706   [!]  darker amber
+--state-stop     #DC2626   [x]  darker red
+--state-stealth  #707070   fg-2     — redacted, hidden
+```
+
 Мнемоника: чем тише состояние — тем холоднее и приглушеннее
 цвет. Чем критичнее — тем теплее и насыщеннее.
+Light mode использует затемнённые аналоги для прохождения
+WCAG AA контраста (min 4.5:1) на светлом фоне.
 
 ### 8.3. Color rules
 
