@@ -298,7 +298,6 @@ function showProcessing(cmdLineEl) {
         mark.textContent = '[>]';
         mark.classList.remove('st-core');
         mark.classList.add('st-action');
-        inputLine.style.display = '';
         resolve();
         return;
       }
@@ -427,10 +426,11 @@ input.addEventListener('keydown', async e => {
     return;
   }
 
-  // spinner inline with command
+  // spinner inline with command (hides inputLine, does NOT restore it)
   processing = true;
   await showProcessing(cmdLine);
   processing = false;
+  inputLine.style.display = '';
 
   // parse command + args
   const spaceIdx = val.indexOf(' ');
@@ -462,11 +462,20 @@ input.addEventListener('keydown', async e => {
       });
       const data = await res.json();
       if (data.lines && data.lines.length > 0) {
-        renderLines(data.lines);
         if (data.effect) {
+          // effect manages inputLine visibility and blank
+          inputLine.style.display = 'none';
+          renderLines(data.lines);
           const delay = data.delay || 0;
           if (delay) await sleep(delay);
           await runEffect(data.effect);
+          // after effect: add blank + scroll (effect restores inputLine)
+          const bl = document.createElement('div');
+          bl.className = 'blank';
+          term.insertBefore(bl, inputLine);
+          inputLine.scrollIntoView({block:'nearest'});
+        } else {
+          renderLines(data.lines);
         }
       } else {
         renderNotFound(val);
@@ -476,11 +485,12 @@ input.addEventListener('keydown', async e => {
     }
   }
 
-  const blank = document.createElement('div');
-  blank.className = 'blank';
-  term.insertBefore(blank, inputLine);
-
-  inputLine.scrollIntoView({block:'nearest'});
+  if (inputLine.style.display !== 'none') {
+    const blank = document.createElement('div');
+    blank.className = 'blank';
+    term.insertBefore(blank, inputLine);
+    inputLine.scrollIntoView({block:'nearest'});
+  }
 });
 
 // ── render helpers ───────────────────────────────
@@ -619,11 +629,13 @@ async function fxMatrix() {
       renderRow(rainEls[i], buf[i + 2], clr[i + 2]);
     }
 
-    // when trails clear row 2: swap fake prompt for real input
+    // when trails clear row 2: swap fake prompt for real input in-place
     if (!activated && drops.every(d => (d.y - d.trail) > 2)) {
       activated = true;
       responseLine.innerHTML = origHTML;
-      fakePrompt.remove();
+      const blank = document.createElement('div');
+      blank.className = 'blank';
+      fakePrompt.replaceWith(blank, inputLine);
       inputLine.style.display = '';
     }
 
