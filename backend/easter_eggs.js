@@ -81,9 +81,7 @@ export const commands = {
   },
 
   'matrix': {
-    lines: [
-      { mark: '[*]', text: 'welcome back.' },
-    ],
+    lines: [],
     effect: 'matrix_rain',
   },
 

@@ -464,7 +464,7 @@ input.addEventListener('keydown', async e => {
       backendData = await res.json();
       if (backendData.lines && backendData.lines.length > 0) {
         renderLines(backendData.lines);
-      } else {
+      } else if (!backendData.effect) {
         renderNotFound(val);
       }
     } catch {
@@ -530,9 +530,8 @@ async function fxMatrix() {
   const COLS = 60;
   const ROWS = 22;
 
-  // find response line to position overlay from
+  // anchor = blank before inputLine (where response would be)
   let anchor = inputLine.previousElementSibling;
-  while (anchor && anchor.classList.contains('blank')) anchor = anchor.previousElementSibling;
   if (!anchor) return;
 
   // position overlay starting at anchor
