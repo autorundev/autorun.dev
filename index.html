@@ -134,9 +134,8 @@
   }
   .project:hover{border-color:var(--core)}
   .project-name{color:var(--core);font-weight:700}
-  .project:hover .project-name{text-decoration:underline;text-underline-offset:3px}
-  .project-desc{color:var(--fg-2);font-size:.87rem}
-  .project-status{font-size:.87rem}
+  .project-desc{color:var(--fg-2)}
+  .project-status{}
 
   /* interactive input */
   .input-line{display:flex;align-items:center}
@@ -263,22 +262,25 @@ logoEl.addEventListener('click', e => {
   animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 150);
 });
 
-// ── processing spinner before output ──────────────
-function showProcessing() {
+// ── processing spinner inline with command ────────
+function showProcessing(cmdLineEl) {
   return new Promise(resolve => {
-    const el = document.createElement('div');
-    el.className = 'line processing';
-    term.insertBefore(el, inputLine);
+    inputLine.style.display = 'none';
+    const spinner = document.createElement('span');
+    spinner.className = 'processing';
+    spinner.style.marginLeft = '.6em';
+    cmdLineEl.appendChild(spinner);
     const frames = ['[/]','[-]','[\\]','[-]','[*]'];
     let i = 0;
     const iv = setInterval(() => {
       if (i >= frames.length) {
         clearInterval(iv);
-        el.remove();
+        spinner.remove();
+        inputLine.style.display = '';
         resolve();
         return;
       }
-      el.textContent = frames[i];
+      spinner.textContent = frames[i];
       i++;
     }, 120);
   });
@@ -318,12 +320,12 @@ const commands = {
     'who ship end-to-end — design, code, growth,\n' +
     'ops.\n' +
     '\n' +
-    '<span class="st st-action">[>]</span> <span class="dim">whoami</span>\n' +
-    '  founder:  <span style="color:var(--fg)">anton frolov</span>\n' +
-    '            vibe coder (unironically)\n' +
-    '  crew:     engineers, designers, degens\n' +
-    '  hiring:   always, if you\'re the real thing.\n' +
-    '            → <a href="mailto:hello@autorun.dev" style="color:var(--core);text-decoration:none">hello@autorun.dev</a>',
+    'founder:  <span style="color:var(--fg)">anton frolov</span>\n' +
+    '          vibe coder (unironically)\n' +
+    '\n' +
+    'crew:     engineers, designers, degens\n' +
+    'hiring:   always, if you\'re the real thing.\n' +
+    '          → <a href="mailto:hello@autorun.dev" style="color:var(--core);text-decoration:none">hello@autorun.dev</a>',
 
   projects: () => '__projects__',
 
@@ -354,12 +356,12 @@ const commands = {
 
 const projectsHTML = `
   <a href="https://vectoros.ai" target="_blank" rel="noopener" class="project">
-    <div class="project-name">vectoros.ai</div>
+    <div class="project-name">vectoros.ai →</div>
     <div class="project-desc">ai companion for telegram.<br>second brain powered by claude.</div>
     <div class="project-status st-live">[status: live]</div>
   </a>
   <a href="https://t.me/playsnap_bot/app" target="_blank" rel="noopener" class="project">
-    <div class="project-name">playsnap.bot</div>
+    <div class="project-name">playsnap.bot →</div>
     <div class="project-desc">minimalist hockey for telegram.<br>one button. perfect timing. no tutorial.</div>
     <div class="project-status st-live">[status: live]</div>
   </a>
@@ -397,9 +399,9 @@ input.addEventListener('keydown', async e => {
     return;
   }
 
-  // spinner
+  // spinner inline with command
   processing = true;
-  await showProcessing();
+  await showProcessing(cmdLine);
   processing = false;
 
   // parse command + args
