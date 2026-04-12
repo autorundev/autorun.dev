@@ -159,6 +159,72 @@ interaction-слое. На одной поверхности допустимо 
 
 ---
 
+## 6.4. Sub-brand system
+
+autorun.dev — это **umbrella brand** для семейства продуктов.
+Каждый продукт имеет свой бренд, домен, и визуальную идентичность,
+но все они живут в общей грамматике.
+
+### 6.4.1. Identity hierarchy
+
+```
+autorun.dev          parent brand, [*] cyan
+  ├── vectoros       sub-brand, pure white
+  ├── playsnap       sub-brand, play(white) + snap(chartreuse)
+  └── ********       sub-brand (stealth), muted
+```
+
+### 6.4.2. Parent vs sub-brand rules
+
+- **Parent brand** (autorun.dev) использует `[*]` в `--state-core`
+  cyan. Это unchanging identity.
+- **Sub-brands** получают свой **brand color на имени**, но не
+  получают свой state-знак. State-знаки — это grammar, они
+  остаются в руках parent-бренда.
+- **TLD не часть sub-brand identity.** `vectoros.ai` → в тексте
+  «vectoros». `playsnap.bot` → «playsnap». TLD живёт только в
+  URL-href и адресной строке.
+
+### 6.4.3. Sub-brand colors (current)
+
+```
+vectoros       #FFFFFF   pure white — reflective intelligence
+playsnap       play: #FFFFFF / snap: #C8FF00  (two-tone)
+********       muted grey (inherits --fg-1)
+```
+
+### 6.4.4. When sub-brand is «live»
+
+Sub-brand в projects-списке получает:
+- `[:]` presence (knows it's live, listening)
+- Имя в brand color
+- Clickable (вся строка = ссылка на домен)
+- Стрелка `→` при hover
+
+### 6.4.5. When sub-brand is «stealth»
+
+- `[.]` ping (tiny activity signal, «в разработке»)
+- Имя redacted звёздочками (`********`)
+- Описание тоже redacted
+- Не clickable, не hoverable
+- Весь блок в `--fg-1` muted
+
+### 6.4.6. Parent brand always uses full TLD
+
+Исключение для sub-brand TLD rule — **сам autorun.dev** в header
+лендинга всегда показывается целиком. `.dev` — часть parent
+identity.
+
+```
+[*] autorun.dev                  ← полное имя с TLD
+    ai-native tools & products
+```
+
+Это разделяет parent (инфраструктура, umbrella) от products
+(чистые имена).
+
+---
+
 ## 6.5. Terminal dialogue grammar
 
 **Это самое важное правило брендовой грамматики, когда бренд
@@ -182,24 +248,28 @@ interaction-слое. На одной поверхности допустимо 
 
 ```
 [>] help
-
 [*] available commands:
     about     — what we do
     projects  — things we ship
     ...
 
-[>] projects
-
-[*] active projects:
-    vectoros.ai
-    ...
+[>] about
+[*] what we do
+    autorun.dev builds ai-native products...
 
 [>] _
 ```
 
-- `[>] help` — пользователь ввёл команду
-- `[*] available commands:` — система отвечает
-- `[>] _` — курсор готов к следующему вводу
+**Ключевое правило для dialogue rendering:**
+
+1. **Нет пустой строки между `[>]` input и `[*]` output.** Ответ
+   идёт сразу под командой.
+2. **`[*]` не повторяет имя команды.** Вместо этого используется
+   подстрочник из `help` («what we do» вместо «about»). Команда
+   уже видна в истории как `[>] about`, дублировать название
+   избыточно.
+3. **Пустая строка только перед следующим `[>]` prompt.**
+   Разделяет блоки команда-ответ, не внутри блока.
 
 ### 6.5.3. Remaining state marks in dialogue
 
@@ -456,8 +526,6 @@ Light mode (вторичный):
 Цвета привязаны к семантике state-алфавита. Не используются
 декоративно.
 
-Dark mode:
-
 ```
 --state-core     #7DD3FC   [*]  cyan/blue — active intelligence
 --state-action   #E8E8E8   [>]  fg-0     — neutral, ready
@@ -468,24 +536,26 @@ Dark mode:
 --state-stealth  #A0A0A0   fg-1     — redacted, hidden
 ```
 
-Light mode:
-
-```
---state-core     #0284C7   [*]  darker cyan — WCAG AA on #FAFAFA
---state-action   #0A0A0A   [>]  fg-0     — neutral, ready
---state-presence #7C3AED   [:]  deeper violet
---state-live     #16A34A   green     — status: live, ok
---state-alert    #D97706   [!]  darker amber
---state-stop     #DC2626   [x]  darker red
---state-stealth  #707070   fg-2     — redacted, hidden
-```
-
 Мнемоника: чем тише состояние — тем холоднее и приглушеннее
 цвет. Чем критичнее — тем теплее и насыщеннее.
-Light mode использует затемнённые аналоги для прохождения
-WCAG AA контраста (min 4.5:1) на светлом фоне.
 
-### 8.3. Color rules
+### 8.3. Sub-brand palette
+
+Каждый sub-brand получает свой акцентный цвет. Используется
+только на имени продукта, не на state-знаках.
+
+```
+--brand-autorun          #7DD3FC   cyan (= state-core)
+--brand-vectoros         #FFFFFF   pure white (dark mode)
+                         #0A0A0A   near-black (light mode)
+--brand-playsnap-play    #FFFFFF / #0A0A0A
+--brand-playsnap-snap    #C8FF00 / #65A30D
+```
+
+В light-теме color-mapping инвертируется для контраста. Sub-brand
+visual identity сохраняется, адаптируется яркость.
+
+### 8.4. Color rules
 
 - **Monochrome first.** По умолчанию весь UI — только fg/bg
   токены. Цвет появляется только как state-сигнал.
@@ -497,7 +567,7 @@ WCAG AA контраста (min 4.5:1) на светлом фоне.
 - **High contrast always.** Все цвета проходят WCAG AA на
   соответствующих фонах. Minimum 4.5:1 для body text.
 
-### 8.4. Usage examples
+### 8.5. Usage examples
 
 ```
 default text         --fg-0 on --bg-0

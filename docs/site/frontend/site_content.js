@@ -7,12 +7,16 @@
  * State grammar reminder:
  *   [*]  core       — identity, active output, system response
  *   [>]  action     — user input, prompt
- *   [:]  presence   — attached, listening
- *   [.]  ping       — trace, heartbeat, low activity (boot)
+ *   [:]  presence   — attached, listening, live project
+ *   [.]  ping       — trace, heartbeat, stealth/in-progress
  *   [/][\][|][-]    — spinner frames (transitions only)
  *   [!]  alert      — warning, anomaly
  *   [x]  stop       — fail, abort
  *   [+]  extend     — attach, augment (unlocks)
+ *
+ * Dialogue grammar:
+ *   [>] = user input (always)
+ *   [*] = system output (always)
  */
 
 // ─────────────────────────────────────────────────────
@@ -23,7 +27,7 @@ export const config = {
   theme: 'dark',         // 'dark' | 'light'
   version: 'v0.1.0',
   agentsOnline: 3,
-  apiEndpoint: '/api/cmd',   // backend для hidden commands
+  apiEndpoint: '/api/cmd',
 };
 
 // ─────────────────────────────────────────────────────
@@ -31,13 +35,18 @@ export const config = {
 
 export const themes = {
   dark: {
+    // Backgrounds
     '--bg-0':          '#0A0A0A',
     '--bg-1':          '#111111',
     '--bg-2':          '#1A1A1A',
+
+    // Foregrounds
     '--fg-0':          '#E8E8E8',
     '--fg-1':          '#A0A0A0',
     '--fg-2':          '#606060',
     '--fg-3':          '#404040',
+
+    // State colors
     '--state-core':    '#7DD3FC',
     '--state-action':  '#E8E8E8',
     '--state-presence':'#A78BFA',
@@ -45,15 +54,23 @@ export const themes = {
     '--state-alert':   '#FBBF24',
     '--state-stop':    '#F87171',
     '--state-stealth': '#A0A0A0',
+
+    // Brand colors (parent + sub-brands)
+    '--brand-autorun':       '#7DD3FC',   // cyan (= state-core)
+    '--brand-vectoros':      '#FFFFFF',   // pure white — reflective intelligence
+    '--brand-playsnap-play': '#FFFFFF',   // white — play/input
+    '--brand-playsnap-snap': '#C8FF00',   // chartreuse — snap/score
   },
   light: {
     '--bg-0':          '#FAFAFA',
     '--bg-1':          '#F4F4F4',
     '--bg-2':          '#EDEDED',
+
     '--fg-0':          '#0A0A0A',
     '--fg-1':          '#404040',
     '--fg-2':          '#707070',
     '--fg-3':          '#B0B0B0',
+
     '--state-core':    '#0284C7',
     '--state-action':  '#0A0A0A',
     '--state-presence':'#7C3AED',
@@ -61,7 +78,92 @@ export const themes = {
     '--state-alert':   '#D97706',
     '--state-stop':    '#DC2626',
     '--state-stealth': '#707070',
+
+    '--brand-autorun':       '#0284C7',
+    '--brand-vectoros':      '#0A0A0A',   // near-black (inverse of white)
+    '--brand-playsnap-play': '#0A0A0A',
+    '--brand-playsnap-snap': '#65A30D',   // darker chartreuse for light bg
   },
+};
+
+// ─────────────────────────────────────────────────────
+// PROJECTS — structured data (rendered separately from command output)
+
+export const projects = {
+  en: [
+    {
+      name: 'vectoros',
+      nameColored: [['vectoros', 'var(--brand-vectoros)']],
+      url: 'https://vectoros.ai',
+      desc: [
+        'ai companion for telegram.',
+        'second brain powered by claude.',
+      ],
+      status: 'live',
+      mark: '[:]',
+    },
+    {
+      name: 'playsnap',
+      nameColored: [
+        ['play', 'var(--brand-playsnap-play)'],
+        ['snap', 'var(--brand-playsnap-snap)'],
+      ],
+      url: 'https://playsnap.bot',
+      desc: [
+        'minimalist hockey for telegram.',
+        'one button. perfect timing. no tutorial.',
+      ],
+      status: 'live',
+      mark: '[:]',
+    },
+    {
+      name: '********',
+      nameColored: null,      // inherits muted
+      url: null,
+      desc: [
+        '********* *** ******.',
+      ],
+      status: 'stealth',
+      mark: '[.]',
+    },
+  ],
+  ru: [
+    {
+      name: 'vectoros',
+      nameColored: [['vectoros', 'var(--brand-vectoros)']],
+      url: 'https://vectoros.ai',
+      desc: [
+        'ai-компаньон для telegram.',
+        'второй мозг на claude.',
+      ],
+      status: 'live',
+      mark: '[:]',
+    },
+    {
+      name: 'playsnap',
+      nameColored: [
+        ['play', 'var(--brand-playsnap-play)'],
+        ['snap', 'var(--brand-playsnap-snap)'],
+      ],
+      url: 'https://playsnap.bot',
+      desc: [
+        'минималистичный хоккей для telegram.',
+        'одна кнопка. точный тайминг. без туториалов.',
+      ],
+      status: 'live',
+      mark: '[:]',
+    },
+    {
+      name: '********',
+      nameColored: null,
+      url: null,
+      desc: [
+        '********* *** ******.',
+      ],
+      status: 'stealth',
+      mark: '[.]',
+    },
+  ],
 };
 
 // ─────────────────────────────────────────────────────
@@ -106,7 +208,7 @@ export const en = {
     about: {
       description: 'what we do',
       output: [
-        { mark: '[*]', text: 'about' },
+        { mark: '[*]', text: 'what we do' },
         { mark: null,  text: 'autorun.dev builds ai-native products that', indent: true },
         { mark: null,  text: 'run where people already live — messengers,', indent: true },
         { mark: null,  text: 'games, markets. small crew. tight loops.', indent: true },
@@ -119,29 +221,16 @@ export const en = {
 
     projects: {
       description: 'things we ship',
-      output: [
-        { mark: '[*]', text: 'active projects:' },
-        { mark: null,  text: '' },
-        { mark: null,  text: 'vectoros.ai', indent: true, bold: true },
-        { mark: null,  text: 'ai companion for telegram.', indent: true },
-        { mark: null,  text: 'second brain powered by claude.', indent: true },
-        { mark: null,  text: '[status: live]', indent: true, state: 'live' },
-        { mark: null,  text: '' },
-        { mark: null,  text: 'playsnap.bot', indent: true, bold: true },
-        { mark: null,  text: 'minimalist hockey for telegram.', indent: true },
-        { mark: null,  text: 'one button. perfect timing. no tutorial.', indent: true },
-        { mark: null,  text: '[status: live]', indent: true, state: 'live' },
-        { mark: null,  text: '' },
-        { mark: null,  text: '[redacted]', indent: true, bold: true },
-        { mark: null,  text: 'something for traders.', indent: true },
-        { mark: null,  text: '[status: stealth]', indent: true, state: 'stealth' },
+      header: [
+        { mark: '[*]', text: 'things we ship' },
       ],
+      renderProjects: true,
     },
 
     team: {
       description: 'who\'s behind the terminal',
       output: [
-        { mark: '[*]', text: 'team' },
+        { mark: '[*]', text: 'who\'s behind the terminal' },
         { mark: null,  text: 'small, senior, remote. product engineers', indent: true },
         { mark: null,  text: 'who ship end-to-end — design, code, growth,', indent: true },
         { mark: null,  text: 'ops.', indent: true },
@@ -157,7 +246,7 @@ export const en = {
     stack: {
       description: 'how we build',
       output: [
-        { mark: '[*]', text: 'stack' },
+        { mark: '[*]', text: 'how we build' },
         { mark: null,  text: 'claude · typescript · python · telegram', indent: true },
         { mark: null,  text: 'sqlite-and-prayers · vps · tmux · vibes', indent: true },
         { mark: null,  text: '' },
@@ -169,7 +258,7 @@ export const en = {
     contact: {
       description: 'how to reach us',
       output: [
-        { mark: '[*]', text: 'contact' },
+        { mark: '[*]', text: 'how to reach us' },
         { mark: null,  text: 'mail      · hello@autorun.dev', indent: true },
         { mark: null,  text: 'telegram  · t.me/autorundev', indent: true },
         { mark: null,  text: 'github    · github.com/autorundev', indent: true },
@@ -182,7 +271,7 @@ export const en = {
     lang: {
       description: 'switch language',
       output: [
-        { mark: '[*]', text: 'language' },
+        { mark: '[*]', text: 'switch language' },
         { mark: null,  text: 'current:  en', indent: true },
         { mark: null,  text: 'usage:    `lang en` · `lang ru`', indent: true, muted: true },
       ],
@@ -191,7 +280,7 @@ export const en = {
     theme: {
       description: 'toggle dark/light',
       output: [
-        { mark: '[*]', text: 'theme' },
+        { mark: '[*]', text: 'toggle dark/light' },
         { mark: null,  text: 'current:  dark', indent: true },
         { mark: null,  text: 'usage:    `theme dark` · `theme light`', indent: true, muted: true },
       ],
@@ -204,9 +293,9 @@ export const en = {
   },
 
   system: {
-    langChanged: (lang) => ({ mark: '[*]', text: `language: ${lang}` }),
+    langChanged:  (lang)  => ({ mark: '[*]', text: `language: ${lang}` }),
     themeChanged: (theme) => ({ mark: '[*]', text: `theme: ${theme}` }),
-    unlocked: (name) => ({ mark: '[+]', text: `${name} unlocked.` }),
+    unlocked:     (name)  => ({ mark: '[+]', text: `${name} unlocked.` }),
   },
 };
 
@@ -252,7 +341,7 @@ export const ru = {
     about: {
       description: 'что мы делаем',
       output: [
-        { mark: '[*]', text: 'о нас' },
+        { mark: '[*]', text: 'что мы делаем' },
         { mark: null,  text: 'autorun.dev строит ai-native продукты,', indent: true },
         { mark: null,  text: 'которые живут там, где уже живут люди —', indent: true },
         { mark: null,  text: 'в мессенджерах, играх, маркетах.', indent: true },
@@ -266,29 +355,16 @@ export const ru = {
 
     projects: {
       description: 'что мы строим',
-      output: [
-        { mark: '[*]', text: 'активные проекты:' },
-        { mark: null,  text: '' },
-        { mark: null,  text: 'vectoros.ai', indent: true, bold: true },
-        { mark: null,  text: 'ai-компаньон для telegram.', indent: true },
-        { mark: null,  text: 'второй мозг на claude.', indent: true },
-        { mark: null,  text: '[status: live]', indent: true, state: 'live' },
-        { mark: null,  text: '' },
-        { mark: null,  text: 'playsnap.bot', indent: true, bold: true },
-        { mark: null,  text: 'минималистичный хоккей для telegram.', indent: true },
-        { mark: null,  text: 'одна кнопка. точный тайминг. без туториалов.', indent: true },
-        { mark: null,  text: '[status: live]', indent: true, state: 'live' },
-        { mark: null,  text: '' },
-        { mark: null,  text: '[redacted]', indent: true, bold: true },
-        { mark: null,  text: 'кое-что для трейдеров.', indent: true },
-        { mark: null,  text: '[status: stealth]', indent: true, state: 'stealth' },
+      header: [
+        { mark: '[*]', text: 'что мы строим' },
       ],
+      renderProjects: true,
     },
 
     team: {
       description: 'кто за этим терминалом',
       output: [
-        { mark: '[*]', text: 'команда' },
+        { mark: '[*]', text: 'кто за этим терминалом' },
         { mark: null,  text: 'небольшая, опытная, удалённая.', indent: true },
         { mark: null,  text: 'product-инженеры, которые шипят от и до —', indent: true },
         { mark: null,  text: 'дизайн, код, рост, операции.', indent: true },
@@ -304,7 +380,7 @@ export const ru = {
     stack: {
       description: 'на чём строим',
       output: [
-        { mark: '[*]', text: 'stack' },
+        { mark: '[*]', text: 'на чём строим' },
         { mark: null,  text: 'claude · typescript · python · telegram', indent: true },
         { mark: null,  text: 'sqlite-and-prayers · vps · tmux · vibes', indent: true },
         { mark: null,  text: '' },
@@ -316,7 +392,7 @@ export const ru = {
     contact: {
       description: 'как связаться',
       output: [
-        { mark: '[*]', text: 'контакты' },
+        { mark: '[*]', text: 'как связаться' },
         { mark: null,  text: 'почта     · hello@autorun.dev', indent: true },
         { mark: null,  text: 'telegram  · t.me/autorundev', indent: true },
         { mark: null,  text: 'github    · github.com/autorundev', indent: true },
@@ -329,7 +405,7 @@ export const ru = {
     lang: {
       description: 'сменить язык',
       output: [
-        { mark: '[*]', text: 'язык' },
+        { mark: '[*]', text: 'сменить язык' },
         { mark: null,  text: 'текущий:  ru', indent: true },
         { mark: null,  text: 'usage:    `lang en` · `lang ru`', indent: true, muted: true },
       ],
@@ -351,14 +427,14 @@ export const ru = {
   },
 
   system: {
-    langChanged: (lang) => ({ mark: '[*]', text: `язык: ${lang}` }),
+    langChanged:  (lang)  => ({ mark: '[*]', text: `язык: ${lang}` }),
     themeChanged: (theme) => ({ mark: '[*]', text: `тема: ${theme}` }),
-    unlocked: (name) => ({ mark: '[+]', text: `${name} разблокирован.` }),
+    unlocked:     (name)  => ({ mark: '[+]', text: `${name} разблокирован.` }),
   },
 };
 
 // ─────────────────────────────────────────────────────
-// PUBLIC COMMAND LIST (для быстрой проверки — всё остальное уходит на бэк)
+// PUBLIC COMMAND LIST
 
 export const publicCommands = [
   'help', 'about', 'projects', 'team', 'stack',
@@ -367,4 +443,4 @@ export const publicCommands = [
 
 export const content = { en, ru };
 
-export default { config, themes, content, publicCommands };
+export default { config, themes, content, projects, publicCommands };

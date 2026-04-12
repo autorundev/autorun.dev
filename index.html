@@ -110,7 +110,6 @@
   .terminal{
     max-width:60ch;
     width:100%;
-    overflow-x:hidden;
   }
   @media(min-width:640px){
     .terminal{max-width:80ch}
@@ -437,7 +436,7 @@ const commands = {
     '<span class="st st-core">[*]</span> how we build\n' +
     '    claude · typescript · python · telegram\n' +
     '    sqlite-and-prayers · vps · tmux · vibes\n' +
-    '\n' +
+    '&nbsp;\n' +
     '    <span class="st st-alert">[!]</span> we deploy on fridays.\n' +
     '        <span class="dim">and midnights. no one stops us.</span>',
 
@@ -581,7 +580,7 @@ function renderLines(lines) {
     out.className = 'line';
     let html = '';
     if (l.mark) html += `<span class="st st-${markClass(l.mark)}">${esc(l.mark)}</span> `;
-    if (l.indent) html += '   ';
+    if (l.indent) html += '    ';
     const text = l.muted ? `<span class="dim">${esc(l.text)}</span>` : esc(l.text);
     html += l.bold ? `<strong>${text}</strong>` : text;
     if (l.state) out.innerHTML = html.replace(esc(l.text), `<span class="st st-${l.state}">${esc(l.text)}</span>`);
@@ -591,10 +590,14 @@ function renderLines(lines) {
 }
 
 function renderNotFound(val) {
-  const out = document.createElement('div');
-  out.className = 'line';
-  out.innerHTML = `<span class="st st-alert">[?]</span> <span class="dim">command not found: ${esc(val)}. try</span> <span class="cmd">help</span>`;
-  term.insertBefore(out, inputLine);
+  const l1 = document.createElement('div');
+  l1.className = 'line';
+  l1.innerHTML = `<span class="st st-alert">[!]</span> command not found: ${esc(val)}`;
+  term.insertBefore(l1, inputLine);
+  const l2 = document.createElement('div');
+  l2.className = 'line dim';
+  l2.textContent = '    try `help`';
+  term.insertBefore(l2, inputLine);
 }
 
 function markClass(mark) {

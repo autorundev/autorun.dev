@@ -10,6 +10,7 @@
 - [ ] favicon - SVG версия для высокого разрешения
 - [ ] OG image - регенерировать с обновлённым dialogue grammar `[>] _`
 - [ ] `site_content.js` - привести social handles в соответствие с реальностью
+- [ ] hello@autorun.dev - настроить отправку (ImprovMX SMTP или Namecheap Private Email)
 - [ ] layout spec: "new output" indicator (optional, может быть слишком chat-like)
 
 ## done

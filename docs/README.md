@@ -1,6 +1,6 @@
 # autorun — Brand System
 
-**Version:** 1.2
+**Version:** 1.4
 **Status:** Final
 
 ---
@@ -21,19 +21,18 @@ Brand system для autorun — AI-native бренда, построенного
 ## Documents
 
 ```
-docs/
+autorun/
 ├── README.md                        ← this file, entry point
 ├── autorun_brand_system_spec.md     ← identity, typography, color, voice
 ├── autorun_motion_spec.md           ← state grammar, loops, motion
+├── autorun_layout_spec.md           ← layout, width, scroll, output timing
 ├── autorun_social_spec.md           ← channel-specific guides
-├── tasks.md                         ← deferred work
-└── site/
-    ├── README.md                    ← site architecture
-    ├── frontend/                    ← public commands, themes, effects
-    └── backend/                     ← easter eggs api (reference)
-
-og/                                  ← OG image generator (puppeteer)
-backend/                             ← easter eggs API server (deployed)
+└── og/
+    ├── og_spec.md                   ← og image spec
+    ├── og_template.html             ← html template
+    ├── og_generate.js               ← puppeteer generator
+    ├── package.json
+    └── posts.example.json           ← batch example
 ```
 
 ### `autorun_brand_system_spec.md`
@@ -59,6 +58,17 @@ backend/                             ← easter eggs API server (deployed)
 - timing и easing rules
 - UI usage patterns
 - CSS implementation
+
+### `autorun_layout_spec.md`
+
+Layout, scroll и тайминги появления контента:
+- content width (60ch mobile / 80ch desktop, never grows)
+- flush-left vs center alignment
+- vertical rhythm (start top, accumulate down)
+- smart auto-follow scroll behavior
+- output timing (typewriter boot, line-by-line commands)
+- mobile considerations (100dvh, keyboard, wrap)
+- clear & reboot effects
 
 ### `autorun_social_spec.md`
 
@@ -120,7 +130,19 @@ AI-sparkle, никакого cartoon-easing.
 - `[.]` — процесс, `[:]` — готовность, `[!]` / `[x]` — ошибки
 - `[+]` — разблокировки, `[/] [-] [\] [|]` — spinner frames
 
+Ответ идёт сразу под командой, без пустой строки. `[*]` не
+повторяет имя команды — использует подстрочник из `help`.
+
 Подробно — brand spec section 6.5.
+
+### 8. Sub-brand system
+
+autorun.dev — umbrella. Продукты (vectoros, playsnap) —
+sub-brands с собственными цветами на имени, но общей
+state grammar. TLD убирается в sub-brand именах (но сохраняется
+в parent `autorun.dev`).
+
+Подробно — brand spec section 6.4.
 
 ---
 
@@ -153,11 +175,32 @@ COLOR
   stop     #F87171
   stealth  #A0A0A0
 
+SUB-BRANDS
+  autorun.dev   #7DD3FC    cyan (parent)
+  vectoros      #FFFFFF    pure white
+  playsnap      #FFFFFF + #C8FF00  (play + snap)
+  ********      muted (stealth)
+
 DIALOGUE GRAMMAR
   [>] = user input (always)
   [*] = system output (always)
   [.] process · [:] ready · [!] error · [x] fatal
   [+] unlock · [/][\][|][-] spinner
+
+LAYOUT
+  width:     60ch mobile / 80ch desktop (never grows)
+  alignment: flush-left (margin: 0)
+  height:    100dvh, justify-content: flex-start
+
+SCROLL
+  follow-tail within 50px of bottom
+  instant, never smooth
+  new command forces follow
+
+OUTPUT TIMING
+  boot:    15ms/char, 200ms/line
+  command: 40ms between lines
+  spinner: 120ms/frame
 
 VOICE
   two registers, never mixed on one surface
@@ -191,9 +234,10 @@ ai-native tools & products
 
 1. **README** (this) — обзор системы
 2. **brand spec** — ядро бренда
-3. **social spec** — как бренд говорит в каналах
-4. **og/og_spec** — как бренд выглядит в шерах
-5. **motion spec** — когда начнешь строить продукт на грамматике
+3. **layout spec** — как раскладывать на странице
+4. **social spec** — как бренд говорит в каналах
+5. **og/og_spec** — как бренд выглядит в шерах
+6. **motion spec** — когда начнешь строить продукт на грамматике
 
 ---
 
