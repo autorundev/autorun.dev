@@ -162,7 +162,8 @@
     flex-shrink:0;
     margin-right:.6em;
   }
-  .input-wrap{display:flex;align-items:center;min-width:0}
+  .input-wrap{display:flex;align-items:center;min-width:0;position:relative}
+  #ghost{color:var(--fg-3);font:inherit;font-weight:500;pointer-events:none;white-space:nowrap}
   #input{
     background:none;
     border:none;
@@ -202,7 +203,7 @@
 <div class="terminal" id="term">
   <div class="input-line" style="display:none">
     <div class="input-wrap">
-      <div id="input" contenteditable="true" role="textbox" spellcheck="false" autocorrect="off" autocapitalize="off"></div><span class="cursor" id="cursor"></span>
+      <div id="input" contenteditable="true" role="textbox" spellcheck="false" autocorrect="off" autocapitalize="off"></div><span id="ghost"></span><span class="cursor" id="cursor"></span>
     </div>
   </div>
 </div>
@@ -317,6 +318,7 @@ async function renderBoot() {
   if (isFollowing) scrollToBottom();
   focusEnd();
   scheduleBreath();
+  resetIdleTimer();
 }
 
 renderBoot();
@@ -467,14 +469,14 @@ const projectsHTML = `
   <div class="line"><span class="st st-core">[*]</span> things we ship</div>
   <div class="blank"></div>
   <a href="https://vectoros.ai" target="_blank" rel="noopener" class="proj-link">
-    <div class="line"><span class="st st-presence">[:]</span> <span style="color:var(--brand-vectoros)">vectoros</span><span class="proj-arrow"> -></span></div>
+    <div class="line"><span class="st st-presence">[:]</span> <span style="color:var(--brand-vectoros)">vectoros</span><span class="proj-arrow"> →</span></div>
     <div class="line">    ai companion for telegram.</div>
     <div class="line">    second brain powered by claude.</div>
     <div class="line">    <span class="st st-live">[status: live]</span></div>
   </a>
   <div class="blank"></div>
   <a href="https://playsnap.bot" target="_blank" rel="noopener" class="proj-link">
-    <div class="line"><span class="st st-presence">[:]</span> <span style="color:var(--brand-playsnap-play)">play</span><span style="color:var(--brand-playsnap-snap)">snap</span><span class="proj-arrow"> -></span></div>
+    <div class="line"><span class="st st-presence">[:]</span> <span style="color:var(--brand-playsnap-play)">play</span><span style="color:var(--brand-playsnap-snap)">snap</span><span class="proj-arrow"> →</span></div>
     <div class="line">    minimalist hockey for telegram.</div>
     <div class="line">    one button. perfect timing. no tutorial.</div>
     <div class="line">    <span class="st st-live">[status: live]</span></div>
@@ -483,6 +485,58 @@ const projectsHTML = `
   <div class="line"><span class="st st-idle">[.]</span> <span style="color:var(--fg-1)">********</span></div>
   <div class="line" style="color:var(--fg-1)">    ********* *** ******.</div>
   <div class="line">    <span class="st st-stealth">[status: stealth]</span></div>`;
+
+// ── autocomplete + idle suggest ───────────────────
+const ghost = document.getElementById('ghost');
+const cmdList = ['help','about','projects','team','stack','config','clear'];
+let idleTimer = null;
+let suggestTimer = null;
+let suggestActive = false;
+
+function updateGhost() {
+  const val = input.textContent.trim().toLowerCase();
+  if (!val) {
+    ghost.textContent = '';
+    return;
+  }
+  const match = cmdList.find(c => c.startsWith(val) && c !== val);
+  ghost.textContent = match ? match.slice(val.length) : '';
+}
+
+function clearSuggest() {
+  ghost.textContent = '';
+  suggestActive = false;
+  if (suggestTimer) { clearTimeout(suggestTimer); suggestTimer = null; }
+}
+
+function resetIdleTimer() {
+  if (idleTimer) clearTimeout(idleTimer);
+  if (input.textContent.trim()) return; // don't suggest while typing
+  idleTimer = setTimeout(showSuggest, 5000);
+}
+
+function showSuggest() {
+  if (input.textContent.trim() || processing) {
+    resetIdleTimer();
+    return;
+  }
+  const cmd = cmdList[Math.floor(Math.random() * cmdList.length)];
+  ghost.textContent = cmd;
+  suggestActive = true;
+  suggestTimer = setTimeout(() => {
+    if (suggestActive && !input.textContent.trim()) {
+      ghost.textContent = '';
+      suggestActive = false;
+      resetIdleTimer();
+    }
+  }, 3000);
+}
+
+input.addEventListener('input', () => {
+  clearSuggest();
+  updateGhost();
+  resetIdleTimer();
+});
 
 // ── input handling ────────────────────────────────
 input.addEventListener('paste', e => {
@@ -494,11 +548,28 @@ input.addEventListener('paste', e => {
 let processing = false;
 
 input.addEventListener('keydown', async e => {
+  // Tab = accept autocomplete/suggest
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    if (ghost.textContent) {
+      input.textContent += ghost.textContent;
+      ghost.textContent = '';
+      suggestActive = false;
+      // move caret to end
+      const sel = window.getSelection();
+      sel.selectAllChildren(input);
+      sel.collapseToEnd();
+    }
+    return;
+  }
+
   if (e.key !== 'Enter' || processing) return;
   e.preventDefault();
+  clearSuggest();
   const raw = input.textContent.trim();
   const val = raw.toLowerCase();
   input.textContent = '';
+  ghost.textContent = '';
   if (!val) return;
 
   // force follow on new command input
@@ -534,7 +605,11 @@ input.addEventListener('keydown', async e => {
     if (result === '__projects__') {
       const wrap = document.createElement('div');
       wrap.innerHTML = projectsHTML;
-      term.insertBefore(wrap, inputLine);
+      for (const child of [...wrap.children]) {
+        term.insertBefore(child, inputLine);
+        if (isFollowing) scrollToBottom();
+        await sleep(LINE_DELAY);
+      }
     } else {
       const lines = result.split('\n');
       for (const l of lines) {
@@ -579,6 +654,7 @@ input.addEventListener('keydown', async e => {
     if (delay) await sleep(delay);
     await runEffect(backendData.effect);
   }
+  resetIdleTimer();
 });
 
 // ── render helpers ───────────────────────────────
