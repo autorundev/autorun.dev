@@ -90,7 +90,6 @@
     outline:none;
     caret-color:transparent;
     white-space:nowrap;
-    overflow:hidden;
     padding:0;
     margin:0;
     min-height:1.7em;
@@ -249,8 +248,17 @@
     }
   });
 
-  document.addEventListener('click', () => input.focus());
-  requestAnimationFrame(() => input.focus());
+  function focusEnd() {
+    input.focus();
+    const sel = window.getSelection();
+    sel.selectAllChildren(input);
+    sel.collapseToEnd();
+  }
+
+  document.addEventListener('click', e => {
+    if (!input.contains(e.target)) focusEnd();
+  });
+  requestAnimationFrame(focusEnd);
 
   function esc(s) {
     const d = document.createElement('div');

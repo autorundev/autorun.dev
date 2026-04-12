@@ -1,0 +1,23 @@
+{
+  "name": "autorun-og",
+  "version": "1.0.0",
+  "description": "og image generator for autorun.dev brand system",
+  "main": "og_generate.js",
+  "bin": {
+    "autorun-og": "./og_generate.js"
+  },
+  "scripts": {
+    "generate": "node og_generate.js",
+    "preview": "npx http-server . -p 8080 -c-1",
+    "example:default": "node og_generate.js --out ./out/default.png",
+    "example:stealth":  "node og_generate.js --preset stealth --out ./out/stealth.png",
+    "example:ship":    "node og_generate.js --title 'ship log 007' --subtitle 'agent now remembers things.' --out ./out/ship-007.png",
+    "example:boot":    "node og_generate.js --preset boot --out ./out/boot.png"
+  },
+  "dependencies": {
+    "puppeteer": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
