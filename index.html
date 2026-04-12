@@ -674,6 +674,29 @@ async function renderLines(lines) {
     const out = document.createElement('div');
     out.className = 'line';
 
+    // spinner lines: spin for duration, resolve to [:]
+    if (l.spinner) {
+      const spinMark = document.createElement('span');
+      spinMark.className = 'st st-core';
+      out.appendChild(spinMark);
+      out.appendChild(document.createTextNode(' ' + (l.text || '')));
+      term.insertBefore(out, inputLine);
+      if (isFollowing) scrollToBottom();
+      const dur = l.duration || 800;
+      const frames = ['[/]','[-]','[\\]','[-]'];
+      const end = Date.now() + dur;
+      let fi = 0;
+      while (Date.now() < end) {
+        spinMark.textContent = frames[fi % frames.length];
+        fi++;
+        await sleep(120);
+      }
+      spinMark.textContent = '[:]';
+      spinMark.className = 'st st-presence';
+      await sleep(LINE_DELAY);
+      continue;
+    }
+
     // lines with a mark get a brief spinner first
     if (l.mark && l.mark !== '[*]') {
       const spinMark = document.createElement('span');
@@ -682,13 +705,11 @@ async function renderLines(lines) {
       out.appendChild(document.createTextNode(' ' + (l.text || '')));
       term.insertBefore(out, inputLine);
       if (isFollowing) scrollToBottom();
-      // spin through frames
       const frames = ['[/]','[-]','[\\]','[-]'];
       for (const f of frames) {
         spinMark.textContent = f;
         await sleep(120);
       }
-      // resolve to final mark
       spinMark.textContent = l.mark;
       spinMark.className = 'st st-' + markClass(l.mark);
       await sleep(LINE_DELAY);
