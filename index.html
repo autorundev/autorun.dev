@@ -39,6 +39,10 @@
     --state-alert:#FBBF24;
     --state-stop:#F87171;
     --state-stealth:#A0A0A0;
+    --brand-autorun:#7DD3FC;
+    --brand-vectoros:#FFFFFF;
+    --brand-playsnap-play:#FFFFFF;
+    --brand-playsnap-snap:#C8FF00;
   }
 
   /* === LIGHT THEME === */
@@ -57,6 +61,10 @@
     --state-alert:#D97706;
     --state-stop:#DC2626;
     --state-stealth:#707070;
+    --brand-autorun:#0284C7;
+    --brand-vectoros:#0A0A0A;
+    --brand-playsnap-play:#0A0A0A;
+    --brand-playsnap-snap:#65A30D;
   }
 
   /* === SYSTEM THEME === */
@@ -76,6 +84,10 @@
       --state-alert:#D97706;
       --state-stop:#DC2626;
       --state-stealth:#707070;
+      --brand-autorun:#0284C7;
+      --brand-vectoros:#0A0A0A;
+      --brand-playsnap-play:#0A0A0A;
+      --brand-playsnap-snap:#65A30D;
     }
   }
 
@@ -329,7 +341,7 @@ const commands = {
     '   clear    <span style="color:var(--fg-3)"> - wipe the screen</span>',
 
   about: () =>
-    '<span class="st st-core">[*]</span> about\n' +
+    '<span class="st st-core">[*]</span> what we do\n' +
     '   autorun.dev builds ai-native products that\n' +
     '   run where people already live - messengers,\n' +
     '   games, markets. small crew. tight loops.\n' +
@@ -339,7 +351,7 @@ const commands = {
     '   <span class="dim">have a ui. it has an agent.</span>',
 
   team: () =>
-    '<span class="st st-core">[*]</span> team\n' +
+    '<span class="st st-core">[*]</span> who\'s behind the terminal\n' +
     '   small, senior, remote. product engineers\n' +
     '   who ship end-to-end - design, code, growth,\n' +
     '   ops.\n' +
@@ -354,7 +366,7 @@ const commands = {
   projects: () => '__projects__',
 
   stack: () =>
-    '<span class="st st-core">[*]</span> stack\n' +
+    '<span class="st st-core">[*]</span> how we build\n' +
     '   claude · typescript · python · telegram\n' +
     '   sqlite-and-prayers · vps · tmux · vibes\n' +
     '\n' +
@@ -363,12 +375,13 @@ const commands = {
 
   config: (args) => {
     if (!args) {
-      return '<span class="dim">current theme:</span> ' + getTheme() + '\n' +
+      return '<span class="st st-core">[*]</span> settings\n' +
+        '   <span class="dim">current theme:</span> ' + getTheme() + '\n' +
         '\n' +
-        '<span class="dim">usage:</span>\n' +
-        '  config theme dark\n' +
-        '  config theme light\n' +
-        '  config theme system';
+        '   <span class="dim">usage:</span>\n' +
+        '   config theme dark\n' +
+        '   config theme light\n' +
+        '   config theme system';
     }
     const parts = args.split(/\s+/);
     if (parts[0] === 'theme' && ['dark','light','system'].includes(parts[1])) {
@@ -382,19 +395,20 @@ const commands = {
 };
 
 const projectsHTML = `
+  <div class="line"><span class="st st-core">[*]</span> things we ship</div>
   <a href="https://vectoros.ai" target="_blank" rel="noopener" class="project">
-    <div class="project-name">vectoros.ai →</div>
+    <div class="project-name"><span class="st st-presence">[:]</span> <span style="color:var(--brand-vectoros)">vectoros</span></div>
     <div class="project-desc">ai companion for telegram.<br>second brain powered by claude.</div>
     <div class="project-status st-live">[status: live]</div>
   </a>
-  <a href="https://t.me/playsnap_bot/app" target="_blank" rel="noopener" class="project">
-    <div class="project-name">playsnap.bot →</div>
+  <a href="https://playsnap.bot" target="_blank" rel="noopener" class="project">
+    <div class="project-name"><span class="st st-presence">[:]</span> <span style="color:var(--brand-playsnap-play)">play</span><span style="color:var(--brand-playsnap-snap)">snap</span></div>
     <div class="project-desc">minimalist hockey for telegram.<br>one button. perfect timing. no tutorial.</div>
     <div class="project-status st-live">[status: live]</div>
   </a>
   <div class="project" style="cursor:default">
-    <div class="project-name st-stealth">[redacted]</div>
-    <div class="project-desc">something for traders.</div>
+    <div class="project-name"><span class="st st-idle">[.]</span> <span style="color:var(--fg-1)">********</span></div>
+    <div class="project-desc" style="color:var(--fg-1)">********* *** ******.</div>
     <div class="project-status st-stealth">[status: stealth]</div>
   </div>`;
 
