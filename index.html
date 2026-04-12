@@ -241,14 +241,14 @@ function forceFollow() {
 
 // ── boot sequence (typewriter) ──────────────────
 const bootLines = [
-  {html: '<div class="logo-wrap" id="logo"><div class="logo-mark"><span class="mark-char" id="mark">[*]</span>autorun.dev</div></div>', raw: '[*] autorun.dev', isLogo: true},
-  {html: '<div class="line dim">ai-native tools &amp; products</div>', raw: 'ai-native tools & products'},
-  {html: '<div class="line dim">v0.1.0</div>', raw: 'v0.1.0'},
-  {html: '<div class="blank"></div>', raw: '', noType: true},
-  {html: '<div class="line"><span class="st st-idle">[.]</span> <span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span></div>', raw: '[.] booting autorun.dev ... ok'},
-  {html: '<div class="line"><span class="st st-presence">[:]</span> <span class="dim">agents online:</span> 3</div>', raw: '[:] agents online: 3'},
-  {html: '<div class="line"><span class="st st-presence">[:]</span> <span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>', raw: '[:] type help to see available commands.'},
-  {html: '<div class="blank"></div>', raw: '', noType: true},
+  {html: '<div class="logo-wrap" id="logo"><div class="logo-mark"><span class="mark-char" id="mark">[*]</span> autorun.dev</div></div>', isLogo: true},
+  {html: '<div class="line dim">    ai-native tools &amp; products</div>', color: 'var(--fg-2)'},
+  {html: '<div class="line dim">    v0.1.0</div>', color: 'var(--fg-2)'},
+  {noType: true},
+  {html: '<div class="line"><span class="st st-idle">[.]</span> <span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span></div>', color: 'var(--fg-2)'},
+  {html: '<div class="line"><span class="st st-presence">[:]</span> <span class="dim">agents online:</span> 3</div>', color: 'var(--fg-2)'},
+  {html: '<div class="line"><span class="st st-presence">[:]</span> <span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>', color: 'var(--fg-2)'},
+  {noType: true},
 ];
 
 async function renderBoot() {
@@ -272,20 +272,22 @@ async function renderBoot() {
       await sleep(LINE_PAUSE);
       continue;
     }
-    // typewriter: create element, type char by char
+    // typewriter: type char by char in default color, then swap to styled
+    const tmp = document.createElement('div');
+    tmp.innerHTML = line.html;
+    const raw = tmp.textContent;
     const el = document.createElement('div');
     el.className = 'line';
     el.style.whiteSpace = 'pre-wrap';
+    if (line.color) el.style.color = line.color;
     term.insertBefore(el, inputLine);
-    for (const ch of line.raw) {
+    for (const ch of raw) {
       el.textContent += ch;
       if (isFollowing) scrollToBottom();
       await sleep(CHAR_DELAY);
     }
-    // swap to styled HTML
-    const styled = document.createElement('div');
-    styled.innerHTML = line.html;
-    el.replaceWith(styled.firstElementChild);
+    // swap to fully styled version
+    el.replaceWith(tmp.firstElementChild);
     if (isFollowing) scrollToBottom();
     await sleep(LINE_PAUSE);
   }
@@ -379,55 +381,55 @@ applyTheme(getTheme());
 const commands = {
   help: () =>
     '<span class="st st-core">[*]</span> available commands:\n' +
-    '   about    <span style="color:var(--fg-3)"> - what we do</span>\n' +
-    '   projects <span style="color:var(--fg-3)"> - things we ship</span>\n' +
-    '   team     <span style="color:var(--fg-3)"> - who\'s behind the terminal</span>\n' +
-    '   stack    <span style="color:var(--fg-3)"> - how we build</span>\n' +
-    '   config   <span style="color:var(--fg-3)"> - settings</span>\n' +
-    '   clear    <span style="color:var(--fg-3)"> - wipe the screen</span>',
+    '    about    <span style="color:var(--fg-3)"> - what we do</span>\n' +
+    '    projects <span style="color:var(--fg-3)"> - things we ship</span>\n' +
+    '    team     <span style="color:var(--fg-3)"> - who\'s behind the terminal</span>\n' +
+    '    stack    <span style="color:var(--fg-3)"> - how we build</span>\n' +
+    '    config   <span style="color:var(--fg-3)"> - settings</span>\n' +
+    '    clear    <span style="color:var(--fg-3)"> - wipe the screen</span>',
 
   about: () =>
     '<span class="st st-core">[*]</span> what we do\n' +
-    '   autorun.dev builds ai-native products that\n' +
-    '   run where people already live - messengers,\n' +
-    '   games, markets. small crew. tight loops.\n' +
-    '   no meetings that could\'ve been a commit.\n' +
+    '    autorun.dev builds ai-native products that\n' +
+    '    run where people already live - messengers,\n' +
+    '    games, markets. small crew. tight loops.\n' +
+    '    no meetings that could\'ve been a commit.\n' +
     '\n' +
-    '   <span class="dim">thesis: the best software in 2026 doesn\'t</span>\n' +
-    '   <span class="dim">have a ui. it has an agent.</span>',
+    '    <span class="dim">thesis: the best software in 2026 doesn\'t</span>\n' +
+    '    <span class="dim">have a ui. it has an agent.</span>',
 
   team: () =>
     '<span class="st st-core">[*]</span> who\'s behind the terminal\n' +
-    '   small, senior, remote. product engineers\n' +
-    '   who ship end-to-end - design, code, growth,\n' +
-    '   ops.\n' +
+    '    small, senior, remote. product engineers\n' +
+    '    who ship end-to-end - design, code, growth,\n' +
+    '    ops.\n' +
     '\n' +
-    '   founder:  <span style="color:var(--fg-0)">anton frolov</span>\n' +
-    '             vibe coder (unironically)\n' +
+    '    founder:  <span style="color:var(--fg-0)">anton frolov</span>\n' +
+    '              vibe coder (unironically)\n' +
     '\n' +
-    '   crew:     engineers, designers, degens\n' +
-    '   hiring:   always, if you\'re the real thing.\n' +
-    '             → <a href="mailto:hello@autorun.dev" style="color:var(--state-core);text-decoration:none">hello@autorun.dev</a>',
+    '    crew:     engineers, designers, degens\n' +
+    '    hiring:   always, if you\'re the real thing.\n' +
+    '              → <a href="mailto:hello@autorun.dev" style="color:var(--state-core);text-decoration:none">hello@autorun.dev</a>',
 
   projects: () => '__projects__',
 
   stack: () =>
     '<span class="st st-core">[*]</span> how we build\n' +
-    '   claude · typescript · python · telegram\n' +
-    '   sqlite-and-prayers · vps · tmux · vibes\n' +
+    '    claude · typescript · python · telegram\n' +
+    '    sqlite-and-prayers · vps · tmux · vibes\n' +
     '\n' +
-    '   <span class="st st-alert">[!]</span> we deploy on fridays.\n' +
-    '   <span class="dim">and midnights. no one stops us.</span>',
+    '<span class="st st-alert">[!]</span> we deploy on fridays.\n' +
+    '    <span class="dim">and midnights. no one stops us.</span>',
 
   config: (args) => {
     if (!args) {
       return '<span class="st st-core">[*]</span> settings\n' +
-        '   <span class="dim">current theme:</span> ' + getTheme() + '\n' +
+        '    <span class="dim">current theme:</span> ' + getTheme() + '\n' +
         '\n' +
-        '   <span class="dim">usage:</span>\n' +
-        '   config theme dark\n' +
-        '   config theme light\n' +
-        '   config theme system';
+        '    <span class="dim">usage:</span>\n' +
+        '    config theme dark\n' +
+        '    config theme light\n' +
+        '    config theme system';
     }
     const parts = args.split(/\s+/);
     if (parts[0] === 'theme' && ['dark','light','system'].includes(parts[1])) {
@@ -601,15 +603,12 @@ async function fxMatrix() {
   if (anchor) anchor = anchor.previousElementSibling; // cmd line
   if (!anchor) return;
 
-  // position overlay starting at anchor
   const style = getComputedStyle(document.body);
   const lineH = parseFloat(style.lineHeight) || 18;
-  const termRect = term.getBoundingClientRect();
-  const anchorRect = anchor.getBoundingClientRect();
-  const topOffset = anchorRect.top - termRect.top;
 
-  // make terminal position:relative for overlay
+  // position overlay relative to terminal
   term.style.position = 'relative';
+  const topOffset = anchor.offsetTop;
 
   const overlay = document.createElement('div');
   Object.assign(overlay.style, {
