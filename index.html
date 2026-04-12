@@ -15,7 +15,7 @@
     --link:#93c5fd;
     --prompt:#a78bfa;
   }
-  html{font-size:16px}
+  html{font-size:15px}
   body{
     background:var(--bg);
     color:var(--fg);
@@ -83,10 +83,17 @@
     outline:none;
     flex:1;
     caret-color:var(--fg);
-    font-size:16px;
+    min-width:0;
+    white-space:nowrap;
+    overflow:hidden;
   }
+  #input:empty::before{
+    content:'';
+  }
+  #input br{display:none}
 
   @media(max-width:480px){
+    html{font-size:14px}
     body{padding:1.5rem 1rem}
   }
 </style>
@@ -99,7 +106,7 @@
   <div class="blank"></div>
 
   <div class="input-line">
-    <input id="input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus>
+    <div id="input" contenteditable="true" role="textbox" spellcheck="false" autocorrect="off" autocapitalize="off"></div>
   </div>
 
 </div>
@@ -131,54 +138,66 @@
       <div class="project-desc">Minimalist top-down hockey for Telegram — one-button, perfect timing</div>
     </a>`;
 
-  input.addEventListener('keydown', e => {
-    if (e.key !== 'Enter') return;
-    const val = input.value.trim().toLowerCase();
-    input.value = '';
-    if (!val) return;
-
-    // echo command
-    const cmdLine = document.createElement('div');
-    cmdLine.className = 'line';
-    cmdLine.innerHTML = `<span class="prompt"></span><span class="cmd">${esc(val)}</span>`;
-    term.insertBefore(cmdLine, inputLine);
-
-    if (val === 'clear') {
-      while (term.firstChild !== inputLine) term.removeChild(term.firstChild);
-      return;
-    }
-
-    const handler = commands[val];
-    if (handler) {
-      const result = handler();
-      if (result === '__projects__') {
-        const wrap = document.createElement('div');
-        wrap.innerHTML = projectsHTML;
-        term.insertBefore(wrap, inputLine);
-      } else {
-        const lines = result.split('\n');
-        lines.forEach(l => {
-          const out = document.createElement('div');
-          out.className = 'line';
-          out.innerHTML = l;
-          term.insertBefore(out, inputLine);
-        });
-      }
-    } else {
-      const out = document.createElement('div');
-      out.className = 'line dim';
-      out.textContent = `command not found: ${val}. try "help"`;
-      term.insertBefore(out, inputLine);
-    }
-
-    const blank = document.createElement('div');
-    blank.className = 'blank';
-    term.insertBefore(blank, inputLine);
-
-    window.scrollTo(0, document.body.scrollHeight);
+  // prevent paste formatting, line breaks
+  input.addEventListener('paste', e => {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\n/g,'');
+    document.execCommand('insertText', false, text);
   });
 
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const val = input.textContent.trim().toLowerCase();
+      input.textContent = '';
+      if (!val) return;
+
+      // echo command
+      const cmdLine = document.createElement('div');
+      cmdLine.className = 'line';
+      cmdLine.innerHTML = `<span class="prompt"></span><span class="cmd">${esc(val)}</span>`;
+      term.insertBefore(cmdLine, inputLine);
+
+      if (val === 'clear') {
+        while (term.firstChild !== inputLine) term.removeChild(term.firstChild);
+        return;
+      }
+
+      const handler = commands[val];
+      if (handler) {
+        const result = handler();
+        if (result === '__projects__') {
+          const wrap = document.createElement('div');
+          wrap.innerHTML = projectsHTML;
+          term.insertBefore(wrap, inputLine);
+        } else {
+          result.split('\n').forEach(l => {
+            const out = document.createElement('div');
+            out.className = 'line';
+            out.innerHTML = l;
+            term.insertBefore(out, inputLine);
+          });
+        }
+      } else {
+        const out = document.createElement('div');
+        out.className = 'line dim';
+        out.textContent = `command not found: ${val}. try "help"`;
+        term.insertBefore(out, inputLine);
+      }
+
+      const blank = document.createElement('div');
+      blank.className = 'blank';
+      term.insertBefore(blank, inputLine);
+
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  });
+
+  // focus on tap anywhere
   document.addEventListener('click', () => input.focus());
+
+  // autofocus on load
+  requestAnimationFrame(() => input.focus());
 
   function esc(s) {
     const d = document.createElement('div');
