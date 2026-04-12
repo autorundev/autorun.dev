@@ -18,6 +18,20 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
+  @font-face{
+    font-family:'Ioskeley Mono';
+    src:url('/fonts/IoskeleyMono-Regular.woff2') format('woff2');
+    font-weight:400;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:'Ioskeley Mono';
+    src:url('/fonts/IoskeleyMono-Bold.woff2') format('woff2');
+    font-weight:700;
+    font-style:normal;
+    font-display:swap;
+  }
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
   /* === DARK THEME (default) === */
@@ -77,7 +91,7 @@
   body{
     background:var(--bg);
     color:var(--fg);
-    font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-family:'Ioskeley Mono','JetBrains Mono',ui-monospace,monospace;
     line-height:1.7;
     min-height:100dvh;
     display:flex;
@@ -97,7 +111,7 @@
   .blank{height:1.7em}
 
   /* state marks */
-  .st{font-weight:400;display:inline}
+  .st{font-weight:400;display:inline;}
   .st-core{color:var(--core)}
   .st-action{color:var(--action)}
   .st-presence{color:var(--presence)}
@@ -262,25 +276,27 @@ logoEl.addEventListener('click', e => {
   animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 150);
 });
 
-// ── processing spinner inline with command ────────
+// ── processing spinner replaces inner char of [>] ─
 function showProcessing(cmdLineEl) {
   return new Promise(resolve => {
     inputLine.style.display = 'none';
-    const spinner = document.createElement('span');
-    spinner.className = 'processing';
-    spinner.style.marginLeft = '.6em';
-    cmdLineEl.appendChild(spinner);
-    const frames = ['[/]','[-]','[\\]','[-]','[*]'];
+    const inner = cmdLineEl.querySelector('.st-inner');
+    const mark = cmdLineEl.querySelector('.st');
+    const frames = ['/','—','\\','—','*'];
     let i = 0;
+    mark.classList.remove('st-action');
+    mark.classList.add('st-core');
     const iv = setInterval(() => {
       if (i >= frames.length) {
         clearInterval(iv);
-        spinner.remove();
+        inner.textContent = '>';
+        mark.classList.remove('st-core');
+        mark.classList.add('st-action');
         inputLine.style.display = '';
         resolve();
         return;
       }
-      spinner.textContent = frames[i];
+      inner.textContent = frames[i];
       i++;
     }, 120);
   });
@@ -391,7 +407,7 @@ input.addEventListener('keydown', async e => {
   // echo command
   const cmdLine = document.createElement('div');
   cmdLine.className = 'line';
-  cmdLine.innerHTML = `<span class="st st-action">[>]</span> <span class="cmd">${esc(raw)}</span>`;
+  cmdLine.innerHTML = `<span class="st st-action">[<span class="st-inner">></span>]</span> <span class="cmd">${esc(raw)}</span>`;
   term.insertBefore(cmdLine, inputLine);
 
   if (val === 'clear') {
