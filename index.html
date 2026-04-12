@@ -132,14 +132,8 @@
   .st-idle{color:var(--fg-2)}
 
   /* logo */
-  .logo-wrap{cursor:pointer;display:inline-block}
-  .logo-mark{
-    font-weight:800;
-    display:flex;
-    align-items:center;
-    gap:.4em;
-  }
-  .logo-mark .mark-char{
+  .logo-wrap{cursor:pointer;display:inline-block;font-weight:800;white-space:pre-wrap}
+  .logo-wrap .mark-char{
     color:var(--state-core);
     transition:color .1s;
   }
@@ -241,11 +235,11 @@ function forceFollow() {
 
 // ── boot sequence (typewriter) ──────────────────
 const bootLines = [
-  {html: '<div class="logo-wrap" id="logo"><div class="logo-mark"><span class="mark-char" id="mark">[*]</span> autorun.dev</div></div>', isLogo: true},
+  {html: '<div class="logo-wrap" id="logo"><span class="mark-char" id="mark">[*]</span> autorun.dev</div>', isLogo: true},
   {html: '<div class="line dim">    ai-native tools &amp; products</div>', color: 'var(--fg-2)'},
   {html: '<div class="line dim">    v0.1.0</div>', color: 'var(--fg-2)'},
   {noType: true},
-  {html: '<div class="line"><span class="st st-idle">[.]</span> <span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span></div>', color: 'var(--fg-2)'},
+  {bootSequence: true},
   {html: '<div class="line"><span class="st st-presence">[:]</span> <span class="dim">agents online:</span> 3</div>', color: 'var(--fg-2)'},
   {html: '<div class="line"><span class="st st-presence">[:]</span> <span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>', color: 'var(--fg-2)'},
   {noType: true},
@@ -257,6 +251,32 @@ async function renderBoot() {
       const el = document.createElement('div');
       el.className = 'blank';
       term.insertBefore(el, inputLine);
+      await sleep(LINE_PAUSE);
+      continue;
+    }
+    if (line.bootSequence) {
+      const el = document.createElement('div');
+      el.className = 'line';
+      el.style.whiteSpace = 'pre-wrap';
+      el.style.color = 'var(--fg-2)';
+      term.insertBefore(el, inputLine);
+      // type "booting autorun.dev "
+      const prefix = '[.] booting autorun.dev ';
+      for (const ch of prefix) {
+        el.textContent += ch;
+        if (isFollowing) scrollToBottom();
+        await sleep(CHAR_DELAY);
+      }
+      // dots one by one with pause
+      for (let d = 0; d < 3; d++) {
+        el.textContent += '.';
+        if (isFollowing) scrollToBottom();
+        await sleep(reducedMotion ? 0 : 600);
+      }
+      // ok
+      await sleep(reducedMotion ? 0 : 300);
+      el.innerHTML = '<span class="st st-idle">[.]</span> <span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span>';
+      if (isFollowing) scrollToBottom();
       await sleep(LINE_PAUSE);
       continue;
     }
