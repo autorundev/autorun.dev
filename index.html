@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>autorun.dev</title>
+<meta name="description" content="autorun.dev — building things that work">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0a0a0a;
+    --fg:#c8c8c8;
+    --dim:#555;
+    --accent:#6ee7b7;
+    --link:#93c5fd;
+    --prompt:#a78bfa;
+  }
+  html{font-size:16px}
+  body{
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'SF Mono','Cascadia Code','JetBrains Mono','Fira Code',monospace;
+    line-height:1.7;
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    padding:2rem 1.5rem;
+    -webkit-font-smoothing:antialiased;
+  }
+  .terminal{
+    max-width:640px;
+    width:100%;
+  }
+  .line{margin-bottom:.15rem}
+  .prompt::before{
+    content:'> ';
+    color:var(--prompt);
+  }
+  .cmd{color:#fff;font-weight:600}
+  .dim{color:var(--dim)}
+  .accent{color:var(--accent)}
+  .blank{height:1.7em}
+
+  /* projects */
+  .project{
+    display:block;
+    margin:.6rem 0 .6rem 1.2rem;
+    text-decoration:none;
+    color:var(--fg);
+    border-left:2px solid var(--dim);
+    padding-left:1rem;
+    transition:border-color .2s,color .2s;
+  }
+  .project:hover{
+    border-color:var(--accent);
+  }
+  .project-name{
+    color:var(--link);
+    font-weight:600;
+  }
+  .project:hover .project-name{
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+  .project-desc{
+    color:var(--dim);
+    font-size:.87rem;
+  }
+
+  /* interactive input */
+  .input-line{display:flex;align-items:center}
+  .input-line::before{
+    content:'> ';
+    color:var(--prompt);
+    flex-shrink:0;
+  }
+  #input{
+    background:none;
+    border:none;
+    color:#fff;
+    font:inherit;
+    font-weight:600;
+    outline:none;
+    flex:1;
+    caret-color:var(--fg);
+    font-size:16px;
+  }
+
+  @media(max-width:480px){
+    body{padding:1.5rem 1rem}
+  }
+</style>
+</head>
+<body>
+<div class="terminal" id="term">
+
+  <div class="line dim">Last login: <span id="date"></span> on tty1</div>
+  <div class="line dim">Type <span style="color:var(--fg)">help</span> for available commands.</div>
+  <div class="blank"></div>
+
+  <div class="input-line">
+    <input id="input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus>
+  </div>
+
+</div>
+
+<script>
+  document.getElementById('date').textContent =
+    new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  const term = document.getElementById('term');
+  const input = document.getElementById('input');
+  const inputLine = input.parentElement;
+
+  const commands = {
+    help:     () => '<span class="dim">whoami</span>  — who am i\n<span class="dim">about</span>   — what i do\n<span class="dim">projects</span> — things i build\n<span class="dim">links</span>   — socials\n<span class="dim">clear</span>   — reset terminal',
+    whoami:   () => 'anton <span class="dim">@</span> autorun.dev',
+    about:    () => 'building tools & products.\nai agents, games, infra.',
+    projects: () => '__projects__',
+    links:    () => '<a href="https://github.com/autorunmd" target="_blank" style="color:var(--link);text-decoration:none">github</a> <span class="dim">·</span> <a href="https://t.me/autorun" target="_blank" style="color:var(--link);text-decoration:none">telegram</a>',
+    clear:    () => '__clear__',
+  };
+
+  const projectsHTML = `
+    <a href="https://vectoros.ai" target="_blank" rel="noopener" class="project">
+      <div class="project-name">vectoros.ai</div>
+      <div class="project-desc">AI-powered Telegram companion — personal second brain with Claude</div>
+    </a>
+    <a href="https://t.me/playsnap_bot/app" target="_blank" rel="noopener" class="project">
+      <div class="project-name">playsnap.bot</div>
+      <div class="project-desc">Minimalist top-down hockey for Telegram — one-button, perfect timing</div>
+    </a>`;
+
+  input.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const val = input.value.trim().toLowerCase();
+    input.value = '';
+    if (!val) return;
+
+    // echo command
+    const cmdLine = document.createElement('div');
+    cmdLine.className = 'line';
+    cmdLine.innerHTML = `<span class="prompt"></span><span class="cmd">${esc(val)}</span>`;
+    term.insertBefore(cmdLine, inputLine);
+
+    if (val === 'clear') {
+      while (term.firstChild !== inputLine) term.removeChild(term.firstChild);
+      return;
+    }
+
+    const handler = commands[val];
+    if (handler) {
+      const result = handler();
+      if (result === '__projects__') {
+        const wrap = document.createElement('div');
+        wrap.innerHTML = projectsHTML;
+        term.insertBefore(wrap, inputLine);
+      } else {
+        const lines = result.split('\n');
+        lines.forEach(l => {
+          const out = document.createElement('div');
+          out.className = 'line';
+          out.innerHTML = l;
+          term.insertBefore(out, inputLine);
+        });
+      }
+    } else {
+      const out = document.createElement('div');
+      out.className = 'line dim';
+      out.textContent = `command not found: ${val}. try "help"`;
+      term.insertBefore(out, inputLine);
+    }
+
+    const blank = document.createElement('div');
+    blank.className = 'blank';
+    term.insertBefore(blank, inputLine);
+
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+
+  document.addEventListener('click', () => input.focus());
+
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+</script>
+</body>
+</html>

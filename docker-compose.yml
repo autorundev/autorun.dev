@@ -1,0 +1,13 @@
+services:
+  autorun-web:
+    image: nginx:alpine
+    container_name: autorun-web
+    restart: unless-stopped
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
