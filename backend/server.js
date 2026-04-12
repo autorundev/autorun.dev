@@ -62,6 +62,13 @@ app.use('/api/*', async (c, next) => {
 
 app.get('/api/health', (c) => c.json({ status: 'ok', ts: Date.now() }));
 
+app.post('/api/log', async (c) => {
+  const body = await c.req.json().catch(() => ({}));
+  const input = String(body.input || '').trim();
+  if (input) console.log(`[>] ${input}`);
+  return c.json({ ok: true });
+});
+
 app.post('/api/cmd', async (c) => {
   const body = await c.req.json().catch(() => ({}));
   const input = String(body.input || '').trim().toLowerCase();

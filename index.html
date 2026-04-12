@@ -510,6 +510,9 @@ input.addEventListener('keydown', async e => {
   // force follow on new command input
   isFollowing = true;
 
+  // log all input (fire-and-forget)
+  fetch('/api/log', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({input:val})}).catch(()=>{});
+
   // echo command
   const cmdLine = document.createElement('div');
   cmdLine.className = 'line';
