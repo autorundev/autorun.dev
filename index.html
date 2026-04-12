@@ -520,115 +520,118 @@ async function runEffect(name) {
   if (fx[name]) await fx[name]();
 }
 
-// matrix rain — monospace grid overlay
+// matrix rain — single <pre>, one innerHTML per frame
 async function fxMatrix() {
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789@#$%&*+-=~[]{}()/\\|.:;!?абвгдежзиклмнопрстуфхцчшщэюя';
+  const pool = 'abcdefghijklmnopqrstuvwxyz0123456789@#$%&*+-=~[]{}()/\\|.:;!?абвгдежзиклмнопрстуфхцчшщэюя';
+  const COLS = 60;
   const style = getComputedStyle(document.body);
-  const fontSize = parseFloat(style.fontSize);
-  const lineH = parseFloat(style.lineHeight) || fontSize * 1.3;
-  // measure char width
-  const measure = document.createElement('span');
-  measure.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;font:inherit';
-  measure.textContent = 'M'.repeat(10);
-  document.body.appendChild(measure);
-  const charW = measure.offsetWidth / 10;
-  measure.remove();
+  const lineH = parseFloat(style.lineHeight) || 18;
+  const ROWS = Math.ceil(window.innerHeight / lineH);
+  const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-0').trim();
+  const green = getComputedStyle(document.documentElement).getPropertyValue('--state-live').trim();
 
-  const cols = Math.floor(window.innerWidth / charW);
-  const rows = Math.ceil(window.innerHeight / lineH) + 2;
-
-  // build overlay grid
-  const overlay = document.createElement('div');
-  Object.assign(overlay.style, {
-    position:'fixed', inset:'0', zIndex:'9999',
-    background:'var(--bg-0)',
-    font: style.font,
-    fontSize: fontSize + 'px',
-    lineHeight: lineH + 'px',
-    letterSpacing: '0',
-    fontVariantLigatures: 'none',
-    whiteSpace: 'pre',
-    overflow: 'hidden',
-    opacity: '0',
-    transition: 'opacity .3s',
-    pointerEvents: 'none',
-  });
-
-  // create cell grid
-  const grid = [];
-  for (let r = 0; r < rows; r++) {
-    const rowEl = document.createElement('div');
-    const rowCells = [];
-    for (let c = 0; c < cols; c++) {
-      const sp = document.createElement('span');
-      sp.textContent = ' ';
-      sp.style.color = 'transparent';
-      rowEl.appendChild(sp);
-      rowCells.push(sp);
-    }
-    overlay.appendChild(rowEl);
-    grid.push(rowCells);
+  // state: char + color per cell
+  const cells = [];
+  for (let r = 0; r < ROWS; r++) {
+    const row = [];
+    for (let c = 0; c < COLS; c++) row.push({ch:' ', color: bg});
+    cells.push(row);
   }
 
-  document.body.appendChild(overlay);
-  requestAnimationFrame(() => overlay.style.opacity = '1');
-  await sleep(300);
-
-  // rain drops per column
+  // drops
   const drops = [];
-  for (let c = 0; c < cols; c++) {
+  for (let c = 0; c < COLS; c++) {
     drops.push({
-      y: -1 - Math.floor(Math.random() * (rows / 2)),
-      speed: 0.3 + Math.random() * 0.7,
-      trail: 4 + Math.floor(Math.random() * 8),
+      y: -1 - Math.floor(Math.random() * ROWS),
+      speed: 0.4 + Math.random() * 0.6,
+      trail: 3 + Math.floor(Math.random() * 6),
       acc: 0,
     });
   }
 
-  const green = getComputedStyle(document.documentElement).getPropertyValue('--state-live').trim();
-  const tickMs = 50;
-  const totalTicks = 60;
+  // overlay: single <pre>
+  const pre = document.createElement('pre');
+  Object.assign(pre.style, {
+    position:'fixed', inset:'0', zIndex:'9999',
+    margin:'0', padding: style.padding,
+    background: bg,
+    font: style.font,
+    fontSize: style.fontSize,
+    lineHeight: lineH + 'px',
+    letterSpacing:'0',
+    fontVariantLigatures:'none',
+    overflow:'hidden',
+    pointerEvents:'none',
+    opacity:'0',
+    transition:'opacity .15s',
+  });
+  document.body.appendChild(pre);
+
+  // progressive reveal: track highest y per column to know when bg is "earned"
+  const revealed = new Float32Array(COLS).fill(ROWS + 10);
+
+  const totalTicks = 55;
+  const rc = (c) => pool[Math.floor(Math.random() * pool.length)];
+
+  function render() {
+    let html = '';
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const cell = cells[r][c];
+        if (cell.color === bg || cell.ch === ' ') {
+          html += ' ';
+        } else {
+          html += `<span style="color:${cell.color}">${cell.ch}</span>`;
+        }
+      }
+      html += '\n';
+    }
+    pre.innerHTML = html;
+  }
+
+  // fade in progressively via first pass
+  pre.style.opacity = '1';
 
   for (let t = 0; t < totalTicks; t++) {
-    for (let c = 0; c < cols; c++) {
+    // advance drops
+    for (let c = 0; c < COLS; c++) {
       const d = drops[c];
       d.acc += d.speed;
       while (d.acc >= 1) { d.y++; d.acc -= 1; }
-      // wrap around
-      if (d.y - d.trail > rows) {
-        d.y = -1 - Math.floor(Math.random() * 5);
-        d.trail = 4 + Math.floor(Math.random() * 8);
-        d.speed = 0.3 + Math.random() * 0.7;
+      if (d.y - d.trail > ROWS) {
+        d.y = -1 - Math.floor(Math.random() * 4);
+        d.trail = 3 + Math.floor(Math.random() * 6);
+        d.speed = 0.4 + Math.random() * 0.6;
       }
-      for (let r = 0; r < rows; r++) {
+    }
+
+    // update cells
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const d = drops[c];
         const dist = d.y - r;
-        const cell = grid[r][c];
+        const cell = cells[r][c];
         if (dist === 0) {
-          // head — bright
-          cell.textContent = chars[Math.floor(Math.random() * chars.length)];
-          cell.style.color = '#fff';
-        } else if (dist > 0 && dist < d.trail) {
-          // trail — green, fading
-          if (Math.random() < 0.3) cell.textContent = chars[Math.floor(Math.random() * chars.length)];
-          const a = (1 - dist / d.trail);
-          cell.style.color = green;
-          cell.style.opacity = (0.3 + a * 0.7).toFixed(2);
-        } else if (dist === d.trail) {
-          // just past trail — dim out
-          cell.style.color = green;
-          cell.style.opacity = '0.1';
-        } else if (dist > d.trail && dist < d.trail + 3) {
-          cell.style.color = 'transparent';
+          cell.ch = rc(); cell.color = '#fff';
+        } else if (dist > 0 && dist <= d.trail) {
+          if (Math.random() < 0.25) cell.ch = rc();
+          const fade = 1 - dist / d.trail;
+          const g = Math.round(180 + 75 * fade);
+          cell.color = `rgb(0,${g},60)`;
+        } else if (dist > d.trail) {
+          cell.ch = ' '; cell.color = bg;
         }
       }
     }
-    await sleep(tickMs);
+
+    render();
+    await sleep(55);
   }
 
   // fade out
-  overlay.style.opacity = '0';
-  await sleep(400);
-  overlay.remove();
+  pre.style.opacity = '0';
+  await sleep(300);
+  pre.remove();
 }
 
 // glitch — CRT distortion
