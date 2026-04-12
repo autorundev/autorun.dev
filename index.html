@@ -520,114 +520,115 @@ async function runEffect(name) {
   if (fx[name]) await fx[name]();
 }
 
-// matrix rain — in-place text replacement
+// matrix rain — monospace grid overlay
 async function fxMatrix() {
-  const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789[*]>:.';
-  const green = 'var(--state-live)';
-  const lines = Array.from(term.querySelectorAll('.line,.blank,.logo-wrap'));
-  if (!lines.length) return;
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789@#$%&*+-=~[]{}()/\\|.:;!?абвгдежзиклмнопрстуфхцчшщэюя';
+  const style = getComputedStyle(document.body);
+  const fontSize = parseFloat(style.fontSize);
+  const lineH = parseFloat(style.lineHeight) || fontSize * 1.3;
+  // measure char width
+  const measure = document.createElement('span');
+  measure.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;font:inherit';
+  measure.textContent = 'M'.repeat(10);
+  document.body.appendChild(measure);
+  const charW = measure.offsetWidth / 10;
+  measure.remove();
 
-  // snapshot original HTML for each line
-  const originals = lines.map(l => l.innerHTML);
+  const cols = Math.floor(window.innerWidth / charW);
+  const rows = Math.ceil(window.innerHeight / lineH) + 2;
 
-  // convert each line to a char grid: array of spans, one per char
-  const grid = []; // grid[row] = [{span, orig}]
-  lines.forEach((line, row) => {
-    const text = line.textContent;
-    // build span-per-char version
-    const container = document.createElement('div');
-    container.className = line.className;
-    container.style.whiteSpace = 'pre';
-    const cells = [];
-    for (let i = 0; i < text.length; i++) {
-      const sp = document.createElement('span');
-      sp.textContent = text[i];
-      sp.style.color = '';
-      container.appendChild(sp);
-      cells.push({span: sp, orig: text[i]});
-    }
-    // pad short lines so rain has columns to fill
-    const maxCols = 50;
-    for (let i = text.length; i < maxCols; i++) {
-      const sp = document.createElement('span');
-      sp.textContent = ' ';
-      container.appendChild(sp);
-      cells.push({span: sp, orig: ' '});
-    }
-    grid.push(cells);
-    line.replaceWith(container);
-    // keep ref to swapped element
-    lines[row] = container;
+  // build overlay grid
+  const overlay = document.createElement('div');
+  Object.assign(overlay.style, {
+    position:'fixed', inset:'0', zIndex:'9999',
+    background:'var(--bg-0)',
+    font: style.font,
+    fontSize: fontSize + 'px',
+    lineHeight: lineH + 'px',
+    letterSpacing: '0',
+    fontVariantLigatures: 'none',
+    whiteSpace: 'pre',
+    overflow: 'hidden',
+    opacity: '0',
+    transition: 'opacity .3s',
+    pointerEvents: 'none',
   });
 
-  const rows = grid.length;
-  const maxCols = grid.reduce((m, r) => Math.max(m, r.length), 0);
+  // create cell grid
+  const grid = [];
+  for (let r = 0; r < rows; r++) {
+    const rowEl = document.createElement('div');
+    const rowCells = [];
+    for (let c = 0; c < cols; c++) {
+      const sp = document.createElement('span');
+      sp.textContent = ' ';
+      sp.style.color = 'transparent';
+      rowEl.appendChild(sp);
+      rowCells.push(sp);
+    }
+    overlay.appendChild(rowEl);
+    grid.push(rowCells);
+  }
 
-  // rain state per column: current head position
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.style.opacity = '1');
+  await sleep(300);
+
+  // rain drops per column
   const drops = [];
-  for (let c = 0; c < maxCols; c++) {
+  for (let c = 0; c < cols; c++) {
     drops.push({
-      y: -Math.floor(Math.random() * rows) - 1,
-      speed: 0.3 + Math.random() * 0.6,  // rows per tick
-      trail: 3 + Math.floor(Math.random() * 5),
+      y: -1 - Math.floor(Math.random() * (rows / 2)),
+      speed: 0.3 + Math.random() * 0.7,
+      trail: 4 + Math.floor(Math.random() * 8),
       acc: 0,
     });
   }
 
-  // phase 1: rain falls (40 ticks)
-  // phase 2: restore original (20 ticks)
-  const tickMs = 60;
-  const rainTicks = 40;
-  const restoreTicks = 20;
+  const green = getComputedStyle(document.documentElement).getPropertyValue('--state-live').trim();
+  const tickMs = 50;
+  const totalTicks = 60;
 
-  for (let t = 0; t < rainTicks; t++) {
-    drops.forEach((d, c) => {
+  for (let t = 0; t < totalTicks; t++) {
+    for (let c = 0; c < cols; c++) {
+      const d = drops[c];
       d.acc += d.speed;
-      while (d.acc >= 1) {
-        d.y++;
-        d.acc -= 1;
+      while (d.acc >= 1) { d.y++; d.acc -= 1; }
+      // wrap around
+      if (d.y - d.trail > rows) {
+        d.y = -1 - Math.floor(Math.random() * 5);
+        d.trail = 4 + Math.floor(Math.random() * 8);
+        d.speed = 0.3 + Math.random() * 0.7;
       }
       for (let r = 0; r < rows; r++) {
-        if (c >= grid[r].length) continue;
-        const cell = grid[r][c];
         const dist = d.y - r;
-        if (dist >= 0 && dist < d.trail) {
-          // in trail
-          cell.span.textContent = chars[Math.floor(Math.random() * chars.length)];
-          const bright = dist === 0 ? 1 : 0.4 + 0.4 * (1 - dist / d.trail);
-          cell.span.style.color = green;
-          cell.span.style.opacity = bright.toFixed(2);
-        } else if (dist >= d.trail && dist < d.trail + 2) {
-          // fade out behind trail
-          cell.span.style.opacity = '0.15';
+        const cell = grid[r][c];
+        if (dist === 0) {
+          // head — bright
+          cell.textContent = chars[Math.floor(Math.random() * chars.length)];
+          cell.style.color = '#fff';
+        } else if (dist > 0 && dist < d.trail) {
+          // trail — green, fading
+          if (Math.random() < 0.3) cell.textContent = chars[Math.floor(Math.random() * chars.length)];
+          const a = (1 - dist / d.trail);
+          cell.style.color = green;
+          cell.style.opacity = (0.3 + a * 0.7).toFixed(2);
+        } else if (dist === d.trail) {
+          // just past trail — dim out
+          cell.style.color = green;
+          cell.style.opacity = '0.1';
+        } else if (dist > d.trail && dist < d.trail + 3) {
+          cell.style.color = 'transparent';
         }
       }
-    });
+    }
     await sleep(tickMs);
   }
 
-  // phase 2: restore line by line from top
-  const restoreDelay = Math.floor((restoreTicks * tickMs) / rows);
-  for (let r = 0; r < rows; r++) {
-    const orig = originals[r];
-    const el = lines[r];
-    const restored = document.createElement('div');
-    restored.className = el.className.replace(/\s*logo-wrap\s*/g, 'logo-wrap');
-    restored.innerHTML = orig;
-    el.replaceWith(restored);
-    lines[r] = restored;
-    await sleep(restoreDelay);
-  }
-
-  // re-bind logo refs after restore
-  const newMark = document.getElementById('mark');
-  const newLogo = document.getElementById('logo');
-  if (newMark) markEl = newMark;
-  if (newLogo) {
-    logoEl = newLogo;
-    newLogo.addEventListener('mouseenter', () => animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 200));
-    newLogo.addEventListener('click', () => animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 150));
-  }
+  // fade out
+  overlay.style.opacity = '0';
+  await sleep(400);
+  overlay.remove();
 }
 
 // glitch — CRT distortion
