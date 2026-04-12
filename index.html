@@ -726,7 +726,7 @@ async function renderLines(lines) {
     term.insertBefore(out, inputLine);
     if (isFollowing) scrollToBottom();
     await sleep(LINE_DELAY);
-  });
+  }
 }
 
 function renderNotFound(val) {
