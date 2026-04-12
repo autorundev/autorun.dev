@@ -97,7 +97,7 @@
     width:100%;
     overflow-x:hidden;
   }
-  .line{margin-bottom:.15rem}
+  .line{margin-bottom:.15rem;white-space:pre-wrap}
   .cmd{color:var(--fg);font-weight:500}
   .dim{color:var(--fg-2)}
   .blank{height:18px}
@@ -194,9 +194,9 @@
   <div class="line dim">ai-native tools &amp; products</div>
   <div class="line dim">v0.1.0</div>
   <div class="blank"></div>
-  <div class="line"><span class="st st-action">[>]</span> <span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span></div>
-  <div class="line"><span class="st st-action">[>]</span> <span class="dim">agents online:</span> 3</div>
-  <div class="line"><span class="st st-action">[>]</span> <span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>
+  <div class="line"><span class="st st-idle">[.]</span> <span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span></div>
+  <div class="line"><span class="st st-presence">[:]</span> <span class="dim">agents online:</span> 3</div>
+  <div class="line"><span class="st st-presence">[:]</span> <span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>
   <div class="blank"></div>
 
   <div class="input-line">
@@ -304,40 +304,46 @@ applyTheme(getTheme());
 // ── commands ──────────────────────────────────────
 const commands = {
   help: () =>
-    'about    <span style="color:var(--fg-3)"> - what we do</span>\n' +
-    'projects <span style="color:var(--fg-3)"> - things we ship</span>\n' +
-    'team     <span style="color:var(--fg-3)"> - who\'s behind the terminal</span>\n' +
-    'stack    <span style="color:var(--fg-3)"> - how we build</span>\n' +
-    'config   <span style="color:var(--fg-3)"> - settings</span>\n' +
-    'clear    <span style="color:var(--fg-3)"> - wipe the screen</span>',
+    '<span class="st st-core">[*]</span> available commands:\n' +
+    '   about    <span style="color:var(--fg-3)"> - what we do</span>\n' +
+    '   projects <span style="color:var(--fg-3)"> - things we ship</span>\n' +
+    '   team     <span style="color:var(--fg-3)"> - who\'s behind the terminal</span>\n' +
+    '   stack    <span style="color:var(--fg-3)"> - how we build</span>\n' +
+    '   config   <span style="color:var(--fg-3)"> - settings</span>\n' +
+    '   clear    <span style="color:var(--fg-3)"> - wipe the screen</span>',
 
   about: () =>
-    'autorun.dev builds ai-native products that\n' +
-    'run where people already live - messengers,\n' +
-    'games, markets. small crew. tight loops.\n' +
-    'no meetings that could\'ve been a commit.\n' +
+    '<span class="st st-core">[*]</span> about\n' +
+    '   autorun.dev builds ai-native products that\n' +
+    '   run where people already live - messengers,\n' +
+    '   games, markets. small crew. tight loops.\n' +
+    '   no meetings that could\'ve been a commit.\n' +
     '\n' +
-    '<span class="dim">thesis: the best software in 2026 doesn\'t</span>\n' +
-    '<span class="dim">have a ui. it has an agent.</span>',
+    '   <span class="dim">thesis: the best software in 2026 doesn\'t</span>\n' +
+    '   <span class="dim">have a ui. it has an agent.</span>',
 
   team: () =>
-    'small, senior, remote. product engineers\n' +
-    'who ship end-to-end - design, code, growth,\n' +
-    'ops.\n' +
+    '<span class="st st-core">[*]</span> team\n' +
+    '   small, senior, remote. product engineers\n' +
+    '   who ship end-to-end - design, code, growth,\n' +
+    '   ops.\n' +
     '\n' +
-    'founder:  <span style="color:var(--fg)">anton frolov</span>\n' +
-    '          vibe coder (unironically)\n' +
+    '   founder:  <span style="color:var(--fg)">anton frolov</span>\n' +
+    '             vibe coder (unironically)\n' +
     '\n' +
-    'crew:     engineers, designers, degens\n' +
-    'hiring:   always, if you\'re the real thing.\n' +
-    '          → <a href="mailto:hello@autorun.dev" style="color:var(--core);text-decoration:none">hello@autorun.dev</a>',
+    '   crew:     engineers, designers, degens\n' +
+    '   hiring:   always, if you\'re the real thing.\n' +
+    '             → <a href="mailto:hello@autorun.dev" style="color:var(--core);text-decoration:none">hello@autorun.dev</a>',
 
   projects: () => '__projects__',
 
   stack: () =>
-    'claude · typescript · python · telegram\n' +
-    'sqlite-and-prayers · vps · tmux · vibes\n' +
-    '<span class="dim">we deploy on fridays.</span>',
+    '<span class="st st-core">[*]</span> stack\n' +
+    '   claude · typescript · python · telegram\n' +
+    '   sqlite-and-prayers · vps · tmux · vibes\n' +
+    '\n' +
+    '   <span class="st st-alert">[!]</span> we deploy on fridays.\n' +
+    '   <span class="dim">and midnights. no one stops us.</span>',
 
   config: (args) => {
     if (!args) {

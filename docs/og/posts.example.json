@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "home",
+    "title": "ai-native tools & products",
+    "subtitle": "software that runs where people already are.",
+    "status": "[status: live]"
+  },
+  {
+    "slug": "vectoros",
+    "title": "vectoros.ai",
+    "subtitle": "ai companion for telegram. second brain powered by claude.",
+    "status": "[status: live]"
+  },
+  {
+    "slug": "playsnap",
+    "title": "playsnap.bot",
+    "subtitle": "minimalist hockey for telegram. one button. perfect timing.",
+    "status": "[status: live]"
+  },
+  {
+    "slug": "redacted",
+    "title": "[redacted]",
+    "subtitle": "something for traders.",
+    "status": "[status: stealth]"
+  },
+  {
+    "slug": "ship-log-007",
+    "title": "ship log 007",
+    "subtitle": "agent now remembers things. we finally fixed that bug.",
+    "status": "[status: live]"
+  },
+  {
+    "slug": "careers",
+    "title": "we're hiring.",
+    "subtitle": "senior product engineers. remote, async, ship-focused.",
+    "status": "[status: live]"
+  }
+]

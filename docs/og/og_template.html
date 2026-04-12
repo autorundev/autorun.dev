@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>autorun.dev — og</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-0: #0A0A0A;
+    --fg-0: #E8E8E8;
+    --fg-1: #A0A0A0;
+    --fg-2: #606060;
+    --state-core:    #7DD3FC;
+    --state-live:    #4ADE80;
+    --state-alert:   #FBBF24;
+    --state-stop:    #F87171;
+    --state-stealth: #A0A0A0;
+  }
+
+  html, body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+  }
+
+  body {
+    background: var(--bg-0);
+    color: var(--fg-0);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    padding: 72px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Subtle terminal grid background */
+  body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 26px;
+    font-weight: 700;
+    position: relative;
+  }
+
+  .mark  { color: var(--state-core); }
+  .brand { color: var(--fg-0); }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1040px;
+    position: relative;
+  }
+
+  .title {
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--fg-0);
+    letter-spacing: -0.01em;
+  }
+
+  .title.small    { font-size: 52px; }
+  .title.xsmall   { font-size: 42px; }
+
+  .subtitle {
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--fg-1);
+    max-width: 920px;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 20px;
+    color: var(--fg-2);
+    position: relative;
+  }
+
+  .prompt {
+    color: var(--fg-0);
+  }
+
+  .status {
+    color: var(--state-live);
+    font-weight: 700;
+  }
+
+  .status.stealth { color: var(--state-stealth); }
+  .status.alert   { color: var(--state-alert); }
+  .status.stop    { color: var(--state-stop); }
+  .status.core    { color: var(--state-core); }
+
+  .meta {
+    color: var(--fg-2);
+    font-size: 18px;
+  }
+
+  /* Variant: announcement with boot lines */
+  .boot {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: var(--fg-2);
+    font-size: 18px;
+    margin-top: 24px;
+  }
+
+  .boot .ok { color: var(--state-live); }
+  .boot .core { color: var(--state-core); }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <span class="mark">[*]</span>
+    <span class="brand" id="brand">autorun.dev</span>
+  </div>
+
+  <div class="content">
+    <div class="title" id="title">ai-native tools &amp; products</div>
+    <div class="subtitle" id="subtitle">software that runs where people already are.</div>
+    <div class="boot" id="boot" style="display:none;">
+      <div>&gt; booting <span class="core" id="boot-name">autorun.dev</span> ... <span class="ok">ok</span></div>
+      <div>&gt; agents online: <span id="boot-agents">3</span></div>
+      <div>&gt; <span id="boot-line">ready.</span></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="prompt">[&gt;] _</span>
+    <span class="status" id="status">[status: live]</span>
+  </div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+
+  // Text content
+  const setText = (id, key) => {
+    const v = params.get(key);
+    if (v !== null) document.getElementById(id).textContent = v;
+  };
+
+  setText('brand', 'brand');
+  setText('title', 'title');
+  setText('subtitle', 'subtitle');
+
+  // Auto-scale title based on length
+  const titleEl = document.getElementById('title');
+  const len = titleEl.textContent.length;
+  if (len > 80) titleEl.classList.add('xsmall');
+  else if (len > 50) titleEl.classList.add('small');
+
+  // Status with color mapping
+  const statusEl = document.getElementById('status');
+  if (params.has('status')) {
+    const s = params.get('status');
+    statusEl.textContent = s;
+    const lower = s.toLowerCase();
+    statusEl.classList.remove('stealth', 'alert', 'stop', 'core');
+    if      (lower.includes('stealth') || lower.includes('redacted')) statusEl.classList.add('stealth');
+    else if (lower.includes('alert')   || lower.includes('warning'))  statusEl.classList.add('alert');
+    else if (lower.includes('abort')   || lower.includes('fail')
+          || lower.includes('down')    || lower.includes('stop'))     statusEl.classList.add('stop');
+    else if (lower.includes('wip')     || lower.includes('building')
+          || lower.includes('soon'))                                  statusEl.classList.add('core');
+    // default: live (green)
+  }
+
+  // Boot variant
+  if (params.get('variant') === 'boot') {
+    document.getElementById('boot').style.display = 'flex';
+    if (params.has('agents')) document.getElementById('boot-agents').textContent = params.get('agents');
+    if (params.has('bootline')) document.getElementById('boot-line').textContent = params.get('bootline');
+    if (params.has('brand')) document.getElementById('boot-name').textContent = params.get('brand');
+  }
+
+  // Signal ready for headless screenshot
+  document.fonts.ready.then(() => {
+    document.body.setAttribute('data-ready', 'true');
+  });
+</script>
+
+</body>
+</html>

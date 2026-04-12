@@ -1,0 +1,19 @@
+{
+  "name": "autorun-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "autorun.dev api — easter eggs and hidden commands",
+  "main": "server.js",
+  "scripts": {
+    "start": "bun run server.js",
+    "dev": "bun --watch server.js",
+    "start:node": "node --experimental-vm-modules server.js"
+  },
+  "dependencies": {
+    "hono": "^4.6.0"
+  },
+  "engines": {
+    "bun": ">=1.0.0",
+    "node": ">=20"
+  }
+}
