@@ -588,7 +588,7 @@ async function fxMatrix() {
     clr.push(new Uint8Array(COLS));
   }
 
-  const bg = 'var(--bg-0)';
+  const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-0').trim();
   const tickMs = 60;
 
   let done = false;
