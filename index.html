@@ -454,20 +454,16 @@ input.addEventListener('keydown', async e => {
     }
   } else {
     // ask backend for easter eggs
+    var backendData = null;
     try {
       const res = await fetch('/api/cmd', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({input: val, lang: 'en'}),
       });
-      const data = await res.json();
-      if (data.lines && data.lines.length > 0) {
-        renderLines(data.lines);
-        if (data.effect) {
-          const delay = data.delay || 0;
-          if (delay) await sleep(delay);
-          await runEffect(data.effect);
-        }
+      backendData = await res.json();
+      if (backendData.lines && backendData.lines.length > 0) {
+        renderLines(backendData.lines);
       } else {
         renderNotFound(val);
       }
@@ -476,10 +472,18 @@ input.addEventListener('keydown', async e => {
     }
   }
 
+  // always: blank + scroll first, then effect overlay on top
   const blank = document.createElement('div');
   blank.className = 'blank';
   term.insertBefore(blank, inputLine);
   inputLine.scrollIntoView({block:'nearest'});
+
+  // run effect after layout is settled
+  if (typeof backendData !== 'undefined' && backendData?.effect) {
+    const delay = backendData.delay || 0;
+    if (delay) await sleep(delay);
+    await runEffect(backendData.effect);
+  }
 });
 
 // ── render helpers ───────────────────────────────
