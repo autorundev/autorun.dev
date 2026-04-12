@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>autorun.dev</title>
-<meta name="description" content="autorun.dev — ai-native tools for messaging, gaming, and trading">
+<meta name="description" content="autorun.dev — ai-native tools & products">
 <style>
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
   :root{
@@ -15,7 +15,7 @@
     --link:#93c5fd;
     --prompt:#a78bfa;
   }
-  html{font-size:clamp(8px,calc((100vw - 32px)/36),15px)}
+  html{font-size:clamp(8px,calc((100vw - 32px)/43),15px)}
   body{
     background:var(--bg);
     color:var(--fg);
@@ -33,6 +33,8 @@
     overflow-x:hidden;
   }
   .line{margin-bottom:.15rem}
+  .indent{padding-left:1.2em}
+  .indent2{padding-left:2.4em}
   .prompt::before{
     content:'>';
     color:var(--prompt);
@@ -45,33 +47,23 @@
 
   /* intro */
   .intro{margin-bottom:0;white-space:pre;line-height:1.2}
-  .intro .accent{color:var(--accent)}
 
   /* projects */
   .project{
     display:block;
-    margin:.6rem 0 .6rem 1.2rem;
+    margin:.5rem 0 .5rem 1.2em;
     text-decoration:none;
     color:var(--fg);
     border-left:2px solid var(--dim);
     padding-left:1rem;
     transition:border-color .2s,color .2s;
   }
-  .project:hover{
-    border-color:var(--accent);
-  }
-  .project-name{
-    color:var(--link);
-    font-weight:600;
-  }
-  .project:hover .project-name{
-    text-decoration:underline;
-    text-underline-offset:3px;
-  }
-  .project-desc{
-    color:var(--dim);
-    font-size:.87rem;
-  }
+  .project:hover{border-color:var(--accent)}
+  .project-name{color:var(--link);font-weight:600}
+  .project:hover .project-name{text-decoration:underline;text-underline-offset:3px}
+  .project-desc{color:var(--dim);font-size:.87rem}
+  .project-status{color:var(--accent);font-size:.87rem}
+  .project-status.stealth{color:var(--dim)}
 
   /* interactive input */
   .input-line{display:flex;align-items:center}
@@ -115,14 +107,15 @@
 <body>
 <div class="terminal" id="term">
 
-  <div class="intro"><span class="accent">           _                          _         </span></div>
-  <div class="intro"><span class="accent"> __ _ _  _| |_ ___ _ _ _  _ _ _    __| |_____ __</span></div>
-  <div class="intro"><span class="accent">/ _` | || |  _/ _ \ '_| || | ' \ _/ _` / -_) V /</span></div>
-  <div class="intro"><span class="accent">\__,_|\_,_|\__\___/_|  \_,_|_||_(_)__,_\___|\_/ </span></div>
+  <div class="intro"><span class="accent">            _                          _            _</span></div>
+  <div class="intro"><span class="accent">  __ _ _  _| |_ ___ _ _ _  _ _ _    __| |_____ __  | |_ ___ __ _ _ __</span></div>
+  <div class="intro"><span class="accent"> / _` | || |  _/ _ \ '_| || | ' \ _/ _` / -_) V /  |  _/ -_) _` | '  \</span></div>
+  <div class="intro"><span class="accent"> \__,_|\_,_|\__\___/_|  \_,_|_||_(_)__,_\___|\_/    \__\___\__,_|_|_|_|</span></div>
+  <div class="line dim" style="margin-top:.3rem"> v0.1.0 — ai-native tools &amp; products</div>
   <div class="blank"></div>
-  <div class="line dim">v1.0.0 — ai-native tools for messaging, gaming, and trading.</div>
-  <div class="blank"></div>
-  <div class="line dim">Type <span style="color:var(--fg)">help</span> to see available commands.</div>
+  <div class="line"><span class="prompt"></span><span class="dim">booting autorun.dev ...</span> <span class="accent">ok</span></div>
+  <div class="line"><span class="prompt"></span><span class="dim">agents online:</span> 3</div>
+  <div class="line"><span class="prompt"></span><span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>
   <div class="blank"></div>
 
   <div class="input-line">
@@ -139,23 +132,57 @@
   const inputLine = input.closest('.input-line');
 
   const commands = {
-    help:     () => '<span class="dim">about</span>     — what we do\n<span class="dim">projects</span>  — things we build\n<span class="dim">team</span>     — who we are\n<span class="dim">links</span>    — find us online\n<span class="dim">clear</span>    — reset terminal',
-    about:    () => 'we build ai-native products that live where\npeople already spend their time — messengers,\ngames, markets. small team, fast shipping.',
-    team:     () => 'founded by <span style="color:var(--fg)">anton afrolov</span>.\nproduct engineer. builds from zero to one.\n<span class="dim">previously:</span> product, growth, startups.',
+    help: () =>
+      '<span class="dim indent">about</span>     — what we do\n' +
+      '<span class="dim indent">projects</span>  — things we ship\n' +
+      '<span class="dim indent">team</span>     — who\'s behind the terminal\n' +
+      '<span class="dim indent">stack</span>    — how we build\n' +
+      '<span class="dim indent">clear</span>    — wipe the screen',
+
+    about: () =>
+      '<span class="indent">autorun.dev builds ai-native products that run</span>\n' +
+      '<span class="indent">where people already live — messengers, games,</span>\n' +
+      '<span class="indent">markets. small crew. tight loops. no meetings</span>\n' +
+      '<span class="indent">that could\'ve been a commit.</span>\n' +
+      '\n' +
+      '<span class="indent dim">thesis: the best software in 2026 doesn\'t have</span>\n' +
+      '<span class="indent dim">a ui. it has an agent.</span>',
+
+    team: () =>
+      '<span class="indent">small, senior, remote. product engineers who</span>\n' +
+      '<span class="indent">ship end-to-end — design, code, growth, ops.</span>\n' +
+      '\n' +
+      '<span class="indent prompt"></span><span class="dim">whoami</span>\n' +
+      '<span class="indent2">founder:   <span style="color:var(--fg)">anton frolov</span> — vibe coder (unironically)</span>\n' +
+      '<span class="indent2">crew:      engineers, designers, degens</span>\n' +
+      '<span class="indent2">hiring:    always, if you\'re the real thing.</span>\n' +
+      '<span class="indent2">           → <a href="mailto:hello@autorun.dev" style="color:var(--link);text-decoration:none">hello@autorun.dev</a></span>',
+
     projects: () => '__projects__',
-    links:    () => '<a href="https://github.com/autorunmd" target="_blank" style="color:var(--link);text-decoration:none">github</a> <span class="dim">·</span> <a href="https://t.me/autorun" target="_blank" style="color:var(--link);text-decoration:none">telegram</a>',
-    clear:    () => '__clear__',
+
+    stack: () =>
+      '<span class="indent">claude · typescript · python · telegram · sqlite-and-prayers</span>\n' +
+      '<span class="indent dim">vps + tmux + vibes. we deploy on fridays.</span>',
+
+    clear: () => '__clear__',
   };
 
   const projectsHTML = `
     <a href="https://vectoros.ai" target="_blank" rel="noopener" class="project">
       <div class="project-name">vectoros.ai</div>
-      <div class="project-desc">AI companion for Telegram — second brain powered by Claude</div>
+      <div class="project-desc">ai companion for telegram.<br>second brain powered by claude.</div>
+      <div class="project-status">[status: live]</div>
     </a>
     <a href="https://t.me/playsnap_bot/app" target="_blank" rel="noopener" class="project">
       <div class="project-name">playsnap.bot</div>
-      <div class="project-desc">Minimalist hockey for Telegram — one-button, perfect timing</div>
-    </a>`;
+      <div class="project-desc">minimalist hockey for telegram.<br>one button. perfect timing. no tutorial.</div>
+      <div class="project-status">[status: live]</div>
+    </a>
+    <div class="project" style="cursor:default">
+      <div class="project-name" style="color:var(--dim)">[redacted]</div>
+      <div class="project-desc">something for traders.</div>
+      <div class="project-status stealth">[status: stealth]</div>
+    </div>`;
 
   // prevent paste formatting, line breaks
   input.addEventListener('paste', e => {
@@ -207,7 +234,7 @@
       blank.className = 'blank';
       term.insertBefore(blank, inputLine);
 
-      window.scrollTo(0, document.body.scrollHeight);
+      inputLine.scrollIntoView({block:'nearest'});
     }
   });
 
