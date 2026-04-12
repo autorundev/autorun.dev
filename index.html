@@ -211,12 +211,25 @@
 
 </div>
 
+<template id="boot-template">
+  <div class="logo-wrap" id="logo">
+    <div class="logo-mark"><span class="mark-char" id="mark">[*]</span>autorun.dev</div>
+  </div>
+  <div class="line dim">ai-native tools &amp; products</div>
+  <div class="line dim">v0.1.0</div>
+  <div class="blank"></div>
+  <div class="line"><span class="st st-idle">[.]</span> <span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span></div>
+  <div class="line"><span class="st st-presence">[:]</span> <span class="dim">agents online:</span> 3</div>
+  <div class="line"><span class="st st-presence">[:]</span> <span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>
+  <div class="blank"></div>
+</template>
+
 <script>
 const term = document.getElementById('term');
 const input = document.getElementById('input');
 const inputLine = input.closest('.input-line');
-const markEl = document.getElementById('mark');
-const logoEl = document.getElementById('logo');
+let markEl = document.getElementById('mark');
+let logoEl = document.getElementById('logo');
 
 // ── state mark animation ──────────────────────────
 const RUNTIME_LOOP = ['[*]','[/]','[-]','[\\]'];
@@ -450,6 +463,11 @@ input.addEventListener('keydown', async e => {
       const data = await res.json();
       if (data.lines && data.lines.length > 0) {
         renderLines(data.lines);
+        if (data.effect) {
+          const delay = data.delay || 0;
+          if (delay) await sleep(delay);
+          await runEffect(data.effect);
+        }
       } else {
         renderNotFound(val);
       }
@@ -492,6 +510,138 @@ function markClass(mark) {
   const m = mark.replace(/[\[\]]/g, '');
   const map = {'*':'core','>':'action',':':'presence','.':'idle','!':'alert','x':'stop','+':'live','?':'alert','-':'idle','/':'core','\\':'core'};
   return map[m] || 'core';
+}
+
+// ── effects ──────────────────────────────────────
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function runEffect(name) {
+  const fx = {matrix_rain: fxMatrix, glitch: fxGlitch, reboot: fxReboot};
+  if (fx[name]) await fx[name]();
+}
+
+// matrix rain — pure DOM, no canvas
+async function fxMatrix() {
+  const overlay = document.createElement('div');
+  Object.assign(overlay.style, {
+    position:'fixed',inset:'0',zIndex:'9999',
+    overflow:'hidden',pointerEvents:'none',
+    background:'rgba(0,0,0,0.92)',
+    fontFamily:'inherit',fontSize:'14px',lineHeight:'16px',
+    opacity:'0',transition:'opacity .3s',
+  });
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.style.opacity = '1');
+
+  const cols = Math.floor(window.innerWidth / 10);
+  const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789*>:.';
+  const columns = [];
+
+  for (let i = 0; i < cols; i++) {
+    const col = document.createElement('div');
+    Object.assign(col.style, {
+      position:'absolute',
+      left: (i * 10) + 'px',
+      top: (-20 - Math.random() * 400) + 'px',
+      color:'#4ADE80',
+      whiteSpace:'pre',
+      opacity: (0.3 + Math.random() * 0.7).toFixed(2),
+      fontSize: (10 + Math.random() * 6) + 'px',
+      transition:'none',
+    });
+    const len = 8 + Math.floor(Math.random() * 20);
+    let txt = '';
+    for (let j = 0; j < len; j++) txt += chars[Math.floor(Math.random() * chars.length)] + '\n';
+    col.textContent = txt;
+    overlay.appendChild(col);
+    columns.push({el: col, speed: 2 + Math.random() * 6, y: parseFloat(col.style.top)});
+  }
+
+  const h = window.innerHeight;
+  let frame = 0;
+  const maxFrames = 180; // ~3s at 60fps
+  function tick() {
+    if (frame++ > maxFrames) {
+      overlay.style.opacity = '0';
+      setTimeout(() => overlay.remove(), 300);
+      return;
+    }
+    columns.forEach(c => {
+      c.y += c.speed;
+      if (c.y > h + 100) c.y = -300 - Math.random() * 200;
+      c.el.style.top = c.y + 'px';
+    });
+    requestAnimationFrame(tick);
+  }
+  tick();
+  await sleep(3300);
+}
+
+// glitch — CRT distortion
+async function fxGlitch() {
+  const el = document.querySelector('.terminal');
+  const duration = 600;
+  const start = Date.now();
+
+  function frame() {
+    const t = Date.now() - start;
+    if (t > duration) {
+      el.style.transform = '';
+      el.style.filter = '';
+      el.style.textShadow = '';
+      el.style.clipPath = '';
+      return;
+    }
+    const intensity = Math.sin(t * 0.05) * (1 - t / duration);
+    const skewX = (Math.random() - 0.5) * 8 * intensity;
+    const skewY = (Math.random() - 0.5) * 2 * intensity;
+    const tx = (Math.random() - 0.5) * 12 * intensity;
+    const r = (Math.random() - 0.5) * 4 * intensity;
+    const g = (Math.random() - 0.5) * 4 * intensity;
+    el.style.transform = `skew(${skewX}deg,${skewY}deg) translateX(${tx}px)`;
+    el.style.textShadow = `${r}px 0 rgba(255,0,0,0.7), ${g}px 0 rgba(0,255,255,0.7)`;
+
+    // random scanline clip
+    if (Math.random() < 0.3 * Math.abs(intensity)) {
+      const y1 = Math.random() * 100;
+      const y2 = y1 + 2 + Math.random() * 8;
+      el.style.clipPath = `polygon(0 0,100% 0,100% ${y1}%,0 ${y1}%,0 ${y2}%,100% ${y2}%,100% 100%,0 100%)`;
+    } else {
+      el.style.clipPath = '';
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+  await sleep(duration + 50);
+}
+
+// reboot — clear + re-run boot
+async function fxReboot() {
+  const el = document.querySelector('.terminal');
+  el.style.transition = 'opacity .3s';
+  el.style.opacity = '0';
+  await sleep(400);
+
+  // remove everything except input line
+  while (term.firstChild !== inputLine) term.removeChild(term.firstChild);
+
+  // re-insert boot sequence
+  const tpl = document.getElementById('boot-template').content.cloneNode(true);
+  term.insertBefore(tpl, inputLine);
+
+  // re-bind logo animation
+  const newLogo = document.getElementById('logo');
+  const newMark = document.getElementById('mark');
+  if (newLogo && newMark) {
+    markEl = newMark;
+    logoEl = newLogo;
+    newLogo.addEventListener('mouseenter', () => animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 200));
+    newLogo.addEventListener('click', () => animateMark(RUNTIME_LOOP, RUNTIME_COLORS, 150));
+  }
+
+  el.style.opacity = '1';
+  await sleep(300);
 }
 
 // ── focus management ──────────────────────────────
