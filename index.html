@@ -643,7 +643,7 @@ input.addEventListener('keydown', async e => {
       });
       backendData = await res.json();
       if (backendData.lines && backendData.lines.length > 0) {
-        renderLines(backendData.lines);
+        await renderLines(backendData.lines);
       } else if (!backendData.effect) {
         renderNotFound(val);
       }
@@ -669,10 +669,32 @@ input.addEventListener('keydown', async e => {
 });
 
 // ── render helpers ───────────────────────────────
-function renderLines(lines) {
-  lines.forEach(l => {
+async function renderLines(lines) {
+  for (const l of lines) {
     const out = document.createElement('div');
     out.className = 'line';
+
+    // lines with a mark get a brief spinner first
+    if (l.mark && l.mark !== '[*]') {
+      const spinMark = document.createElement('span');
+      spinMark.className = 'st st-core';
+      out.appendChild(spinMark);
+      out.appendChild(document.createTextNode(' ' + (l.text || '')));
+      term.insertBefore(out, inputLine);
+      if (isFollowing) scrollToBottom();
+      // spin through frames
+      const frames = ['[/]','[-]','[\\]','[-]'];
+      for (const f of frames) {
+        spinMark.textContent = f;
+        await sleep(120);
+      }
+      // resolve to final mark
+      spinMark.textContent = l.mark;
+      spinMark.className = 'st st-' + markClass(l.mark);
+      await sleep(LINE_DELAY);
+      continue;
+    }
+
     let html = '';
     if (l.mark) html += `<span class="st st-${markClass(l.mark)}">${esc(l.mark)}</span> `;
     if (l.indent) html += '    ';
@@ -681,6 +703,8 @@ function renderLines(lines) {
     if (l.state) out.innerHTML = html.replace(esc(l.text), `<span class="st st-${l.state}">${esc(l.text)}</span>`);
     else out.innerHTML = html;
     term.insertBefore(out, inputLine);
+    if (isFollowing) scrollToBottom();
+    await sleep(LINE_DELAY);
   });
 }
 
