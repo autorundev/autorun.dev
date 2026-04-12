@@ -9,7 +9,7 @@
 - [x] light mode state colors - зафиксированы в спеке и на сайте
 - [ ] favicon - SVG версия для высокого разрешения
 - [ ] OG image - регенерировать с обновлённым dialogue grammar `[>] _`
-- [ ] бэкенд easter eggs - задеплоить (сейчас только спека, не запущен)
+- [x] бэкенд easter eggs - задеплоен (autorun-api контейнер, /api/cmd)
 - [ ] `site_content.js` - привести social handles в соответствие с реальностью
 
 ## done

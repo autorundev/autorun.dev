@@ -26,17 +26,14 @@ docs/
 ├── autorun_brand_system_spec.md     ← identity, typography, color, voice
 ├── autorun_motion_spec.md           ← state grammar, loops, motion
 ├── autorun_social_spec.md           ← channel-specific guides
-├── og/
-│   ├── og_spec.md                   ← og image spec
-│   ├── og_template.html             ← html template
-│   ├── og_generate.js               ← puppeteer generator
-│   ├── package.json
-│   └── posts.example.json           ← batch example
-├── site/
-│   ├── README.md                    ← site architecture
-│   ├── frontend/                    ← public commands, themes, effects
-│   └── backend/                     ← easter eggs api server
-└── brand-old/                       ← deprecated v1.0
+├── tasks.md                         ← deferred work
+└── site/
+    ├── README.md                    ← site architecture
+    ├── frontend/                    ← public commands, themes, effects
+    └── backend/                     ← easter eggs api (reference)
+
+og/                                  ← OG image generator (puppeteer)
+backend/                             ← easter eggs API server (deployed)
 ```
 
 ### `autorun_brand_system_spec.md`
