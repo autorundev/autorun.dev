@@ -19,6 +19,8 @@ services:
     build: ./backend
     container_name: autorun-api
     restart: unless-stopped
+    env_file:
+      - ../docker/.env
     environment:
       - PORT=8787
     networks:

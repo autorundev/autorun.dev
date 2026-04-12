@@ -16,6 +16,19 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 
 import { commands } from './easter_eggs.js';
+import Anthropic from '@anthropic-ai/sdk';
+
+const anthropic = new Anthropic();
+let unknownCount = 0; // pseudo-random: every 10th unknown command
+
+const SYSTEM_PROMPT = `You are the terminal of autorun.dev — an AI-native tools company.
+You respond in 1-3 very short lines. Terse, dry, lowercase. No emoji. No marketing speak.
+You are a quiet, autonomous, machine-like presence. Self-aware but not chatty.
+Think terminal output, not chatbot. Use state marks:
+[*] for statements, [:] for presence/status, [!] for warnings.
+Never use [>] — that's user input only.
+If the input is gibberish, respond with something witty but brief.
+If it's a real question, answer honestly and short.`;
 
 const app = new Hono();
 
@@ -86,6 +99,30 @@ app.post('/api/cmd', async (c) => {
   const handler = commands[input] || commands[normalizeInput(input)];
 
   if (!handler) {
+    // every 10th unknown command — ask haiku
+    unknownCount++;
+    if (unknownCount % 10 === 0) {
+      try {
+        const msg = await anthropic.messages.create({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 150,
+          system: SYSTEM_PROMPT,
+          messages: [{ role: 'user', content: input }],
+        });
+        const text = msg.content[0]?.text || '';
+        const lines = text.split('\n').filter(l => l.trim()).map(l => {
+          // parse [x] marks from haiku response
+          const m = l.match(/^\[(.)\]\s*(.*)/);
+          if (m) return { mark: `[${m[1]}]`, text: m[2] };
+          return { mark: null, text: l.trim(), indent: true };
+        });
+        console.log(`[*] haiku responded to: ${input}`);
+        return c.json({ lines });
+      } catch (e) {
+        console.log(`[!] haiku error: ${e.message}`);
+      }
+    }
+
     return c.json({
       lines: [
         { mark: '[!]', text: lang === 'ru'
