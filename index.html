@@ -462,20 +462,11 @@ input.addEventListener('keydown', async e => {
       });
       const data = await res.json();
       if (data.lines && data.lines.length > 0) {
+        renderLines(data.lines);
         if (data.effect) {
-          // effect manages inputLine visibility and blank
-          inputLine.style.display = 'none';
-          renderLines(data.lines);
           const delay = data.delay || 0;
           if (delay) await sleep(delay);
           await runEffect(data.effect);
-          // after effect: add blank + scroll (effect restores inputLine)
-          const bl = document.createElement('div');
-          bl.className = 'blank';
-          term.insertBefore(bl, inputLine);
-          inputLine.scrollIntoView({block:'nearest'});
-        } else {
-          renderLines(data.lines);
         }
       } else {
         renderNotFound(val);
@@ -485,12 +476,10 @@ input.addEventListener('keydown', async e => {
     }
   }
 
-  if (inputLine.style.display !== 'none') {
-    const blank = document.createElement('div');
-    blank.className = 'blank';
-    term.insertBefore(blank, inputLine);
-    inputLine.scrollIntoView({block:'nearest'});
-  }
+  const blank = document.createElement('div');
+  blank.className = 'blank';
+  term.insertBefore(blank, inputLine);
+  inputLine.scrollIntoView({block:'nearest'});
 });
 
 // ── render helpers ───────────────────────────────
@@ -535,37 +524,47 @@ async function fxMatrix() {
   const pool = 'abcdefghijklmnopqrstuvwxyz0123456789@#$%&*+-=~[]{}()/|.:;!?абвгдежзиклмнопрстуфхцчшщэюя';
   const rc = () => pool[Math.floor(Math.random() * pool.length)];
   const COLS = 60;
-  inputLine.style.display = 'none';
+  const ROWS = 22;
 
-  // find the response line
-  let responseLine = inputLine.previousElementSibling;
-  while (responseLine && responseLine.classList.contains('blank')) responseLine = responseLine.previousElementSibling;
-  if (!responseLine) return;
-  const origHTML = responseLine.innerHTML;
-  const origPadded = responseLine.textContent.padEnd(COLS).slice(0, COLS);
+  // find response line to position overlay from
+  let anchor = inputLine.previousElementSibling;
+  while (anchor && anchor.classList.contains('blank')) anchor = anchor.previousElementSibling;
+  if (!anchor) return;
 
-  // row 1 = static fake prompt, rows 2+ = rain
-  const RAIN_ROWS = 20;
-  const totalRows = 2 + RAIN_ROWS; // row 0=response, row 1=fake prompt, rows 2..=rain
+  // position overlay starting at anchor
+  const style = getComputedStyle(document.body);
+  const lineH = parseFloat(style.lineHeight) || 18;
+  const termRect = term.getBoundingClientRect();
+  const anchorRect = anchor.getBoundingClientRect();
+  const topOffset = anchorRect.top - termRect.top;
 
-  // fake static [>] (no cursor, no input)
-  const fakePrompt = document.createElement('div');
-  fakePrompt.className = 'line';
-  fakePrompt.style.whiteSpace = 'pre';
-  fakePrompt.innerHTML = '<span class="st st-action">[>]</span>';
-  term.insertBefore(fakePrompt, inputLine);
+  // make terminal position:relative for overlay
+  term.style.position = 'relative';
 
-  const rainEls = [];
-  for (let i = 0; i < RAIN_ROWS; i++) {
+  const overlay = document.createElement('div');
+  Object.assign(overlay.style, {
+    position: 'absolute',
+    top: topOffset + 'px',
+    left: '0',
+    right: '0',
+    zIndex: '10',
+    font: 'inherit',
+    lineHeight: lineH + 'px',
+    whiteSpace: 'pre',
+    pointerEvents: 'none',
+  });
+  term.appendChild(overlay);
+
+  // pre-create row elements
+  const rowEls = [];
+  for (let r = 0; r < ROWS; r++) {
     const row = document.createElement('div');
-    row.className = 'line';
-    row.style.whiteSpace = 'pre';
     row.textContent = ' '.repeat(COLS);
-    term.insertBefore(row, inputLine);
-    rainEls.push(row);
+    overlay.appendChild(row);
+    rowEls.push(row);
   }
 
-  // ~18 streams, staggered starts
+  // ~18 streams
   const NUM_DROPS = 18;
   const usedCols = new Set();
   while (usedCols.size < NUM_DROPS) usedCols.add(Math.floor(Math.random() * COLS));
@@ -581,20 +580,16 @@ async function fxMatrix() {
     });
   }
 
-  // buffers: row 0=response, row 1=fake prompt, rows 2+=rain
+  // char + color buffers
   const buf = [];
-  const clr = [];
-  for (let r = 0; r < totalRows; r++) {
+  const clr = []; // 0=transparent, 1=head(white+bg), 2=trail(green+bg), 3=dim(green+bg)
+  for (let r = 0; r < ROWS; r++) {
     buf.push(new Array(COLS).fill(' '));
     clr.push(new Uint8Array(COLS));
   }
-  for (let c = 0; c < COLS; c++) buf[0][c] = origPadded[c];
-  // row 1 init: "[>]" + spaces
-  const fakeText = '[>]'.padEnd(COLS);
-  for (let c = 0; c < COLS; c++) buf[1][c] = fakeText[c];
 
+  const bg = 'var(--bg-0)';
   const tickMs = 60;
-  let activated = false;
 
   let done = false;
   while (!done) {
@@ -603,71 +598,50 @@ async function fxMatrix() {
       while (d.acc >= 1) { d.y++; d.acc -= 1; }
     }
 
-    // update within fixed grid
     for (const d of drops) {
       const c = d.col;
-      for (let r = 0; r < totalRows; r++) {
+      for (let r = 0; r < ROWS; r++) {
         const dist = d.y - r;
         if (dist === 0) {
           buf[r][c] = rc(); clr[r][c] = 1;
         } else if (dist > 0 && dist <= d.trail) {
           buf[r][c] = rc(); clr[r][c] = dist <= 2 ? 2 : 3;
         } else if (dist > d.trail) {
-          if (r === 0) { buf[0][c] = origPadded[c]; clr[0][c] = 0; }
-          else if (r === 1) { buf[1][c] = fakeText[c]; clr[1][c] = 0; }
-          else { buf[r][c] = ' '; clr[r][c] = 0; }
+          buf[r][c] = ' '; clr[r][c] = 0;
         }
       }
     }
 
-    // render row 0 (response)
-    renderRow(responseLine, buf[0], clr[0]);
-    // render row 1 (fake prompt) — only while not activated
-    if (!activated) renderRow(fakePrompt, buf[1], clr[1]);
-    // render rain rows (row 2+)
-    for (let i = 0; i < RAIN_ROWS; i++) {
-      renderRow(rainEls[i], buf[i + 2], clr[i + 2]);
+    // render each row
+    for (let r = 0; r < ROWS; r++) {
+      let html = '';
+      let cur = -1;
+      let seg = '';
+      for (let c = 0; c < COLS; c++) {
+        const cl = clr[r][c];
+        if (cl !== cur) {
+          if (seg) html += wrapSeg(seg, cur);
+          seg = ''; cur = cl;
+        }
+        const ch = buf[r][c];
+        seg += ch === '<' ? '&lt;' : ch === '&' ? '&amp;' : ch;
+      }
+      if (seg) html += wrapSeg(seg, cur);
+      rowEls[r].innerHTML = html;
     }
 
-    // when trails clear row 2: swap fake prompt for real input in-place
-    if (!activated && drops.every(d => (d.y - d.trail) > 2)) {
-      activated = true;
-      responseLine.innerHTML = origHTML;
-      const blank = document.createElement('div');
-      blank.className = 'blank';
-      fakePrompt.replaceWith(blank, inputLine);
-      inputLine.style.display = '';
-    }
-
-    if (drops.every(d => (d.y - d.trail) >= totalRows)) done = true;
-
+    if (drops.every(d => (d.y - d.trail) >= ROWS)) done = true;
     await sleep(tickMs);
   }
 
-  // cleanup
-  rainEls.forEach(el => el.remove());
-
-  function renderRow(el, chars, clrs) {
-    let html = '';
-    let cur = -1;
-    let seg = '';
-    for (let c = 0; c < COLS; c++) {
-      const cl = clrs[c];
-      if (cl !== cur) {
-        if (seg) html += wrapSeg(seg, cur);
-        seg = ''; cur = cl;
-      }
-      seg += chars[c] === '<' ? '&lt;' : chars[c] === '&' ? '&amp;' : chars[c];
-    }
-    if (seg) html += wrapSeg(seg, cur);
-    el.innerHTML = html;
-  }
+  overlay.remove();
+  term.style.position = '';
 
   function wrapSeg(s, cl) {
-    if (cl === 0) return s;
-    if (cl === 1) return `<span style="color:#fff">${s}</span>`;
-    if (cl === 2) return `<span style="color:var(--state-live)">${s}</span>`;
-    return `<span style="color:var(--state-live);opacity:.4">${s}</span>`;
+    if (cl === 0) return `<span style="color:transparent">${s}</span>`;
+    if (cl === 1) return `<span style="color:#fff;background:${bg}">${s}</span>`;
+    if (cl === 2) return `<span style="color:var(--state-live);background:${bg}">${s}</span>`;
+    return `<span style="color:var(--state-live);opacity:.4;background:${bg}">${s}</span>`;
   }
 }
 
