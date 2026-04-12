@@ -19,7 +19,9 @@ import { commands } from './easter_eggs.js';
 import Anthropic from '@anthropic-ai/sdk';
 
 const anthropic = new Anthropic();
-let unknownCount = 0; // pseudo-random: every 10th unknown command
+// PRD (pseudo-random distribution) — chance grows each miss, resets on proc
+const PRD_C = 0.03; // base increment (~10% avg over 10 attempts)
+let prdCounter = 0;
 
 const SYSTEM_PROMPT = `You are the terminal of autorun.dev — an AI-native tools company.
 You respond in 1-3 very short lines. Terse, dry, lowercase. No emoji. No marketing speak.
@@ -99,9 +101,11 @@ app.post('/api/cmd', async (c) => {
   const handler = commands[input] || commands[normalizeInput(input)];
 
   if (!handler) {
-    // every 10th unknown command — ask haiku
-    unknownCount++;
-    if (unknownCount % 10 === 0) {
+    // PRD: chance = C * N, resets on proc
+    prdCounter++;
+    const chance = PRD_C * prdCounter;
+    if (Math.random() < chance) {
+      prdCounter = 0;
       try {
         const msg = await anthropic.messages.create({
           model: 'claude-haiku-4-5-20251001',
