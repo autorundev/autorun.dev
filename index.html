@@ -534,17 +534,17 @@ async function fxMatrix() {
   const origHTML = responseLine.innerHTML;
   const origPadded = responseLine.textContent.padEnd(COLS).slice(0, COLS);
 
-  // rain rows — start empty, grow as needed
+  // fixed rain area: 20 rows
+  const RAIN_ROWS = 20;
+  const totalRows = 1 + RAIN_ROWS;
   const rainEls = [];
-  function ensureRow(i) {
-    while (rainEls.length <= i) {
-      const row = document.createElement('div');
-      row.className = 'line';
-      row.style.whiteSpace = 'pre';
-      row.textContent = ' '.repeat(COLS);
-      term.insertBefore(row, inputLine);
-      rainEls.push(row);
-    }
+  for (let i = 0; i < RAIN_ROWS; i++) {
+    const row = document.createElement('div');
+    row.className = 'line';
+    row.style.whiteSpace = 'pre';
+    row.textContent = ' '.repeat(COLS);
+    term.insertBefore(row, inputLine);
+    rainEls.push(row);
   }
 
   // ~18 streams, staggered starts
@@ -563,47 +563,32 @@ async function fxMatrix() {
     });
   }
 
-  // row 0 = response line, rows 1+ = rain
-  const buf = [new Array(COLS).fill(' ')];
-  const clr = [new Uint8Array(COLS)];
+  // char + color buffers
+  const buf = [];
+  const clr = [];
+  for (let r = 0; r < totalRows; r++) {
+    buf.push(new Array(COLS).fill(' '));
+    clr.push(new Uint8Array(COLS));
+  }
   for (let c = 0; c < COLS; c++) buf[0][c] = origPadded[c];
 
-  function ensureBuf(r) {
-    while (buf.length <= r) {
-      buf.push(new Array(COLS).fill(' '));
-      clr.push(new Uint8Array(COLS));
-    }
-  }
-
   const tickMs = 60;
+  let row0restored = false;
 
-  // run until all drops have fully left the grid
+  // run until all trails exit past the last rain row
   let done = false;
   while (!done) {
-    // advance drops
-    let maxTail = 0;
     for (const d of drops) {
       d.acc += d.speed;
       while (d.acc >= 1) { d.y++; d.acc -= 1; }
-      const tailEnd = d.y - d.trail;
-      if (tailEnd > maxTail) maxTail = tailEnd;
     }
 
-    // grow grid to fit the lowest head
-    const maxHead = Math.max(...drops.map(d => d.y));
-    const neededRows = maxHead + 2; // +1 for 0-index, +1 buffer
-    for (let r = 1; r < neededRows; r++) {
-      ensureRow(r - 1);
-      ensureBuf(r);
-    }
-    const totalRows = buf.length;
-
-    // update drop columns
+    // update only within fixed grid
     for (const d of drops) {
       const c = d.col;
       for (let r = 0; r < totalRows; r++) {
         const dist = d.y - r;
-        if (dist === 0) {
+        if (dist === 0 && r < totalRows) {
           buf[r][c] = rc(); clr[r][c] = 1;
         } else if (dist > 0 && dist <= d.trail) {
           buf[r][c] = rc(); clr[r][c] = dist <= 2 ? 2 : 3;
@@ -616,27 +601,25 @@ async function fxMatrix() {
 
     // render
     renderRow(responseLine, buf[0], clr[0]);
-    for (let i = 0; i < rainEls.length; i++) {
-      if (i + 1 < buf.length) renderRow(rainEls[i], buf[i + 1], clr[i + 1]);
+    for (let i = 0; i < RAIN_ROWS; i++) {
+      renderRow(rainEls[i], buf[i + 1], clr[i + 1]);
     }
 
-    // scroll to follow rain
-    if (rainEls.length > 0) rainEls[rainEls.length - 1].scrollIntoView({block:'nearest'});
+    // show [>] as soon as row 0 is fully restored
+    if (!row0restored && drops.every(d => (d.y - d.trail) > 0)) {
+      row0restored = true;
+      responseLine.innerHTML = origHTML;
+      inputLine.style.display = '';
+    }
 
-    // check if all drops fully off grid
-    const allGone = drops.every(d => (d.y - d.trail) > totalRows);
-    if (allGone) done = true;
+    // done when all trails past last rain row
+    if (drops.every(d => (d.y - d.trail) >= totalRows)) done = true;
 
     await sleep(tickMs);
   }
 
-  // cleanup: remove empty rain rows from bottom up
-  for (let i = rainEls.length - 1; i >= 0; i--) {
-    rainEls[i].remove();
-  }
-  responseLine.innerHTML = origHTML;
-  inputLine.style.display = '';
-  inputLine.scrollIntoView({block:'nearest'});
+  // cleanup rain rows
+  rainEls.forEach(el => el.remove());
 
   function renderRow(el, chars, clrs) {
     let html = '';
