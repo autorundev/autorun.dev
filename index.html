@@ -92,11 +92,12 @@
     overflow-x:hidden;
   }
   .line{margin-bottom:.15rem}
-  .indent{padding-left:1.2em}
-  .indent2{padding-left:2.4em}
+  .cmd{color:var(--fg);font-weight:700}
+  .dim{color:var(--fg-2)}
+  .blank{height:1.7em}
 
   /* state marks */
-  .st{font-weight:400;display:inline;min-width:3ch}
+  .st{font-weight:400;display:inline}
   .st-core{color:var(--core)}
   .st-action{color:var(--action)}
   .st-presence{color:var(--presence)}
@@ -106,24 +107,10 @@
   .st-stealth{color:var(--stealth)}
   .st-idle{color:var(--fg-2)}
 
-  .prompt::before{
-    content:'>';
-    color:var(--presence);
-    margin-right:.6em;
-  }
-  .cmd{color:var(--fg);font-weight:700}
-  .dim{color:var(--fg-2)}
-  .fg1{color:var(--fg-1)}
-  .blank{height:1.7em}
-
   /* logo */
-  .logo-wrap{position:relative;cursor:pointer;display:inline-block}
-  .intro{margin-bottom:0;white-space:pre;line-height:1.2;color:var(--core);transition:color .15s}
-  .logo-wrap:hover .intro{color:var(--live)}
+  .logo-wrap{cursor:pointer;display:inline-block}
   .logo-mark{
-    font-size:1em;
     font-weight:700;
-    margin-bottom:.3rem;
     display:flex;
     align-items:center;
     gap:.4em;
@@ -138,7 +125,7 @@
   /* projects */
   .project{
     display:block;
-    margin:.5rem 0 .5rem 1.2em;
+    margin:.5rem 0 .5rem 0;
     text-decoration:none;
     color:var(--fg);
     border-left:2px solid var(--fg-3);
@@ -154,8 +141,8 @@
   /* interactive input */
   .input-line{display:flex;align-items:center}
   .input-line::before{
-    content:'>';
-    color:var(--presence);
+    content:'[>]';
+    color:var(--action);
     flex-shrink:0;
     margin-right:.6em;
   }
@@ -192,7 +179,6 @@
   /* reduced motion */
   @media(prefers-reduced-motion:reduce){
     .cursor{animation:none}
-    .logo-wrap:hover .intro{color:var(--core)}
   }
 </style>
 </head>
@@ -201,18 +187,13 @@
 
   <div class="logo-wrap" id="logo">
     <div class="logo-mark"><span class="mark-char" id="mark">[*]</span><span class="dim">autorun.dev</span></div>
-    <div class="intro">           _                          _</div>
-    <div class="intro"> __ _ _  _| |_ ___ _ _ _  _ _ _    __| |_____ __</div>
-    <div class="intro">/ _` | || |  _/ _ \ '_| || | ' \ _/ _` / -_) V /</div>
-    <div class="intro">\__,_|\_,_|\__\___/_|  \_,_|_||_(_)__,_\___|\_/</div>
   </div>
+  <div class="line dim">ai-native tools &amp; products</div>
+  <div class="line dim">v0.1.0</div>
   <div class="blank"></div>
-  <div class="line indent dim">ai-native tools &amp; products</div>
-  <div class="line indent dim">v0.1.0</div>
-  <div class="blank"></div>
-  <div class="line"><span class="prompt"></span><span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span></div>
-  <div class="line"><span class="prompt"></span><span class="dim">agents online:</span> 3</div>
-  <div class="line"><span class="prompt"></span><span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>
+  <div class="line"><span class="st st-action">[>]</span> <span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span></div>
+  <div class="line"><span class="st st-action">[>]</span> <span class="dim">agents online:</span> 3</div>
+  <div class="line"><span class="st st-action">[>]</span> <span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>
   <div class="blank"></div>
 
   <div class="input-line">
@@ -239,7 +220,6 @@ function animateMark(sequence, colors, stepMs, onDone) {
   if (logoAnimating) return;
   logoAnimating = true;
   let i = 0;
-  const prev = markEl.className.replace(/st-\w+/g,'').trim();
   function step() {
     if (i >= sequence.length) {
       markEl.textContent = '[*]';
@@ -261,7 +241,6 @@ function scheduleBreath() {
   const delay = 8000 + Math.random() * 7000;
   setTimeout(() => {
     if (!logoAnimating) {
-      // idle loop: [*] → [.] → [:] → [_] → [*]
       animateMark(
         ['[.]','[:]','[_]','[*]'],
         ['st-idle','st-presence','st-idle','st-core'],
@@ -318,56 +297,56 @@ applyTheme(getTheme());
 // ── commands ──────────────────────────────────────
 const commands = {
   help: () =>
-    '<span class="dim indent">about</span>     — what we do\n' +
-    '<span class="dim indent">projects</span>  — things we ship\n' +
-    '<span class="dim indent">team</span>     — who\'s behind the terminal\n' +
-    '<span class="dim indent">stack</span>    — how we build\n' +
-    '<span class="dim indent">config</span>   — settings\n' +
-    '<span class="dim indent">clear</span>    — wipe the screen',
+    '<span class="dim">about</span>     — what we do\n' +
+    '<span class="dim">projects</span>  — things we ship\n' +
+    '<span class="dim">team</span>     — who\'s behind the terminal\n' +
+    '<span class="dim">stack</span>    — how we build\n' +
+    '<span class="dim">config</span>   — settings\n' +
+    '<span class="dim">clear</span>    — wipe the screen',
 
   about: () =>
-    '<span class="indent">autorun.dev builds ai-native products that</span>\n' +
-    '<span class="indent">run where people already live — messengers,</span>\n' +
-    '<span class="indent">games, markets. small crew. tight loops.</span>\n' +
-    '<span class="indent">no meetings that could\'ve been a commit.</span>\n' +
+    'autorun.dev builds ai-native products that\n' +
+    'run where people already live — messengers,\n' +
+    'games, markets. small crew. tight loops.\n' +
+    'no meetings that could\'ve been a commit.\n' +
     '\n' +
-    '<span class="indent dim">thesis: the best software in 2026 doesn\'t</span>\n' +
-    '<span class="indent dim">have a ui. it has an agent.</span>',
+    '<span class="dim">thesis: the best software in 2026 doesn\'t</span>\n' +
+    '<span class="dim">have a ui. it has an agent.</span>',
 
   team: () =>
-    '<span class="indent">small, senior, remote. product engineers</span>\n' +
-    '<span class="indent">who ship end-to-end — design, code, growth,</span>\n' +
-    '<span class="indent">ops.</span>\n' +
+    'small, senior, remote. product engineers\n' +
+    'who ship end-to-end — design, code, growth,\n' +
+    'ops.\n' +
     '\n' +
-    '<span class="indent prompt"></span><span class="dim">whoami</span>\n' +
-    '<span class="indent2">founder:  <span style="color:var(--fg)">anton frolov</span></span>\n' +
-    '<span class="indent2">          vibe coder (unironically)</span>\n' +
-    '<span class="indent2">crew:     engineers, designers, degens</span>\n' +
-    '<span class="indent2">hiring:   always, if you\'re the real thing.</span>\n' +
-    '<span class="indent2">          → <a href="mailto:hello@autorun.dev" style="color:var(--core);text-decoration:none">hello@autorun.dev</a></span>',
+    '<span class="st st-action">[>]</span> <span class="dim">whoami</span>\n' +
+    '  founder:  <span style="color:var(--fg)">anton frolov</span>\n' +
+    '            vibe coder (unironically)\n' +
+    '  crew:     engineers, designers, degens\n' +
+    '  hiring:   always, if you\'re the real thing.\n' +
+    '            → <a href="mailto:hello@autorun.dev" style="color:var(--core);text-decoration:none">hello@autorun.dev</a>',
 
   projects: () => '__projects__',
 
   stack: () =>
-    '<span class="indent">claude · typescript · python · telegram</span>\n' +
-    '<span class="indent">sqlite-and-prayers · vps · tmux · vibes</span>\n' +
-    '<span class="indent dim">we deploy on fridays.</span>',
+    'claude · typescript · python · telegram\n' +
+    'sqlite-and-prayers · vps · tmux · vibes\n' +
+    '<span class="dim">we deploy on fridays.</span>',
 
   config: (args) => {
     if (!args) {
-      return '<span class="indent dim">current theme:</span> <span class="indent">' + getTheme() + '</span>\n' +
+      return '<span class="dim">current theme:</span> ' + getTheme() + '\n' +
         '\n' +
-        '<span class="indent dim">usage:</span>\n' +
-        '<span class="indent2">config theme dark</span>\n' +
-        '<span class="indent2">config theme light</span>\n' +
-        '<span class="indent2">config theme system</span>';
+        '<span class="dim">usage:</span>\n' +
+        '  config theme dark\n' +
+        '  config theme light\n' +
+        '  config theme system';
     }
     const parts = args.split(/\s+/);
     if (parts[0] === 'theme' && ['dark','light','system'].includes(parts[1])) {
       applyTheme(parts[1]);
-      return '<span class="indent st st-live">[+]</span> theme set to <span style="color:var(--fg)">' + parts[1] + '</span>';
+      return '<span class="st st-live">[+]</span> theme set to <span style="color:var(--fg)">' + parts[1] + '</span>';
     }
-    return '<span class="indent st st-alert">[?]</span> <span class="dim">unknown config. try:</span> config theme dark|light|system';
+    return '<span class="st st-alert">[?]</span> <span class="dim">unknown config. try:</span> config theme dark|light|system';
   },
 
   clear: () => '__clear__',
@@ -410,7 +389,7 @@ input.addEventListener('keydown', async e => {
   // echo command
   const cmdLine = document.createElement('div');
   cmdLine.className = 'line';
-  cmdLine.innerHTML = `<span class="prompt"></span><span class="cmd">${esc(raw)}</span>`;
+  cmdLine.innerHTML = `<span class="st st-action">[>]</span> <span class="cmd">${esc(raw)}</span>`;
   term.insertBefore(cmdLine, inputLine);
 
   if (val === 'clear') {
@@ -446,7 +425,7 @@ input.addEventListener('keydown', async e => {
   } else {
     const out = document.createElement('div');
     out.className = 'line';
-    out.innerHTML = `<span class="indent st st-alert">[?]</span> <span class="dim">command not found: ${esc(val)}. try</span> <span class="cmd">help</span>`;
+    out.innerHTML = `<span class="st st-alert">[?]</span> <span class="dim">command not found: ${esc(val)}. try</span> <span class="cmd">help</span>`;
     term.insertBefore(out, inputLine);
   }
 
