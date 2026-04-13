@@ -734,7 +734,7 @@ async function renderLines(lines) {
       let fi = 0;
       // dots filler: grow dots during spin up to col 42
       const textLen = 4 + (l.text || '').length; // [/] + space + text
-      const maxDots = Math.max(0, 42 - textLen);
+      const maxDots = Math.max(0, Math.min(6, 34 - textLen));
       let dotCount = 0;
       while (Date.now() < end) {
         spinMark.textContent = frames[fi % frames.length];
@@ -783,7 +783,7 @@ async function renderLines(lines) {
         const dotsSpan = document.createElement('span');
         dotsSpan.className = 'dim';
         const textLen = 4 + (l.text || '').length;
-        const maxDots = Math.max(0, 42 - textLen);
+        const maxDots = Math.max(0, Math.min(6, 34 - textLen));
         dotsSpan.textContent = (maxDots > 0 ? ' ' + '.'.repeat(maxDots) : '') + ' ' + l.suffix;
         out.appendChild(dotsSpan);
       }
@@ -809,7 +809,7 @@ async function renderLines(lines) {
     // suffix with dots filler
     if (l.suffix) {
       const textLen = (l.mark ? 4 : 0) + (l.indent ? 4 : 0) + (l.text || '').length;
-      const maxDots = Math.max(0, 42 - textLen);
+      const maxDots = Math.max(0, Math.min(6, 34 - textLen));
       html += `<span class="dim">${maxDots > 0 ? ' ' + '.'.repeat(maxDots) : ''} ${esc(l.suffix)}</span>`;
     }
     if (l.state) out.innerHTML = html.replace(esc(l.text), `<span class="st st-${l.state}">${esc(l.text)}</span>`);
