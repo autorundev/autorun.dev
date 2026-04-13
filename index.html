@@ -374,7 +374,7 @@ function showProcessing(cmdLineEl) {
   return new Promise(resolve => {
     inputLine.classList.add('hidden');
     const mark = cmdLineEl.querySelector('.st');
-    const frames = ['[/]','[-]','[\\]','[-]','[>]'];
+    const frames = ['[/]','[-]','[\\]','[|]','[-]','[>]'];
     let i = 0;
     mark.classList.remove('st-action');
     mark.classList.add('st-core');
@@ -822,6 +822,9 @@ async function fxMatrix() {
   term.style.position = 'relative';
   const topOffset = anchor.offsetTop;
 
+  // clip terminal so absolute overlay doesn't expand scrollHeight
+  term.style.overflow = 'hidden';
+
   const overlay = document.createElement('div');
   Object.assign(overlay.style, {
     position: 'absolute',
@@ -917,6 +920,7 @@ async function fxMatrix() {
 
   overlay.remove();
   term.style.position = '';
+  term.style.overflow = '';
 
   function wrapSeg(s, cl) {
     if (cl === 0) return `<span style="color:transparent">${s}</span>`;
