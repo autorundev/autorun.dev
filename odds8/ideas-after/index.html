@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Odds8: мысли после аудитов</title><link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;0,7..72,700;1,7..72,400;1,7..72,500;1,7..72,600&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;color:#cfcfcf;font-family:'IBM Plex Sans',-apple-system,sans-serif;font-size:18px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:0 28px 0 64px;position:relative}
+header{padding:140px 0 110px;border-bottom:1px solid #2a2a2a}
+header h1{font-family:'Literata',Georgia,serif;font-weight:600;font-size:60px;line-height:1.05;letter-spacing:-.025em;color:#f5f5f5;margin-bottom:24px}
+header h1 em{font-style:italic;color:#e8a878;font-weight:600}
+.hero-sub{font-family:'Literata',Georgia,serif;font-style:italic;font-size:24px;line-height:1.45;color:#b8b0a0;max-width:720px;font-weight:400}
+article{padding:70px 0 100px}
+h2{font-family:'Literata',Georgia,serif;font-weight:600;font-size:28px;color:#f5f5f5;margin:72px 0 26px;letter-spacing:-.015em;line-height:1.28}
+h2:first-child{margin-top:0}
+p{margin-bottom:24px}
+strong{font-weight:600;color:#f5f5f5}
+em{font-style:italic;color:#c4875a}
+code{font-family:'JetBrains Mono',monospace;font-size:.86em;color:#c4875a;background:#1a1a1a;padding:1px 5px;border-radius:3px}
+ul{margin:-8px 0 40px 0;padding-left:0;list-style:none}
+li{margin-bottom:10px}
+.ln{display:inline-block;width:32px;margin-left:-44px;font-style:normal;margin-right:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#363636;text-decoration:none;letter-spacing:.05em;font-weight:500;transition:color .15s;vertical-align:baseline}
+.ln:hover{color:#e8712a}
+.lead{font-size:1.08em;color:#e8e8e8;line-height:1.65;font-weight:400}
+.pull{font-family:'Literata',Georgia,serif;font-style:italic;font-size:1.4em;font-weight:500;line-height:1.4;color:#e8a878;margin:44px 0;padding-left:24px;border-left:2px solid #e8712a;letter-spacing:-.005em}
+.pull .ln{margin-left:-70px;margin-right:38px}
+.extlink{color:#e8a878;text-decoration:none;border-bottom:1px solid #5a3820;transition:border-color .15s}
+.extlink:hover{border-bottom-color:#e8712a}
+@media(max-width:980px){.wrap{padding-left:48px}}
+@media(max-width:720px){
+.wrap{padding:0 22px;max-width:100%}
+header{padding:60px 0 32px}
+header h1{font-size:30px;line-height:1.2}
+article{padding:40px 0 60px}
+h2{font-size:22px;margin:48px 0 18px}
+body{font-size:17px;line-height:1.7}
+p{margin-bottom:18px}
+.ln{display:none}
+.lead{font-size:1.05em}
+.pull{font-size:1.18em;padding-left:16px;margin:32px 0}
+ul{margin:0 0 28px 0;padding-left:18px;list-style:disc}
+li{margin-bottom:10px}
+.extlink{word-break:break-word}
+}
+
+.pull-a{font-family:'Literata',Georgia,serif;font-style:italic;font-size:1.4em;font-weight:500;line-height:1.4;color:#e8a878;border-left:2px solid #e8712a;padding-left:24px;border-top:none;border-right:none;border-bottom:none;text-align:left}
+.pull-b{font-family:'Literata',Georgia,serif;font-style:italic;font-size:1.5em;font-weight:500;line-height:1.35;color:#f0d0a8;text-align:center;border:none;padding:36px 0;margin:56px 0;border-top:1px solid #3a3a3a;border-bottom:1px solid #3a3a3a;letter-spacing:-.005em}
+.pull-b .ln{position:absolute;left:0;margin:0;color:#333}
+.pull-b{position:relative}
+
+.threefold{font-family:'IBM Plex Sans',sans-serif;font-size:.82em;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:#e8712a;margin:48px 0 20px;padding:0}
+.threefold .ln{color:#2a2a2a}
+.pull-a .ln{margin-left:-70px;margin-right:38px}
+.pull-b .ln{display:none}
+
+@media(max-width:720px){}
+
+.next-cta{margin:80px 0 20px;display:block}
+.cta-btn{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;column-gap:24px;row-gap:4px;align-items:center;padding:26px 32px;background:linear-gradient(135deg,#1a1917 0%,#161412 100%);border:1px solid #3a3530;border-radius:10px;text-decoration:none;transition:all .25s ease;position:relative;overflow:hidden}
+.cta-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(232,113,42,.08),transparent 60%);opacity:0;transition:opacity .25s}
+.cta-btn:hover{border-color:#e8712a;transform:translateY(-2px);box-shadow:0 12px 32px -12px rgba(232,113,42,.25)}
+.cta-btn:hover::before{opacity:1}
+.cta-btn:hover .cta-arr{transform:translateX(6px);color:#ffaa70}
+.cta-label{font-family:'Literata',Georgia,serif;font-size:24px;font-weight:600;color:#f5f5f5;letter-spacing:-.015em;grid-column:1;grid-row:1;position:relative;z-index:1}
+.cta-sub{font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:#888;grid-column:1;grid-row:2;position:relative;z-index:1}
+.cta-arr{font-family:'IBM Plex Sans',sans-serif;font-size:28px;color:#e8712a;grid-column:2;grid-row:1/3;align-self:center;transition:all .25s;font-weight:300;position:relative;z-index:1}
+@media(max-width:720px){.cta-btn{padding:22px 24px;column-gap:16px}.cta-label{font-size:20px}.cta-sub{font-size:12px}.cta-arr{font-size:24px}}
+
+.kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#e8712a;margin-bottom:28px}
+.hero-meta{margin-top:36px;border-left:1px solid #2a2826;padding:4px 0 4px 24px;display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;max-width:360px}
+.hero-meta dt{color:#666;text-transform:uppercase;letter-spacing:.12em;font-size:10px;align-self:center}
+.hero-meta dd{color:#c4875a;letter-spacing:.02em}
+@media(max-width:720px){.kicker{font-size:10px;margin-bottom:20px}.hero-meta{margin-top:28px}header h1{font-size:38px !important}}
+::selection{background:#e8712a;color:#111}
+
+</style></head><body><header><div class="wrap">
+<div class="kicker">Антон Фролов · апрель 2026 · заметки · черновик</div>
+<h1>Идеи <em>после аудитов</em></h1>
+<p class="hero-sub">Ребята скинули стейдж, я пощупал. Сделано много и в правильном направлении&nbsp;— видно, что команда близко к продукту. На созвоне я сказал, что самый неприятный момент&nbsp;— это подтверждение каждой ставки в кошельке. Для гэмблерского ретейла это жёсткий барьер.</p>
+</div></header><article><div class="wrap"><p id="n1">Дофаминовый цикл «клик → напряжение → результат → клик» разрывается каждые тридцать секунд всплывающим кошельком.</p>
+<p id="n2">Да, это web3, тут к такому привычны, и это правда. Но по факту цена&nbsp;— аудитория, которая не дошла до второй ставки.</p>
+<p id="n3">Вторая тема на созвоне оказалась важнее первой. Игоря беспокоит безопасность смарт-контракта&nbsp;— пока нет уверенности, что контракт надежный, даже собственную ликвидность в него вливать страшновато. Это <strong>правильная интуиция</strong>, и именно она зацепила меня после разговора сильнее всего. Потому что если осторожничают люди, которые знают контракт изнутри, внешний LP тем более будет осторожничать, а без капитала в vault нет ни ликвидности, ни продукта.</p>
+<p id="n4">После созвона я пошёл делать security аудит через Claude Code, чтобы понять обоснованность опасений и возможные решения. Получил отчёт, перечитал предыдущий и начал разгонять. По пути всплыли старые мысли из прошлого проекта, которые я тогда не довёл. А дальше то, что из этого всего вышло.</p>
+<h2 id="n5">Первое: session keys</h2>
+<p class="lead" id="n6">Решение первой боли нашлось на Solana Gaming стороне&nbsp;— session keys. Юзер один раз подписывает авторизацию сессии: создаётся ephemeral keypair с лимитами по объёму, времени и разрешённым инструкциям. Дальше ставки подписываются автоматически, кошелёк не открывается. Revoke&nbsp;— одной кнопкой.</p>
+<p id="n7">В случае odds8 интеграция упрощается тем, что custodial-модель с operator relay уже существует. Апгрейд локальный: <code>BetBull</code> и <code>BetBear</code> начинают принимать либо подпись юзера, либо подпись зарегистрированного session key. Остальное не трогается.</p>
+<p id="n8">В итоге юзер больше не ждёт.</p>
+<p id="n9">Одного этого хватило бы, чтобы догнать классические бинарки по UX. Но одна вещь все ещё оставалась незакрытой.</p>
+<h2 id="n10">Оператор всё ещё держит выплаты</h2>
+<p class="lead" id="n11">В аудите главный trust-риск не upgrade authority и не closed source. Оператор контролирует ключевые события раундов: <code>ExecuteRound</code> и <code>CloseRound</code> требуют его подписи, и именно это определяет, по какой цене раунд закрывается. Юзеры должны доверять, что оператор не играет с таймингом. Это трастовая дыра, которая растёт вместе с TVL.</p>
+<p id="n12">Тут всплыла старая идея из прошлого проекта, которую я также упоминал в первом репорте&nbsp;— Vault как контрагент вместо общего пула.</p>
+<p id="n13">Вместо того чтобы юзеры делили общий пул ставок между собой, они торгуют против vault'а&nbsp;— пула ликвидности, в который любой может положить SOL и получать реальную доходность. Коэффициенты определяются публичной формулой от текущего перекоса блока. Payout фиксирован в момент клика. Settlement считается контрактом из трёх входов: стартовая цена, цена экспирации, коэффициент на момент ставки.</p>
+<p id="n14"><strong>Ключевое следствие: если payouts формульные, оператор для расчётов не нужен.</strong> Его роль сводится к триггеру закрытия раунда, который можно сделать permissionless. Трастовая дыра из аудита закрывается самой архитектурой.</p>
+<p id="n15">Побочный эффект&nbsp;— решается проблема из первого документа&nbsp;— когда юзер выиграл, а получил копейки, потому что все угадали так же. В модели общего пула консенсус бьёт по победителям. В vault-модели с динамическими коэффициентами консенсус делает противоположную позицию привлекательнее для следующего юзера. Коэффициент, который меняется, чтобы сбалансировать стороны, становится сигналом&nbsp;— та самая «зацепка для прогноза», которой не хватало.</p>
+<p class="pull pull-a" id="n16">Получается одна архитектура закрывает обе проблемы.</p>
+<h2 id="n17">Раунд как живая свеча</h2>
+<p class="lead" id="n18">Параллельно крутилась мысль из первого отчёта про проблему наглядности раунда. Команда это закрывает мини-чартом внутри карточки, что правильно.</p>
+<p id="n19">Но этот чарт работает в полную только если раунд сам строится как свеча&nbsp;— с фиксированной стартовой ценой и понятной экспирацией. Иначе чарт показывает просто график SOL, а не твой раунд. И это меня до сих пор дезиориентирует в интерфейсе.</p>
+<p id="n20">Но если раунд представить свечой, то такие rolling-блоки делают это естественно. Каждый блок стартует с фиксированной цены&nbsp;— это начало свечи. Окно сбора ставок занимает короткую первую часть блока, экспирация&nbsp;— всю оставшуюся длительность. Карточка становится свечой, формирующейся в реальном времени&nbsp;— понятная структура и метафора любому трейдеру.</p>
+<p id="n21">И ключевая деталь: <strong>такие блоки идут нахлёстом по времени</strong>, а не последовательно. Окно сбора короче полной длительности блока, поэтому пока один блок ещё только открылся для ставок, следующий уже в середине экспирации, а третий вот-вот закроется.</p>
+<p id="n22">Для быстрых ставок (<code>fast mode</code>) это может выглядеть так: новый блок стартует каждые 30 секунд, каждый живёт 2 минуты. В любой момент на экране <strong>четыре активных блока</strong> разного возраста&nbsp;— свежий (только принимает ставки), два в середине экспирации, один на финише. Для спокойных прогнозов (<code>trader mode</code>) нахлёст ещё выразительнее: блок стартует каждую минуту, живёт 10 минут&nbsp;— одновременно активны <strong>десять блоков</strong>.</p>
+<p class="threefold" id="n23">Из этого выходят три следствия, которые важны и решают другие проблемы.</p>
+<p id="n24">Первое&nbsp;— <strong>юзер никогда не ждёт</strong>. В обычной модели раундов ты поставил и ждёшь до конца, даже если это 30 секунд. С блоками в нахлест между первой ставкой и следующей нулевая пауза: свежий блок всегда есть. Тап в один, тап в следующий, тап в третий&nbsp;— все три параллельно развиваются, один близок к закрытию, другой только стартовал. Дофаминовый цикл становится непрерывным вместо пульсирующего.</p>
+<p id="n25">Второе&nbsp;— <strong>в <code>trader mode</code> появляется параллельная торговля</strong>. Несколько одновременных позиций в блоках разного возраста позволяют строить стратегии: одна в старом блоке, где уже понятна часть движения, другая в молодом, где цена только что зафиксировалась. Можно пытаться хеджить, можно играть direction в одном и mean-reversion в другом. И именно длинные блоки делают <code>trader mode</code> настоящим трейдингом, а не медленной версией <code>fast mode</code>&nbsp;— только там оживает ранний выход, только там позиции складываются в лестницу, только там рынок ощущается как рынок. Это и есть ключевой хук для трейдерской аудитории, который отличает odds8 от ускоренного казино.</p>
+<p id="n26">Третье&nbsp;— <strong>визуал превращается в ленту</strong>. Карточки блоков едут по экрану: новые появляются, а старые уходят и закрываются с результатом. Экран выглядит как живой рынок вместо очереди раундов. Это принципиально другое ощущение продукта, и оно тоже является частью ответа на первый отчёт&nbsp;— зацепка теперь не только в коэффициентах, но и в самом движении ленты. В добавок это будет знакомая структура интерфейса и для юзеров панкейка, и для юзеров полимаркета&nbsp;— проще начать.</p>
+<p id="n27">А внутри этого потока&nbsp;— фича, которой нет ни у кого на on-chain prediction markets. <strong>Ранний выход и доливка до экспирации</strong>. Решил выйти&nbsp;— сначала система ищет P2P-контрагента внутри блока&nbsp;— кого-то, кто хочет долиться на ту же сторону. Остаток закрывается через vault по формульной цене. Bid vault'а на несколько процентов хуже&nbsp;— это одновременно спред, комиссия и стимул искать P2P.</p>
+<p id="n28">То есть стимулируется движение ликвидности внутри блока, а значит платформа зарабатывает не только на входе в прогноз каждую минуту, но и на решениях по ходу&nbsp;— барье для роста в виде фиксированных окон уходит.</p>
+<p id="n29">Ранний выход имеет смысл на 5–15-минутных блоках, где цена позиции динамична. На тридцати секундах&nbsp;— бесполезен. Поэтому <code>trader mode</code> живёт в длинных блоках, параллельно с <code>fast mode</code> в коротких.</p>
+<p class="pull pull-b" id="n30">Один интерфейс, два потока, и один vault под ними.</p>
+<h2 id="n31">Вопрос ликвидности</h2>
+<p class="lead" id="n32">Теперь к тому, что озадачило меня больше всего на созвоне&nbsp;— осторожность вокруг вливания собственных денег в контракт. Это главная проблема ликвидности, просто названная другими словами. И она может решиться на уровне архитектуры, которая внушает доверие <strong>в первую очередь самой команде</strong>, а уже потом внешним LP и маркет-мейкерам.</p>
+<p id="n33">Эти решения большей частью уже в отчёте, но там они поданы как хорошие практики безопасности на потом. Я бы переставил их из категории «потом» в категорию <strong>«предусловие для запуска vault-модели»</strong>:</p>
+<ul><li id="n34">Передать upgrade authority в multisig (Squads).</li><li id="n35">Verified build через Solana Verify&nbsp;— чтобы любой мог проверить, что задеплоенный байткод соответствует исходникам.</li><li id="n36">Опубликовать Anchor IDL и сам контракт на GitHub.</li><li id="n37">Получить внешний аудит у OtterSec / Neodyme / Trail of Bits&nbsp;— для snapshot'а контракта перед запуском vault-модели.</li></ul>
+<p id="n38">Это не делает контракт «невзламываемым», но снимает главные векторы, которые мешают вливать деньги: unilateral upgrade, скрытая логика, отсутствие независимой проверки. После этого команда сама может спокойно положить seed-ликвидность в vault, а дальше идёт стандартная последовательность.</p>
+<p id="n39">Сначала закладываются <strong>условия, при которых внешний капитал приходит сам</strong>:</p>
+<ul><li id="n40">Публичные детерминированные формулы коэффициентов и цены раннего выхода&nbsp;— бот считает edge за миллисекунду, глядя на on-chain стейт.</li><li id="n41">Permissionless или multisig crank для settlement&nbsp;— бот не принимает риск оператора поверх рыночного.</li><li id="n42">Maker rebate на слабую сторону блока&nbsp;— балансировка превращается из косвенной прибыли в прямой платёж.</li></ul>
+<p id="n43">Комиссии тут вообще становятся отдельным инструментом: не просто «3% с пула», а дифференцированная модель по типу действия&nbsp;— мейкер получает ребейт, тейкер платит полностью, ранний выход через P2P дешевле, чем через vault. Это превращает комиссионную структуру из пассивного дохода в активное управление поведением участников.</p>
+<p id="n44">Ни одно из этих условий не требует отдельных фич&nbsp;— это решения на уровне архитектуры, принимаемые один раз при проектировании vault'а.</p>
+<p id="n45">Про риски коротко. Технические штуки&nbsp;— манипуляция оракулом на settlement, sandwich-атаки, MEV&nbsp;— это всё давно решённые проблемы, Pyth с confidence interval, TWAP, лимиты экспозиции vault'а на блок. Не research, а применение известных инструментов. Финансовый риск vault'а на трендах&nbsp;— это привычная модель бинарок: house держит позицию против толпы, управляет лимитами, ребалансирует. Единственная честная оговорка&nbsp;— на старте команде придётся самой балансировать блоки через seed-ликвидность в vault или собственных ботов, пока профессионалы не подтянулись. Это неизбежный этап в любой AMM-подобной модели, и это нормально.</p>
+<p id="n46">Я посмотрел, как задачу привлечения ликвидности решили другие сервисы. PancakeSwap Prediction&nbsp;— контракты на GitHub, больше ничего. Uniswap&nbsp;— публичный стейт и формула. GMX, Hyperliquid&nbsp;— детерминированные условия и публичная математика. Никаких SDK, никаких генераторов стратегий. Профессиональные маркет-мейкеры приходят за предсказуемостью: детерминированный edge плюс credible commitments, что правила не изменятся за ночь. Если заложить условия сразу&nbsp;— капитал приходит в первые месяцы. Не заложить&nbsp;— потом будет сложнее.</p>
+<p id="n47">И вот тут становится видно, что осторожность ребят на созвоне и выводы из аудита связаны. Если я как создатель боюсь, что мой контракт могут взломать или что upgrade authority завтра изменит правила&nbsp;— внешний LP боится того же, только в десять раз сильнее. Починка своего страха автоматически чинит и их страх.</p>
+<h2 id="n48">Что в итоге</h2>
+<p class="lead" id="n49">Я начал с одной боли&nbsp;— подтверждения каждой ставки. Потянул за ниточку, и собрался продукт.</p>
+<p id="n50">Вот как это выглядит.</p>
+<p id="n51">Юзер открывает odds8 на телефоне. Подключает кошелёк, подписывает одно окно&nbsp;— авторизацию сессии. Больше Phantom за этот час не появится.</p>
+<p id="n52">На экране&nbsp;— поток живых свечей. Каждые тридцать секунд стартует новая. У каждой свой таймер, свой коэффициент, своя стартовая цена. Коэффициенты двигаются от перекоса: все ставят вверх&nbsp;— коэффициент на «вниз» растёт. Тап, тап, тап&nbsp;— никаких подтверждений, карточка оживает как растущая свеча, результат приходит мгновенно.</p>
+<p id="n53">Переключатель на trader mode&nbsp;— свечи длиннее, пяти- или пятнадцатиминутные. Под позицией&nbsp;— живой P&L. Кнопка «закрыть раньше»&nbsp;— P2P-матчинг или выход через vault. Этого нет больше нигде на on-chain.</p>
+<p id="n54">Раздел Earn. Vault. Реальная доходность, плавающий APY, breakdown по источникам: комиссии, P&L, ребейты. Большая часть ликвидности&nbsp;— от внешних LP и maker-desks, которые пришли за предсказуемыми условиями и verified-контрактом. Перекосы в блоках закрываются за секунды, юзер никогда не видит мёртвых блоков.</p>
+<p id="n55">Гэмблер приходит за дофамином&nbsp;— UX паритетен с Olymptrade, но on-chain и без брокера-противника. Трейдер приходит за фиксированным payout и ранним выходом. LP приходит за real yield. Боты&nbsp;— за предсказуемым edge. Четыре группы, одна инфраструктура.</p>
+<p id="n56">Если сложить всё вместе&nbsp;— получается двухсегментный on-chain продукт на одной кодовой базе. Один сегмент&nbsp;— честные бинарки с дофаминовым циклом и мгновенным UX, без брокера-противника. Второй&nbsp;— осознанный прогнозный трейдинг с фиксированным payout, ранним выходом и параллельными позициями, чего пока нет ни у кого на Solana. Под ними общий vault, который одновременно обслуживает оба потока и сам становится продуктом для LP и маркет-мейкеров. Под капотом одна архитектура с двумя точками входа&nbsp;— в этом главный нарратив.</p>
+
+<div class="next-cta"><a href="/odds8/roller/" class="cta-btn"><span class="cta-label">Roller Odds8</span><span class="cta-sub">продуктовое описание конфигурации</span><span class="cta-arr">→</span></a></div></div></article></body></html>
