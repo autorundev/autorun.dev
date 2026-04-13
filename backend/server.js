@@ -154,15 +154,7 @@ app.post('/api/cmd', async (c) => {
       }
     }
 
-    return c.json({
-      lines: [
-        { mark: '[!]', text: lang === 'ru'
-          ? `команда не найдена: ${input}`
-          : `command not found: ${input}` },
-        { mark: null,  text: lang === 'ru' ? 'попробуй `help`' : 'try `help`',
-          indent: true, muted: true },
-      ],
-    });
+    return c.json({ notFound: true });
   }
 
   // Handler can be either a plain response object or a function.

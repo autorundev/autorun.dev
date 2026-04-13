@@ -644,7 +644,9 @@ input.addEventListener('keydown', async e => {
         body: JSON.stringify({input: val, lang: 'en'}),
       });
       backendData = await res.json();
-      if (backendData.lines && backendData.lines.length > 0) {
+      if (backendData.notFound) {
+        renderNotFound(val);
+      } else if (backendData.lines && backendData.lines.length > 0) {
         await renderLines(backendData.lines);
       } else if (!backendData.effect) {
         renderNotFound(val);
