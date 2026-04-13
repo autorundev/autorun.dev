@@ -682,11 +682,13 @@ async function renderLines(lines) {
     if (l.spinner) {
       const spinMark = document.createElement('span');
       spinMark.className = 'st st-core';
-      const textNode = document.createTextNode(' ' + (l.text || ''));
+      const textSpan = document.createElement('span');
+      textSpan.textContent = ' ' + (l.text || '');
+      textSpan.className = 'dim';
       const dotsSpan = document.createElement('span');
       dotsSpan.className = 'dim';
       out.appendChild(spinMark);
-      out.appendChild(textNode);
+      out.appendChild(textSpan);
       out.appendChild(dotsSpan);
       term.insertBefore(out, inputLine);
       if (isFollowing) scrollToBottom();

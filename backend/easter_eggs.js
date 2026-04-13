@@ -135,8 +135,8 @@ export const commands = {
       { mark: '[*]', text: 'ok.' },
       // The spinner progress is handled by the frontend rendering
       // an animated line. Backend just signals the sequence.
-      { mark: '[/]', text: 'making a sandwich...', spinner: true, duration: 800 },
-      { mark: '[/]', text: 'finding a plate...', spinner: true, duration: 600 },
+      { mark: '[/]', text: 'making a sandwich', spinner: true, duration: 800 },
+      { mark: '[/]', text: 'finding a plate', spinner: true, duration: 600 },
       { mark: '[*]', text: 'enjoy!' },
       { mark: null,  text: '' },
       { mark: null,  text: '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡖⠉⠉⠙⠒⠦⢤⣀⡀⠀⠀⠀⠀⠀⠀⠀', indent: true },
