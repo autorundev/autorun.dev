@@ -47,7 +47,7 @@ td.accent{color:#e8a878;font-family:'JetBrains Mono',monospace;font-size:13px}
 .tech-item{background:#181716;border:1px solid #2a2826;border-radius:6px;padding:18px 20px}
 .tech-item .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:#666;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
 .tech-item .val{color:#e8a878;font-family:'JetBrains Mono',monospace;font-size:14px}
-footer{padding:70px 0 90px;text-align:center}
+footer{padding:70px 0 90px}
 @media(max-width:760px){
 .wrap{padding:0 22px}
 section{padding:56px 0}
@@ -74,11 +74,11 @@ table.compare td.yes{color:#6fbd8f;font-weight:500}
 table.compare td.no{color:#555}
 table.compare td.partial{color:#c4875a;font-size:11px;font-family:'IBM Plex Sans',sans-serif;font-style:italic}
 table.compare tbody tr:nth-child(even){background:#14131290}
-ol.steps{list-style:none;padding:0;margin-top:32px;counter-reset:step}
+ol.steps{list-style:none;padding:0;margin-top:32px;counter-reset:step;max-width:776px}
 ol.steps li{display:flex;gap:24px;padding:22px 0;border-bottom:1px solid #1f1f1f;align-items:flex-start}
 ol.steps li:last-child{border-bottom:none}
 ol.steps .st{font-family:'JetBrains Mono',monospace;font-size:11px;color:#e8712a;letter-spacing:.15em;min-width:36px;flex-shrink:0;padding-top:4px}
-ol.steps li div{color:#d8d4c8;font-size:16px;line-height:1.6;max-width:720px}
+ol.steps li div{color:#d8d4c8;font-size:16px;line-height:1.6}
 ol.steps li strong{color:#f5f5f5}
 @media(max-width:760px){table.compare{font-size:11px}table.compare th,table.compare td{padding:8px 6px}ol.steps li{gap:14px}ol.steps li div{font-size:15px}}
 
@@ -125,7 +125,7 @@ ol.steps li strong{color:#f5f5f5}
 </style></head><body>
 
 <section class="hero"><div class="wrap">
-<div class="kicker">Антон Фролов · апрель 2026 · продуктовое описание · черновик</div>
+<div class="kicker">Антон Фролов · апрель 2026 · концепт продукта · черновик</div>
 <h1>Roller <em>Odds8</em></h1>
 <p class="hero-sub">Двухсегментный on-chain prediction market на Solana и BSC. Fast mode для дофаминовых ставок, trader mode для осознанного прогнозного трейдинга, общий vault для LP и маркет-мейкеров.</p>
 </div></section>
@@ -360,8 +360,8 @@ ol.steps li strong{color:#f5f5f5}
 </ol>
 </div></section>
 
-<footer><div class="wrap">
-<div class="next-cta"><a href="/odds8/ideas-after/" class="cta-btn"><span class="cta-label">Заметки после аудитов</span><span class="cta-sub">как этот концепт сложился</span><span class="cta-arr">→</span></a></div>
+<footer><div class="wrap" style="max-width:776px">
+<div class="next-cta"><a href="/odds8/ideas-after/" class="cta-btn"><span class="cta-label">Идеи после аудитов</span><span class="cta-sub">как этот концепт сложился</span><span class="cta-arr">→</span></a></div>
 </div></footer>
 
 </body></html>
