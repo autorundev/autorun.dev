@@ -164,7 +164,7 @@ export const commands = {
       { mark: null,  text: '    \u2502\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2502', indent: true },
       { mark: null,  text: '    \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518', indent: true },
       { mark: null,  text: '' },
-      { mark: null,  text: 'enjoy. root privileges taste better with pickles.' },
+      { mark: null,  text: 'enjoy. root privileges taste better with pickles.', indent: true },
     ],
   },
 

@@ -492,9 +492,11 @@ const projectsHTML = `
 // ── autocomplete + idle suggest ───────────────────
 const ghost = document.getElementById('ghost');
 const cmdList = ['help','about','projects','team','stack','config','clear'];
+const eggHints = ['hello','42','ping','matrix','whoami','fortune','hack the planet','red pill','neo','gm','hodl','glitch','reboot','are you alive','git status','man autorun','sudo make me a sandwich'];
 let idleTimer = null;
 let suggestTimer = null;
 let suggestActive = false;
+let suggestCount = 0;
 
 function updateGhost() {
   const val = input.textContent.trim().toLowerCase();
@@ -523,7 +525,9 @@ function showSuggest() {
     resetIdleTimer();
     return;
   }
-  const cmd = cmdList[Math.floor(Math.random() * cmdList.length)];
+  suggestCount++;
+  const pool = suggestCount <= 3 ? cmdList : (Math.random() < 0.4 ? eggHints : cmdList);
+  const cmd = pool[Math.floor(Math.random() * pool.length)];
   ghost.textContent = cmd;
   suggestActive = true;
   suggestTimer = setTimeout(() => {
