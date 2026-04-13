@@ -126,6 +126,9 @@
     .terminal{max-width:80ch}
   }
   .line{white-space:pre-wrap;overflow-wrap:anywhere;padding-left:4ch;text-indent:-4ch}
+  .line-dots{display:flex;white-space:pre;padding-left:4ch;text-indent:0}
+  .line-dots .dots{flex:1;overflow:hidden;color:var(--fg-3)}
+  .line-dots .suffix{flex-shrink:0;color:var(--fg-1)}
   .cmd{color:var(--fg-0);font-weight:500}
   .dim{color:var(--fg-2)}
   .blank{height:var(--lh)}
@@ -716,39 +719,44 @@ async function renderLines(lines) {
 
     // spinner lines: spin for duration, resolve to [:]
     if (l.spinner) {
+      out.className = 'line-dots';
       const spinMark = document.createElement('span');
       spinMark.className = 'st st-core';
       const textSpan = document.createElement('span');
       textSpan.textContent = ' ' + (l.text || '');
       textSpan.className = 'dim';
       const dotsSpan = document.createElement('span');
-      dotsSpan.className = 'dim';
+      dotsSpan.className = 'dots';
       out.appendChild(spinMark);
       out.appendChild(textSpan);
       out.appendChild(dotsSpan);
+      if (l.suffix) {
+        const suffSpan = document.createElement('span');
+        suffSpan.className = 'suffix';
+        suffSpan.textContent = ' ' + l.suffix;
+        suffSpan.style.visibility = 'hidden';
+        out.appendChild(suffSpan);
+      }
       term.insertBefore(out, inputLine);
       if (isFollowing) scrollToBottom();
       const dur = l.duration || 800;
       const frames = ['[/]','[-]','[\\]','[|]','[-]'];
       const end = Date.now() + dur;
       let fi = 0;
-      // dots filler: grow dots during spin up to col 42
-      const textLen = 4 + (l.text || '').length; // [/] + space + text
-      const maxDots = Math.max(0, Math.min(6, 34 - textLen));
-      let dotCount = 0;
+      // grow dots during spin
+      const dotsFull = '.'.repeat(80);
+      let dotLen = 0;
       while (Date.now() < end) {
         spinMark.textContent = frames[fi % frames.length];
-        if (dotCount < maxDots) {
-          dotCount++;
-          dotsSpan.textContent = ' ' + '.'.repeat(dotCount);
-        }
+        dotLen = Math.min(dotLen + 1, 80);
+        dotsSpan.textContent = ' ' + dotsFull.slice(0, dotLen);
         fi++;
         await sleep(120);
       }
-      // fill remaining dots
-      dotsSpan.textContent = maxDots > 0 ? ' ' + '.'.repeat(maxDots) : '';
-      // suffix
-      if (l.suffix) dotsSpan.textContent += ' ' + l.suffix;
+      dotsSpan.textContent = ' ' + dotsFull;
+      // reveal suffix
+      const suf = out.querySelector('.suffix');
+      if (suf) suf.style.visibility = '';
       spinMark.textContent = '[:]';
       spinMark.className = 'st st-presence';
       await sleep(LINE_DELAY);
@@ -778,14 +786,18 @@ async function renderLines(lines) {
       // resolve to final mark
       spinMark.textContent = l.mark;
       spinMark.className = 'st st-' + markClass(l.mark);
-      // suffix (dots filler + text) on non-spinner marked lines
+      // suffix with flex dots
       if (l.suffix) {
+        out.className = 'line-dots';
+        out.style.textIndent = '0';
         const dotsSpan = document.createElement('span');
-        dotsSpan.className = 'dim';
-        const textLen = 4 + (l.text || '').length;
-        const maxDots = Math.max(0, Math.min(6, 34 - textLen));
-        dotsSpan.textContent = (maxDots > 0 ? ' ' + '.'.repeat(maxDots) : '') + ' ' + l.suffix;
+        dotsSpan.className = 'dots';
+        dotsSpan.textContent = ' ' + '.'.repeat(80);
+        const suffSpan = document.createElement('span');
+        suffSpan.className = 'suffix';
+        suffSpan.textContent = ' ' + l.suffix;
         out.appendChild(dotsSpan);
+        out.appendChild(suffSpan);
       }
       // flash for [!] and [x]
       if (isWarn && !reducedMotion) {
@@ -806,11 +818,11 @@ async function renderLines(lines) {
     if (l.indent) html += '    ';
     const text = l.muted ? `<span class="dim">${esc(l.text)}</span>` : esc(l.text);
     html += l.bold ? `<strong>${text}</strong>` : text;
-    // suffix with dots filler
+    // suffix: switch to flex dots layout
     if (l.suffix) {
-      const textLen = (l.mark ? 4 : 0) + (l.indent ? 4 : 0) + (l.text || '').length;
-      const maxDots = Math.max(0, Math.min(6, 34 - textLen));
-      html += `<span class="dim">${maxDots > 0 ? ' ' + '.'.repeat(maxDots) : ''} ${esc(l.suffix)}</span>`;
+      out.className = 'line-dots';
+      out.style.textIndent = '0';
+      html += `<span class="dots"> ${'.' .repeat(80)}</span><span class="suffix"> ${esc(l.suffix)}</span>`;
     }
     if (l.state) out.innerHTML = html.replace(esc(l.text), `<span class="st st-${l.state}">${esc(l.text)}</span>`);
     else out.innerHTML = html;
