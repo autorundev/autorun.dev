@@ -126,7 +126,7 @@
     .terminal{max-width:80ch}
   }
   .line{white-space:pre-wrap;overflow-wrap:anywhere;padding-left:4ch;text-indent:-4ch}
-  .line-dots{display:flex;white-space:pre;padding-left:4ch;text-indent:0}
+  .line-dots{display:flex;white-space:pre}
   .line-dots .dots{flex:1;overflow:hidden;color:var(--fg-3)}
   .line-dots .suffix{flex-shrink:0;color:var(--fg-1)}
   .cmd{color:var(--fg-0);font-weight:500}
@@ -681,7 +681,8 @@ input.addEventListener('keydown', async e => {
 
 // ── render helpers ───────────────────────────────
 async function renderLines(lines) {
-  for (const l of lines) {
+  for (let li = 0; li < lines.length; li++) {
+    const l = lines[li];
     // special anims without DOM line
     if (l.anim === 'pause') { await sleep(reducedMotion ? 0 : (l.duration || 900)); continue; }
     if (l.anim === 'blackout') {
@@ -754,11 +755,30 @@ async function renderLines(lines) {
         await sleep(120);
       }
       dotsSpan.textContent = ' ' + dotsFull;
-      // reveal suffix
-      const suf = out.querySelector('.suffix');
-      if (suf) suf.style.visibility = '';
-      spinMark.textContent = '[:]';
-      spinMark.className = 'st st-presence';
+      // peek next line: if same text with suffix, merge into this line
+      const next = lines[li + 1];
+      if (next && next.text === l.text && next.suffix && !next.spinner) {
+        // resolve mark to next's mark
+        spinMark.textContent = next.mark || '[:]';
+        spinMark.className = 'st st-' + markClass(next.mark || '[:]');
+        // add or reveal suffix
+        let suf = out.querySelector('.suffix');
+        if (!suf) {
+          suf = document.createElement('span');
+          suf.className = 'suffix';
+          out.appendChild(suf);
+        }
+        suf.textContent = ' ' + next.suffix;
+        suf.style.visibility = '';
+        // skip next line
+        li++;
+      } else {
+        // reveal own suffix if any
+        const suf = out.querySelector('.suffix');
+        if (suf) suf.style.visibility = '';
+        spinMark.textContent = '[:]';
+        spinMark.className = 'st st-presence';
+      }
       await sleep(LINE_DELAY);
       continue;
     }
