@@ -682,40 +682,70 @@ async function renderLines(lines) {
     if (l.spinner) {
       const spinMark = document.createElement('span');
       spinMark.className = 'st st-core';
+      const textNode = document.createTextNode(' ' + (l.text || ''));
+      const dotsSpan = document.createElement('span');
+      dotsSpan.className = 'dim';
       out.appendChild(spinMark);
-      out.appendChild(document.createTextNode(' ' + (l.text || '')));
+      out.appendChild(textNode);
+      out.appendChild(dotsSpan);
       term.insertBefore(out, inputLine);
       if (isFollowing) scrollToBottom();
       const dur = l.duration || 800;
-      const frames = ['[/]','[-]','[\\]','[-]'];
+      const frames = ['[/]','[-]','[\\]','[|]','[-]'];
       const end = Date.now() + dur;
       let fi = 0;
+      // dots filler: grow dots during spin up to col 42
+      const textLen = 4 + (l.text || '').length; // [/] + space + text
+      const maxDots = Math.max(0, 42 - textLen);
+      let dotCount = 0;
       while (Date.now() < end) {
         spinMark.textContent = frames[fi % frames.length];
+        if (dotCount < maxDots) {
+          dotCount++;
+          dotsSpan.textContent = ' ' + '.'.repeat(dotCount);
+        }
         fi++;
         await sleep(120);
       }
+      // fill remaining dots
+      dotsSpan.textContent = maxDots > 0 ? ' ' + '.'.repeat(maxDots) : '';
+      // suffix
+      if (l.suffix) dotsSpan.textContent += ' ' + l.suffix;
       spinMark.textContent = '[:]';
       spinMark.className = 'st st-presence';
       await sleep(LINE_DELAY);
       continue;
     }
 
-    // lines with a mark get a brief spinner first
+    // pause before [!] or [x]
+    const isWarn = l.mark === '[!]' || l.mark === '[x]';
+    if (isWarn && !reducedMotion) await sleep(500);
+
+    // lines with a mark (not [*]) get a brief spinner first
     if (l.mark && l.mark !== '[*]') {
       const spinMark = document.createElement('span');
       spinMark.className = 'st st-core';
+      const textSpan = document.createElement('span');
+      textSpan.textContent = ' ' + (l.text || '');
       out.appendChild(spinMark);
-      out.appendChild(document.createTextNode(' ' + (l.text || '')));
+      out.appendChild(textSpan);
       term.insertBefore(out, inputLine);
       if (isFollowing) scrollToBottom();
-      const frames = ['[/]','[-]','[\\]','[-]'];
+      // spinner
+      const frames = ['[/]','[-]','[\\]','[|]','[-]'];
       for (const f of frames) {
         spinMark.textContent = f;
         await sleep(120);
       }
+      // resolve to final mark
       spinMark.textContent = l.mark;
       spinMark.className = 'st st-' + markClass(l.mark);
+      // flash for [!] and [x]
+      if (isWarn && !reducedMotion) {
+        out.style.opacity = '0';
+        await sleep(150);
+        out.style.opacity = '1';
+      }
       await sleep(LINE_DELAY);
       continue;
     }
@@ -754,8 +784,19 @@ function markClass(mark) {
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 async function runEffect(name) {
-  const fx = {matrix_rain: fxMatrix, glitch: fxGlitch, reboot: fxReboot};
+  const fx = {matrix_rain: fxMatrix, glitch: fxGlitch, reboot: fxReboot, shake: fxShake};
   if (fx[name]) await fx[name]();
+}
+
+// shake — ±2px 4 times over 300ms
+async function fxShake() {
+  const el = document.querySelector('.terminal');
+  const offsets = [2, -2, 2, -2, 0];
+  for (const px of offsets) {
+    el.style.transform = px ? `translateX(${px}px)` : '';
+    await sleep(60);
+  }
+  el.style.transform = '';
 }
 
 // matrix rain — inline terminal effect, grows downward
