@@ -16,6 +16,7 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 
 import { commands } from './easter_eggs.js';
+import { pickScenario } from './deploy_scenarios.js';
 import Anthropic from '@anthropic-ai/sdk';
 
 const anthropic = new Anthropic();
@@ -120,6 +121,31 @@ app.post('/api/cmd', async (c) => {
   const ip = c.req.header('x-forwarded-for') || c.req.header('x-real-ip') || 'unknown';
   if (!foundEggs.has(ip)) foundEggs.set(ip, new Set());
   const found = foundEggs.get(ip);
+
+  // ── Deploy command (own module, not easter_eggs) ──
+  if (input === 'deploy' || input.startsWith('deploy ')) {
+    const flags = {
+      force:  input.includes('--force'),
+      friday: input.includes('--friday'),
+      list:   input.includes('--list'),
+    };
+    const result = pickScenario(flags);
+
+    // --list returns a special list response (no final)
+    if (result.type === 'list') {
+      return c.json({ lines: result.lines });
+    }
+
+    // Normal scenario: lines + final
+    const lines = [
+      ...result.lines,
+      ...(result.final && result.final !== 'stub'
+        ? [{ mark: '[*]', text: result.final }]
+        : [{ mark: '[!]', text: `scenario: ${result.id} (stub — coming soon)` }]),
+    ];
+    found.add('deploy');
+    return c.json({ lines });
+  }
 
   // Look up in easter egg registry.
   const key = input in commands ? input : normalizeInput(input);
