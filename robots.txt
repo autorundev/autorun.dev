@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /odds8/
 
 Sitemap: https://autorun.dev/sitemap.xml
