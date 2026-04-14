@@ -865,6 +865,19 @@ async function renderLines(lines) {
     let html = '';
     if (l.mark) html += `<span class="st st-${markClass(l.mark)}">${esc(l.mark)}</span> `;
     if (l.indent) html += '    ';
+    // brand link: colored name as clickable link
+    if (l.brand && l.url) {
+      if (l.brand === 'playsnap') {
+        html += `<a href="${esc(l.url)}" target="_blank" rel="noopener" style="text-decoration:none"><span style="color:var(--brand-playsnap-play)">play</span><span style="color:var(--brand-playsnap-snap)">snap</span></a>`;
+      } else if (l.brand === 'vectoros') {
+        html += `<a href="${esc(l.url)}" target="_blank" rel="noopener" style="color:var(--brand-vectoros);text-decoration:none">vectoros</a>`;
+      }
+      out.innerHTML = html;
+      term.insertBefore(out, inputLine);
+      if (isFollowing) scrollToBottom();
+      await sleep(LINE_DELAY);
+      continue;
+    }
     const text = l.muted ? `<span class="dim">${esc(l.text)}</span>` : esc(l.text);
     html += l.bold ? `<strong>${text}</strong>` : text;
     // suffix: switch to flex dots layout
