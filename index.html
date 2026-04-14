@@ -169,6 +169,7 @@
   .proj-link{display:block;text-decoration:none;color:inherit;cursor:pointer}
   .proj-arrow{color:var(--fg-0);opacity:0;transition:opacity .15s}
   .proj-link:hover .proj-arrow{opacity:1}
+  @media(hover:none){.proj-arrow{opacity:1}}
 
   /* interactive input */
   .input-line{display:flex;align-items:flex-start}
@@ -871,9 +872,9 @@ async function renderLines(lines) {
     // brand link: colored name as clickable link
     if (l.brand && l.url) {
       if (l.brand === 'playsnap') {
-        html += `<a href="${esc(l.url)}" target="_blank" rel="noopener" style="text-decoration:none"><span style="color:var(--brand-playsnap-play)">play</span><span style="color:var(--brand-playsnap-snap)">snap</span> <span style="color:var(--fg-2)">-></span></a>`;
+        html += `<a href="${esc(l.url)}" target="_blank" rel="noopener" style="text-decoration:none"><span style="color:var(--brand-playsnap-play)">play</span><span style="color:var(--brand-playsnap-snap)">snap</span> <span style="color:var(--fg-2)">→</span></a>`;
       } else if (l.brand === 'vectoros') {
-        html += `<a href="${esc(l.url)}" target="_blank" rel="noopener" style="text-decoration:none"><span style="color:var(--brand-vectoros)">vector</span><span style="color:var(--brand-vectoros-dim)">os</span> <span style="color:var(--fg-2)">-></span></a>`;
+        html += `<a href="${esc(l.url)}" target="_blank" rel="noopener" style="text-decoration:none"><span style="color:var(--brand-vectoros)">vector</span><span style="color:var(--brand-vectoros-dim)">os</span> <span style="color:var(--fg-2)">→</span></a>`;
       }
       out.innerHTML = html;
       term.insertBefore(out, inputLine);
