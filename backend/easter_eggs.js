@@ -408,6 +408,7 @@ export const commands = {
     lines: [
       { mark: '[*]', text: 'snap' },
       { mark: null,  text: 'that\'s the sound of a perfect hit.', indent: true },
+      { mark: null,  text: '' },
       { mark: null,  text: 'playsnap', indent: true, brand: 'playsnap', url: 'https://playsnap.bot' },
     ],
   },
@@ -416,6 +417,7 @@ export const commands = {
     lines: [
       { mark: '[*]', text: 'you want playsnap' },
       { mark: null,  text: 'minimalist hockey. one button. on telegram.', indent: true, muted: true },
+      { mark: null,  text: '' },
       { mark: null,  text: 'playsnap', indent: true, brand: 'playsnap', url: 'https://playsnap.bot' },
     ],
   },
@@ -423,6 +425,7 @@ export const commands = {
   'vector': {
     lines: [
       { mark: '[:]', text: 'vectoros is listening elsewhere' },
+      { mark: null,  text: '' },
       { mark: null,  text: 'vectoros', indent: true, brand: 'vectoros', url: 'https://vectoros.ai' },
     ],
   },
@@ -431,7 +434,7 @@ export const commands = {
     lines: [
       { mark: '[:]', text: 'vectoros lives at vectoros.ai' },
       { mark: null,  text: 'second brain. claude inside. telegram native.', indent: true, muted: true },
-      { mark: null,  text: '', indent: true },
+      { mark: null,  text: '' },
       { mark: null,  text: 'vectoros', indent: true, brand: 'vectoros', url: 'https://vectoros.ai' },
     ],
   },
@@ -440,6 +443,7 @@ export const commands = {
     lines: [
       { mark: '[:]', text: 'you\'re talking to one' },
       { mark: null,  text: 'but if you want a personal one:', indent: true },
+      { mark: null,  text: '' },
       { mark: null,  text: 'vectoros', indent: true, brand: 'vectoros', url: 'https://vectoros.ai' },
     ],
   },
@@ -448,6 +452,7 @@ export const commands = {
     lines: [
       { mark: '[*]', text: 'yes, it\'s everywhere' },
       { mark: null,  text: 'try vectoros if you want it useful.', indent: true },
+      { mark: null,  text: '' },
       { mark: null,  text: 'vectoros', indent: true, brand: 'vectoros', url: 'https://vectoros.ai' },
     ],
   },
@@ -456,6 +461,7 @@ export const commands = {
     lines: [
       { mark: '[!]', text: 'wrong terminal for that' },
       { mark: null,  text: 'vectoros does productivity. we do vibes.', indent: true },
+      { mark: null,  text: '' },
       { mark: null,  text: 'vectoros', indent: true, brand: 'vectoros', url: 'https://vectoros.ai' },
     ],
   },
@@ -463,9 +469,10 @@ export const commands = {
   'bot': {
     lines: [
       { mark: '[?]', text: 'which one' },
+      { mark: null,  text: '' },
       { mark: null,  text: 'playsnap', indent: true, brand: 'playsnap', url: 'https://playsnap.bot' },
       { mark: null,  text: 'vectoros', indent: true, brand: 'vectoros', url: 'https://vectoros.ai' },
-      { mark: null,  text: '', indent: true },
+      { mark: null,  text: '' },
       { mark: null,  text: 'or did you mean this terminal? i\'m flattered.', indent: true, muted: true },
     ],
   },
@@ -473,6 +480,7 @@ export const commands = {
   'telegram': {
     lines: [
       { mark: '[*]', text: 'we live there' },
+      { mark: null,  text: '' },
       { mark: null,  text: 'playsnap', indent: true, brand: 'playsnap', url: 'https://playsnap.bot' },
       { mark: null,  text: 'vectoros', indent: true, brand: 'vectoros', url: 'https://vectoros.ai' },
       { mark: null,  text: 'channel   t.me/autorundev', indent: true, muted: true },
@@ -483,6 +491,7 @@ export const commands = {
     lines: [
       { mark: '[*]', text: 'playsnap' },
       { mark: null,  text: 'minimalist hockey on telegram. one button.', indent: true },
+      { mark: null,  text: '' },
       { mark: null,  text: 'playsnap', indent: true, brand: 'playsnap', url: 'https://playsnap.bot' },
     ],
   },
@@ -491,6 +500,7 @@ export const commands = {
     lines: [
       { mark: '[:]', text: 'second brain = vectoros' },
       { mark: null,  text: 'claude-powered. telegram-native. yours.', indent: true, muted: true },
+      { mark: null,  text: '' },
       { mark: null,  text: 'vectoros', indent: true, brand: 'vectoros', url: 'https://vectoros.ai' },
     ],
   },
