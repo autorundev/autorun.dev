@@ -381,4 +381,117 @@ export const commands = {
     effect: 'reboot',
     delay: 800,
   },
+
+  // ───────────────────────────────────────────────────
+  // PRODUCT REDIRECTS
+  // ───────────────────────────────────────────────────
+
+  'play': {
+    lines: [
+      { mark: '[*]', text: 'looking for playsnap?' },
+      { mark: null,  text: 'one button. perfect timing. no tutorial.', indent: true, muted: true },
+      { mark: null,  text: '', indent: true },
+      { mark: null,  text: 'https://t.me/playsnap_bot/app', indent: true },
+    ],
+  },
+
+  'playsnap': {
+    lines: [
+      { mark: '[:]', text: 'playsnap is over there' },
+      { mark: null,  text: 'this terminal is not a game. or is it.', indent: true, muted: true },
+      { mark: null,  text: '', indent: true },
+      { mark: null,  text: 'https://t.me/playsnap_bot/app', indent: true },
+    ],
+  },
+
+  'snap': {
+    lines: [
+      { mark: '[*]', text: 'snap' },
+      { mark: null,  text: 'that\'s the sound of a perfect hit.', indent: true },
+      { mark: null,  text: 'https://t.me/playsnap_bot/app', indent: true, muted: true },
+    ],
+  },
+
+  'hockey': {
+    lines: [
+      { mark: '[*]', text: 'you want playsnap' },
+      { mark: null,  text: 'minimalist hockey. one button. on telegram.', indent: true, muted: true },
+      { mark: null,  text: 'https://t.me/playsnap_bot/app', indent: true },
+    ],
+  },
+
+  'vector': {
+    lines: [
+      { mark: '[:]', text: 'vectoros is listening elsewhere' },
+      { mark: null,  text: 'https://vectoros.ai', indent: true },
+    ],
+  },
+
+  'vectoros': {
+    lines: [
+      { mark: '[:]', text: 'vectoros lives at vectoros.ai' },
+      { mark: null,  text: 'second brain. claude inside. telegram native.', indent: true, muted: true },
+      { mark: null,  text: '', indent: true },
+      { mark: null,  text: 'https://vectoros.ai', indent: true },
+    ],
+  },
+
+  'agent': {
+    lines: [
+      { mark: '[:]', text: 'you\'re talking to one' },
+      { mark: null,  text: 'but if you want a personal one — vectoros.', indent: true },
+      { mark: null,  text: 'https://vectoros.ai', indent: true, muted: true },
+    ],
+  },
+
+  'ai': {
+    lines: [
+      { mark: '[*]', text: 'yes, it\'s everywhere' },
+      { mark: null,  text: 'try vectoros if you want it useful.', indent: true },
+      { mark: null,  text: 'https://vectoros.ai', indent: true, muted: true },
+    ],
+  },
+
+  'productivity': {
+    lines: [
+      { mark: '[!]', text: 'wrong terminal for that' },
+      { mark: null,  text: 'vectoros does productivity. we do vibes.', indent: true },
+      { mark: null,  text: 'https://vectoros.ai', indent: true, muted: true },
+    ],
+  },
+
+  'bot': {
+    lines: [
+      { mark: '[?]', text: 'which one' },
+      { mark: null,  text: 'playsnap — hockey bot on telegram', indent: true },
+      { mark: null,  text: 'vectoros — ai companion on telegram', indent: true },
+      { mark: null,  text: '', indent: true },
+      { mark: null,  text: 'or did you mean this terminal? i\'m flattered.', indent: true, muted: true },
+    ],
+  },
+
+  'telegram': {
+    lines: [
+      { mark: '[*]', text: 'we live there' },
+      { mark: null,  text: 'playsnap  https://t.me/playsnap_bot/app', indent: true },
+      { mark: null,  text: 'vectoros  https://vectoros.ai', indent: true },
+      { mark: null,  text: 'channel   https://t.me/autorundev', indent: true },
+    ],
+  },
+
+  'game': {
+    lines: [
+      { mark: '[*]', text: 'playsnap' },
+      { mark: null,  text: 'minimalist hockey on telegram. one button.', indent: true },
+      { mark: null,  text: 'https://t.me/playsnap_bot/app', indent: true, muted: true },
+    ],
+  },
+
+  'brain': {
+    lines: [
+      { mark: '[:]', text: 'second brain = vectoros' },
+      { mark: null,  text: 'claude-powered. telegram-native. yours.', indent: true, muted: true },
+      { mark: null,  text: 'https://vectoros.ai', indent: true },
+    ],
+  },
 };
