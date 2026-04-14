@@ -62,6 +62,7 @@
     --state-stealth:#A0A0A0;
     --brand-autorun:#7DD3FC;
     --brand-vectoros:#FFFFFF;
+    --brand-vectoros-dim:#A0A0A0;
     --brand-playsnap-play:#FFFFFF;
     --brand-playsnap-snap:#C8FF00;
   }
@@ -84,6 +85,7 @@
     --state-stealth:#707070;
     --brand-autorun:#0284C7;
     --brand-vectoros:#0A0A0A;
+    --brand-vectoros-dim:#707070;
     --brand-playsnap-play:#0A0A0A;
     --brand-playsnap-snap:#65A30D;
   }
@@ -107,6 +109,7 @@
       --state-stealth:#707070;
       --brand-autorun:#0284C7;
       --brand-vectoros:#0A0A0A;
+      --brand-vectoros-dim:#707070;
       --brand-playsnap-play:#0A0A0A;
       --brand-playsnap-snap:#65A30D;
     }
@@ -503,7 +506,7 @@ const projectsHTML = `
   <div class="line"><span class="st st-core">[*]</span> things we ship</div>
   <div class="blank"></div>
   <a href="https://vectoros.ai" target="_blank" rel="noopener" class="proj-link">
-    <div class="line"><span class="st st-presence">[:]</span> <span style="color:var(--brand-vectoros)">vectoros</span><span class="proj-arrow"> →</span></div>
+    <div class="line"><span class="st st-presence">[:]</span> <span style="color:var(--brand-vectoros)">vector</span><span style="color:var(--brand-vectoros-dim)">os</span><span class="proj-arrow"> →</span></div>
     <div class="line">    ai companion for telegram.</div>
     <div class="line">    second brain powered by claude.</div>
     <div class="line">    <span class="st st-live">[status: live]</span></div>
@@ -868,9 +871,9 @@ async function renderLines(lines) {
     // brand link: colored name as clickable link
     if (l.brand && l.url) {
       if (l.brand === 'playsnap') {
-        html += `<a href="${esc(l.url)}" target="_blank" rel="noopener" style="text-decoration:none"><span style="color:var(--brand-playsnap-play)">play</span><span style="color:var(--brand-playsnap-snap)">snap</span></a>`;
+        html += `<a href="${esc(l.url)}" target="_blank" rel="noopener" style="text-decoration:none"><span style="color:var(--brand-playsnap-play)">play</span><span style="color:var(--brand-playsnap-snap)">snap</span> <span style="color:var(--fg-2)">-></span></a>`;
       } else if (l.brand === 'vectoros') {
-        html += `<a href="${esc(l.url)}" target="_blank" rel="noopener" style="color:var(--brand-vectoros);text-decoration:none">vectoros</a>`;
+        html += `<a href="${esc(l.url)}" target="_blank" rel="noopener" style="text-decoration:none"><span style="color:var(--brand-vectoros)">vector</span><span style="color:var(--brand-vectoros-dim)">os</span> <span style="color:var(--fg-2)">-></span></a>`;
       }
       out.innerHTML = html;
       term.insertBefore(out, inputLine);
