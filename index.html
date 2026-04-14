@@ -434,6 +434,7 @@ const commands = {
     '    projects <span style="color:var(--fg-3)"> - things we ship</span>\n' +
     '    team     <span style="color:var(--fg-3)"> - who\'s behind the terminal</span>\n' +
     '    stack    <span style="color:var(--fg-3)"> - how we build</span>\n' +
+    '    contacts <span style="color:var(--fg-3)"> - how to reach us</span>\n' +
     '    config   <span style="color:var(--fg-3)"> - settings</span>\n' +
     '    clear    <span style="color:var(--fg-3)"> - wipe the screen</span>',
 
@@ -469,6 +470,13 @@ const commands = {
     '&nbsp;\n' +
     '    <span class="st st-alert">[!]</span> we deploy on fridays.\n' +
     '        <span class="dim">and midnights. no one stops us.</span>',
+
+  contacts: () =>
+    '<span class="st st-core">[*]</span> how to reach us\n' +
+    '    mail      <a href="mailto:hello@autorun.dev" style="color:var(--state-core);text-decoration:none">hello@autorun.dev</a>\n' +
+    '    telegram  <a href="https://t.me/autorundev" target="_blank" style="color:var(--state-core);text-decoration:none">@autorundev</a>\n' +
+    '&nbsp;\n' +
+    '    <span class="dim">async by default. we reply when we can.</span>',
 
   config: (args) => {
     if (!args) {
@@ -514,7 +522,7 @@ const projectsHTML = `
 
 // ── autocomplete + idle suggest ───────────────────
 const ghost = document.getElementById('ghost');
-const cmdList = ['help','about','projects','team','stack','config','clear'];
+const cmdList = ['help','about','projects','team','stack','contacts','config','clear'];
 const eggHints = ['hello','42','ping','matrix','whoami','red pill','sudo make me a sandwich','deploy'];
 let idleTimer = null;
 let suggestTimer = null;
