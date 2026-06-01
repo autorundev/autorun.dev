@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Ernest — «Get Funded» wedge · стратегия</title>
+<meta name="description" content="Ernest: single-player wedge, выход на рынок через prop-challenge аспирантов. Стратегия, воронка, фичи, $1M-стек. Фактчек 2026.">
+<style>
+  :root{
+    --bg:#0a0b0d; --bg2:#101216; --surface:#14171c; --surface2:#1b1f26;
+    --line:#262b33; --line2:#333a44;
+    --txt:#e9e6df; --txt2:#b4b8bf; --muted:#7e838c;
+    --gold:#cba14e; --gold-soft:#e0c074; --teal:#46b89a; --red:#d65c52; --blue:#5b8fd6;
+    --maxw:1080px;
+    --serif:ui-serif,Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--txt);font-family:var(--sans);line-height:1.62;
+    font-size:17px;letter-spacing:.005em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:var(--gold-soft);text-decoration:none}
+  a:hover{text-decoration:underline}
+  ::selection{background:var(--gold);color:#000}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  section{padding:64px 0;border-top:1px solid var(--line)}
+  section:first-of-type{border-top:none}
+
+  /* hero */
+  .hero{position:relative;padding:104px 0 72px;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(900px 500px at 75% -10%,rgba(203,161,78,.16),transparent 60%),
+               radial-gradient(700px 400px at 10% 30%,rgba(70,184,154,.07),transparent 55%);
+    pointer-events:none}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:22px}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(38px,6.2vw,68px);line-height:1.04;
+    letter-spacing:-.02em;color:#fff;max-width:18ch}
+  h1 em{font-style:italic;color:var(--gold-soft)}
+  .lede{font-size:clamp(18px,2.4vw,22px);color:var(--txt2);max-width:60ch;margin-top:26px;line-height:1.55}
+  .hero-meta{margin-top:34px;display:flex;flex-wrap:wrap;gap:10px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .hero-meta span{border:1px solid var(--line2);border-radius:999px;padding:6px 13px}
+
+  h2{font-family:var(--serif);font-weight:600;font-size:clamp(27px,4vw,40px);line-height:1.1;
+    letter-spacing:-.015em;color:#fff;max-width:24ch}
+  .sec-no{font-family:var(--mono);font-size:13px;color:var(--gold);letter-spacing:.18em;margin-bottom:14px;display:block}
+  h3{font-size:19px;font-weight:650;color:#fff;margin:0 0 6px;letter-spacing:-.01em}
+  p{color:var(--txt2);max-width:68ch;margin-top:16px}
+  p.tight{margin-top:10px}
+  strong{color:var(--txt);font-weight:650}
+  .accent{color:var(--gold-soft)}
+  .em-red{color:var(--red)}
+  .em-teal{color:var(--teal)}
+  .sub{font-size:14px;color:var(--muted);max-width:66ch;margin-top:14px}
+  .lead-after{font-size:19px;color:var(--txt);max-width:62ch}
+
+  /* generic grid */
+  .grid{display:grid;gap:18px;margin-top:34px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .card.hl{border-color:var(--line2);background:linear-gradient(180deg,var(--surface2),var(--surface))}
+  .card p{margin-top:8px;font-size:14.5px}
+  .card .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+  /* big stat numbers */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:34px}
+  .stat{background:var(--bg2);padding:24px 20px}
+  .stat .n{font-family:var(--serif);font-size:clamp(28px,4vw,40px);font-weight:600;color:#fff;letter-spacing:-.02em;line-height:1}
+  .stat .n.gold{color:var(--gold-soft)} .stat .n.red{color:var(--red)} .stat .n.teal{color:var(--teal)}
+  .stat .l{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.4}
+
+  /* two-col compare */
+  .versus{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
+  .vbox{border:1px solid var(--line);border-radius:14px;padding:24px;background:var(--surface)}
+  .vbox.bad{border-color:rgba(214,92,82,.32)}
+  .vbox.good{border-color:rgba(70,184,154,.34)}
+  .vtag{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:12px}
+  .bad .vtag{color:var(--red)} .good .vtag{color:var(--teal)}
+  .vbox h3{font-size:17px}
+  .vbox p{font-size:14.5px;margin-top:10px}
+
+  /* funnel */
+  .funnel{margin-top:38px;display:flex;flex-direction:column;gap:0}
+  .fstep{position:relative;display:grid;grid-template-columns:54px 1fr auto;gap:20px;align-items:start;
+    padding:22px 24px;background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-bottom:10px}
+  .fstep .fn{font-family:var(--serif);font-size:26px;color:var(--gold);font-weight:600;line-height:1}
+  .fstep h3{font-size:17.5px}
+  .fstep p{font-size:14px;margin-top:7px;max-width:52ch}
+  .frev{font-family:var(--mono);font-size:12px;text-align:right;white-space:nowrap;color:var(--teal);padding-top:4px;min-width:120px}
+  .frev .z{color:var(--muted)}
+  .fconn{height:18px;width:2px;background:linear-gradient(var(--gold),transparent);margin:-6px auto;opacity:.5}
+
+  /* feature grid */
+  .feat{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:32px}
+  .fcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .fcard .fid{font-family:var(--mono);font-size:12px;color:var(--gold);font-weight:600}
+  .fcard h3{font-size:16px;margin-top:6px}
+  .fcard p{font-size:13.5px;margin-top:8px}
+  .fcard .reuse{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:10px}
+  .fcard.l2{opacity:.72;border-style:dashed}
+
+  /* stack table */
+  .stack{margin-top:32px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .strow{display:grid;grid-template-columns:1.4fr 1fr 1.1fr;gap:0;border-top:1px solid var(--line)}
+  .strow:first-child{border-top:none;background:var(--bg2);font-family:var(--mono);font-size:11px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .strow>div{padding:15px 20px;border-left:1px solid var(--line)}
+  .strow>div:first-child{border-left:none}
+  .strow .who{font-size:13px;color:var(--muted)}
+  .strow .amt{font-family:var(--mono);color:var(--gold-soft);font-size:14px}
+  .strow.total{background:var(--surface2)}
+  .strow.total .amt{color:#fff;font-size:15px}
+
+  /* lines / risk */
+  .lines{margin-top:30px;display:grid;gap:12px}
+  .line-item{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:18px 20px;
+    background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--red);border-radius:0 12px 12px 0}
+  .line-item .mark{font-family:var(--serif);font-size:22px;color:var(--red);line-height:1}
+  .line-item h3{font-size:15.5px}
+  .line-item p{font-size:13.5px;margin-top:5px}
+
+  ul.clean{margin-top:18px;list-style:none;max-width:66ch}
+  ul.clean li{position:relative;padding-left:24px;margin-top:11px;color:var(--txt2);font-size:15.5px}
+  ul.clean li::before{content:"→";position:absolute;left:0;color:var(--gold);font-family:var(--mono)}
+
+  .callout{margin-top:30px;padding:26px 28px;border:1px solid var(--line2);border-radius:14px;
+    background:linear-gradient(135deg,rgba(203,161,78,.08),rgba(20,23,28,.4))}
+  .callout p{font-size:18px;color:var(--txt);max-width:64ch;margin-top:0}
+  .callout .q{font-family:var(--serif);font-style:italic}
+
+  sup a{font-family:var(--mono);font-size:11px;color:var(--gold);text-decoration:none;padding:0 1px}
+  sup a:hover{text-decoration:underline}
+
+  /* sources */
+  .src{font-size:13px;color:var(--muted)}
+  .src ol{margin-top:18px;padding-left:0;list-style:none;column-count:2;column-gap:36px}
+  .src li{break-inside:avoid;margin-bottom:11px;padding-left:26px;position:relative;line-height:1.45}
+  .src li .num{position:absolute;left:0;font-family:var(--mono);color:var(--gold);font-size:11px}
+  .src li a{color:var(--txt2)}
+
+  footer{padding:48px 0 70px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+
+  .pill{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+    padding:3px 9px;border-radius:999px;border:1px solid var(--line2);color:var(--txt2);margin:2px 4px 2px 0}
+  .pill.dead{color:var(--red);border-color:rgba(214,92,82,.3)}
+  .pill.open{color:var(--teal);border-color:rgba(70,184,154,.3)}
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:820px){
+    body{font-size:16px}
+    .g2,.g3,.g4,.feat,.versus{grid-template-columns:1fr}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .strow{grid-template-columns:1fr}
+    .strow>div{border-left:none;border-top:1px solid var(--line)}
+    .strow:first-child{display:none}
+    .fstep{grid-template-columns:40px 1fr;}
+    .frev{grid-column:1/-1;text-align:left;padding-top:0}
+    .src ol{column-count:1}
+  }
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Ernest · стратегический разбор · 2026-06-01</div>
+    <h1>Эрнест доводит трейдера до <em>funded</em> — и зарабатывает на этом пути.</h1>
+    <p class="lede">Не «ещё один торговый бот» и не платформа-стандарт. Single-player инструмент, который читает тебя там, где это <strong>измеряется в деньгах</strong> — и встраивается в момент, когда трейдер пытается получить funded-капитал.</p>
+    <div class="hero-meta">
+      <span>5 раундов рыночного фактчека</span>
+      <span>HL-native beachhead</span>
+      <span>event-based монетизация</span>
+      <span>путь к $1M ARR</span>
+    </div>
+  </div>
+</header>
+
+<!-- 1 -->
+<section id="why">
+  <div class="wrap reveal">
+    <span class="sec-no">01 — С чего всё началось</span>
+    <h2>«Зачем Эрнест, если есть любой harness + Hummingbot?»</h2>
+    <p class="lead-after">Честный вопрос. И на него два разных ответа — потому что есть два разных скептика.</p>
+    <div class="versus">
+      <div class="vbox bad">
+        <div class="vtag">harness / Condor — pull-модель</div>
+        <h3>Отдаёт то, что ты можешь назвать</h3>
+        <p>Claude Code, Condor, биржевые CLI — ты <em>спрашиваешь</em>, он отвечает. Но слепое пятно по определению — то, что ты назвать не можешь. Pull структурно не вскрывает слепое пятно. Condor — harness для квантов и девелоперов, ноль анализа поведения трейдера.<sup><a href="#s1">1</a></sup></p>
+      </div>
+      <div class="vbox good">
+        <div class="vtag">Ernest — push + модель-тебя</div>
+        <h3>Приходит с тем, чего ты не запрашивал</h3>
+        <p>Проактивность + модель твоего поведения + метод оценки, который <em>заслуживает</em> право прервать. Это другой класс продукта, а не навеска на harness. И — критично — это работает, только если есть накопленный per-user актив, который нельзя подделать свежим харнессом.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <p><span class="q">Pull не вскрывает слепое пятно. Push с моделью-тебя — вскрывает.</span> Вот линия, которую harness не перейдёт навеской — потому что моат не в модели, а в накопленных данных о тебе.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="pivot">
+  <div class="wrap reveal">
+    <span class="sec-no">02 — Стратегический разворот</span>
+    <h2>Платформа-стандарт (Kels) отложена. Эрнест — это клин.</h2>
+    <p>Изначальная ставка: открытый стандарт торговых агентов + закрытый runtime + marketplace (Kels), где Эрнест — лишь пример агента. Но к весне 2026 connectivity-стандарт <strong>уже занят</strong>: <strong>MCP</strong> — 97 млн загрузок SDK в месяц, за ним Anthropic, Microsoft, OpenAI, Google; биржи выпустили свои MCP-серверы.<sup><a href="#s2">2</a></sup> Воевать за стандарт соло — проигрыш.</p>
+    <ul class="clean">
+      <li>Стандарт «связности» = MCP. Эрнест его <strong>использует</strong>, а не строит свой.</li>
+      <li>Стандарта «что делает хороший торговый агент» — нет. Но его не захватить ранним приходом — только победив сначала в одном рынке (паттерн HTTP / Bloomberg).</li>
+      <li>Marketplace / Agent Definition Format / anchoring → <strong>пост-PMF (H2)</strong>, не сейчас.</li>
+    </ul>
+    <div class="callout">
+      <p>Проигрыш гонки за стандарт = Эрнест становится <strong>приложением</strong>, а не платформой. Это ровно тот выбор, который и так был сделан. Плохая новость и правильное решение — одно и то же событие.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="market">
+  <div class="wrap reveal">
+    <span class="sec-no">03 — Рынок · фактчек</span>
+    <h2>Поле вокруг загорелось. Неудобную честную полосу оставили пустой.</h2>
+    <p>Конкуренты, которых стоило бояться, оказались в <em>соседних</em> полосах — и по форме не могут занять полосу Эрнеста.</p>
+
+    <div class="grid g3">
+      <div class="card">
+        <div class="k">Биржевые AI</div>
+        <h3>Заперты + конфликт интересов</h3>
+        <p>Binance AI Pro ($9.99→29.99), Kraken CLI, Bybit Aurora/TradeGPT, OKX OnchainOS — <strong>все</strong> на одной бирже, <strong>все</strong> про объём/сигналы, ни один не анализирует поведение. Биржа на комиссии не построит «торгуй меньше».<sup><a href="#s3">3</a></sup></p>
+      </div>
+      <div class="card">
+        <div class="k">On-chain AI-агенты</div>
+        <h3>Схлопнулись</h3>
+        <p>ai16z <span class="em-red">−99.9%</span> + class-action о фейковой автономности; AIXBT <span class="em-red">−97%</span>. Ни одной верифицированной альфы.<sup><a href="#s4">4</a></sup> Это превращает «AI бьёт рынок» из риторики в доказанный антипаттерн — и усиливает честную позицию Эрнеста.</p>
+      </div>
+      <div class="card hl">
+        <div class="k">Wedge Эрнеста</div>
+        <h3 class="accent">Пусто</h3>
+        <p>Proactive + поведенческий + крипто-native + Telegram + honesty-first + «get funded». Ни один игрок не закрывает комбинацию. Ближайший — 0xA1: ~500 юзеров, без Hyperliquid, без Telegram.<sup><a href="#s5">5</a></sup></p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="n red">83.5%</div><div class="l">трейдеров на Hyperliquid в минусе<sup><a href="#s6">6</a></sup></div></div>
+      <div class="stat"><div class="n">1.4M</div><div class="l">пользователей Hyperliquid к концу 2025, $2.9T объём<sup><a href="#s6">6</a></sup></div></div>
+      <div class="stat"><div class="n red">40%</div><div class="l">кошельков уходят с биржи за 30 дней<sup><a href="#s6">6</a></sup></div></div>
+      <div class="stat"><div class="n gold">$20–50</div><div class="l">доказанный WTP/мес за журнал+аналитику<sup><a href="#s7">7</a></sup></div></div>
+    </div>
+    <p class="sub">Угроза — не потеря стандарта, а <strong>feature-encroachment</strong>: TradesViz уже HL-native (290K визитов/мес), но без поведенческих лейблов; добавит слой за 12–18 мес.<sup><a href="#s7">7</a></sup> Это твои часы — не «окно стандарта».</p>
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="user">
+  <div class="wrap reveal">
+    <span class="sec-no">04 — Кто покупатель</span>
+    <h2>Промежуточный самоучка, который валится на дисциплине, а не на знаниях.</h2>
+    <p>Ключевой вопрос: проп-аспирант — это новичок (нужно обучение) или умеющий, которому нужен тест и контроль? Ответ однозначный.</p>
+    <div class="stats">
+      <div class="stat"><div class="n gold">25–35</div><div class="l">возраст, 1–3 года опыта, свой счёт $500–5K<sup><a href="#s8">8</a></sup></div></div>
+      <div class="stat"><div class="n red">90%</div><div class="l">провалов — эмоциональная дисциплина, не знания<sup><a href="#s9">9</a></sup></div></div>
+      <div class="stat"><div class="n red">75%</div><div class="l">валятся в первые 10 дней — один плохой день<sup><a href="#s9">9</a></sup></div></div>
+      <div class="stat"><div class="n">37.8%</div><div class="l">сами называют «lack of discipline» главной проблемой<sup><a href="#s9">9</a></sup></div></div>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="k">Что у них есть</div>
+        <h3>Знание базы + свой счёт</h3>
+        <p>Не нулевой новичок (тот не дойдёт до покупки challenge'а) и не профи. Уже торгует — идёт в проп <strong>за капиталом</strong>, которого у него нет ($50–100K плеча против $2K своих).</p>
+      </div>
+      <div class="card">
+        <div class="k">Чего им не хватает</div>
+        <h3>Активного контроля в моменте</h3>
+        <p>Существующие инструменты <strong>пассивны</strong> — журналируешь постфактум. Активного, который перехватывает нарушение правила в моменте, нет. Это и есть окно Эрнеста.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <p>Вывод: фрейм <strong class="accent">«Get Funded»</strong>, не «дисциплина». Дисциплина — средство, доступ к капиталу — хотелка. Это чинит WTP (мечта, не шпинат) и discovery («я зафандился» шарится с гордостью, а не со стыдом).</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section id="funnel">
+  <div class="wrap reveal">
+    <span class="sec-no">05 — Воронка</span>
+    <h2>От бесплатного чтения истории — до funded-подписчика.</h2>
+    <p>Платёж привязан к value-event на каждом шаге. Ни один доллар не зависит от удержания подписки у того, кто всё равно уйдёт.</p>
+    <div class="funnel">
+      <div class="fstep">
+        <div class="fn">1</div>
+        <div><h3>Free Readiness Read</h3><p>Подключил 0x (read-only) → behavioral fingerprint + вердикт готовности по истории HL.</p></div>
+        <div class="frev"><span class="z">$0</span> · воронка + data-моат</div>
+      </div>
+      <div class="fconn"></div>
+      <div class="fstep">
+        <div class="fn">2</div>
+        <div><h3>Training Challenge <span class="accent">· центр</span></h3><p>Мок-eval по точным правилам пропа на своём HL под проактивным контролем. Free-trial → aha-момент: ловит твой tilt в реале.</p></div>
+        <div class="frev"><span class="z">free trial</span> + builder-code</div>
+      </div>
+      <div class="fconn"></div>
+      <div class="fstep">
+        <div class="fn">3</div>
+        <div><h3>Readiness Gate</h3><p>Прошёл мок → готов. Не прошёл за N → конкретный data-grounded гэп. Психология сама валит — Эрнест честно констатирует.</p></div>
+        <div class="frev"><span class="z">anti-farming</span></div>
+      </div>
+      <div class="fconn"></div>
+      <div class="fstep">
+        <div class="fn">4</div>
+        <div><h3>Get-Funded Pass + referral</h3><p>Реферал в vetted-проп + сопровождение реального challenge. Flat service-fee, не success-fee.</p></div>
+        <div class="frev">$79–149 + affiliate $30–290</div>
+      </div>
+      <div class="fconn"></div>
+      <div class="fstep">
+        <div class="fn">5</div>
+        <div><h3>Funded → Subscription</h3><p>Ongoing мониторинг, scaling, портфель. Победители липнут — низкий churn.</p></div>
+        <div class="frev">$30–50/мес</div>
+      </div>
+    </div>
+    <p class="sub"><strong>Почему Training Challenge — замок воронки:</strong> де-рискует трату трейдера ($579 challenge), кормит data-моат, делает рефералы premium-качества (выше pass-rate → рычаг на повышенную affiliate-ставку), монетизирует даже бесплатную стадию через builder-code на HL-объёме, и <strong>объективизирует готовность</strong> — снимает dark-pattern: готовность становится продемонстрированным фактом, а не суждением Эрнеста.</p>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="features">
+  <div class="wrap reveal">
+    <span class="sec-no">06 — Что добавить Эрнесту</span>
+    <h2>Фичи MVP — почти всё переиспользует уже построенное.</h2>
+    <p>Продукт впереди рынка: тяжёлый tech (поведенческий движок, NT, проактивность, HL-native) уже есть. MVP — рекомбинация, не новый фундамент.</p>
+    <div class="feat">
+      <div class="fcard"><div class="fid">F1</div><h3>Funding Readiness Read</h3><p>История HL → fingerprint + вердикт «готов / гэп». Топ воронки, discovery, data-моат.</p><div class="reuse">↺ patterns.py · stats.py · mfe</div></div>
+      <div class="fcard"><div class="fid">F2</div><h3>Prop-rule ruleset engine</h3><p>Параметризовать challenge: target / max-DD / daily-loss / min-days.</p><div class="reuse">↺ rules.py · risk.py</div></div>
+      <div class="fcard"><div class="fid">F3</div><h3>Training Challenge runner</h3><p>Мок-eval на HL (paper/малый размер) под прокативным контролем.</p><div class="reuse">↺ NautilusTrader · paper P&L · position monitor</div></div>
+      <div class="fcard"><div class="fid">F4</div><h3>Real-time discipline interrupt</h3><p>Перехват tilt/revenge/over-size в challenge-окне. Главный value, max ROI на 7–10 день.</p><div class="reuse">↺ detectors_a/b/cde · heartbeat</div></div>
+      <div class="fcard"><div class="fid">F5</div><h3>Readiness gate verdict</h3><p>Data-grounded «готов / вот гэп». Anti-farming линия.</p><div class="reuse">↺ F1 + F3 агрегат</div></div>
+      <div class="fcard"><div class="fid">F6</div><h3>Shareable readiness card</h3><p>Виральный механизм: behavioral fingerprint, не P&L.</p><div class="reuse">↺ journey viz</div></div>
+      <div class="fcard"><div class="fid">F7</div><h3>Prop referral + affiliate tracking</h3><p>Ручной MVP: линк + промокод, без платформы.</p><div class="reuse">↺ —</div></div>
+      <div class="fcard l2"><div class="fid">F8 · layer 2</div><h3>Multi-exchange CSV import</h3><p>Bybit/Binance история для mass-рынка — после HL-beachhead.</p><div class="reuse">↺ parser</div></div>
+    </div>
+    <p class="sub">НЕ в MVP: marketplace, Agent Definition Format, Bitcoin anchoring, regime classifier, калибровка-движок — всё это пост-PMF / H2.</p>
+  </div>
+</section>
+
+<!-- 7 -->
+<section id="money">
+  <div class="wrap reveal">
+    <span class="sec-no">07 — Монетизация · $1M-стек</span>
+    <h2>$1M достижим не одним рычагом, а стеком, устойчивым к churn'у.</h2>
+    <p>Рынок структурно сопротивляется подписке-с-проигравшего (40% уходят за 30 дней). Решение: брать на value-event, а подписку оставить тем, кто реально остаётся.</p>
+    <div class="stack">
+      <div class="strow"><div>Слой</div><div>Кто платит</div><div>Вклад в $1M</div></div>
+      <div class="strow"><div><strong>Get-Funded Pass</strong><div class="who">per-challenge, immune к churn</div></div><div class="who">трейдер · $79–149</div><div class="amt">~$0.3–0.45M</div></div>
+      <div class="strow"><div><strong>Prop-affiliate</strong><div class="who">stacks на каждом referred challenge</div></div><div class="who">проп · 15% lifetime</div><div class="amt">$30–100K</div></div>
+      <div class="strow"><div><strong>Subscription</strong><div class="who">funded/фанаты, низкий churn</div></div><div class="who">юзер · $30–50/мес</div><div class="amt">~$0.2–0.5M</div></div>
+      <div class="strow"><div><strong>Builder-code</strong><div class="who">take-rate на HL-объёме*</div></div><div class="who">— (lifetime-aligned)</div><div class="amt">wildcard</div></div>
+      <div class="strow total"><div><strong>Итог</strong><div class="who">wedge + стек гарниров</div></div><div class="who">смешанный, churn-устойчивый</div><div class="amt">≥ $1M ARR</div></div>
+    </div>
+    <p class="sub">* Реконсиляция конфликта «торгуй меньше» vs take-rate: дисциплина режет <em>плохой</em> объём, но удержанный живой трейдер торгует дольше → больший <strong>lifetime</strong>-объём. На рынке, где 40% уходят за 30 дней, выживание = объём. Take-rate выровнен с дисциплиной, а не против неё.</p>
+    <p class="sub"><strong>Что закрыто ресёрчем:</strong> prop-B2B-SaaS (incentive обратный — 80–90% пропов это fee-farming, им дисциплина невыгодна<sup><a href="#s10">10</a></sup>) и Kels-marketplace (two-sided cold start против MCP). Шортката нет: $1M = выиграть wedge + стек. Узкое место — <strong>дистрибуция</strong>, не рынок.</p>
+  </div>
+</section>
+
+<!-- 8 -->
+<section id="beachhead">
+  <div class="wrap reveal">
+    <span class="sec-no">08 — Beachhead</span>
+    <h2>HL-нативные проп-аспиранты — там, где твой edge нативный.</h2>
+    <p>Крипто-проп разделён на два лагеря. CEX-mass (Bybit) большой, но обслужен и без edge. HL-нативный — мал, но растёт, и нативное API-чтение HL даёт преимущество, которого нет ни у кого.</p>
+    <div class="versus">
+      <div class="vbox bad">
+        <div class="vtag">CEX-mass · Bybit</div>
+        <h3>Большой, но без edge</h3>
+        <p>HyroTrader 30K, Crypto Fund Trader 48K, Klein, BitFunded 50K — все на Bybit. CSV-only, нет нативного чтения, аудитория уже обслужена CEX-фирмами напрямую.<sup><a href="#s11">11</a></sup></p>
+        <p class="sub">→ слой 2 (CSV-импорт, F8), не beachhead.</p>
+      </div>
+      <div class="vbox good">
+        <div class="vtag">HL-native · Hyperliquid</div>
+        <h3 class="em-teal">Мал, но растёт — и PMF доказан</h3>
+        <p><strong>SizeProp</strong>: 3,500 трейдеров, $3B объём, $50M выдано за месяцы, 150+ стран. <strong>Hypernova</strong> ($3M pre-seed, Lemniscap), <strong>Propr</strong> ($1.5M seed). 6 из 7 on-chain пропов на HL. A-book alignment реальный.<sup><a href="#s12">12</a></sup></p>
+        <p class="sub">→ нативное HL-чтение без CSV = маркетинговое и техническое преимущество.</p>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="k">Партнёрство</div>
+        <h3>Эрнест как discipline-слой их воронки</h3>
+        <p>SizeProp / Hypernova / Propr — молодые, VC-backed, open к вендорам, на том же HL. A-book: они <em>хотят</em> дисциплинированных funded-трейдеров (в отличие от fee-farming CEX-пропов). Эрнест — их readiness-слой или фидер готовых (rev-share).</p>
+      </div>
+      <div class="card">
+        <div class="k">Первые 100</div>
+        <h3>Высокий intent, уже тратят</h3>
+        <p>Комьюнити HL-проп-аспирантов (SizeProp/Hypernova Discord, r/propfirms крипто, HypurrCollective). Хук: «бесплатный readiness-read + тренировочный challenge, который спасёт от слива $579 вслепую».</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section id="lines">
+  <div class="wrap reveal">
+    <span class="sec-no">09 — Линии, которые нельзя пересекать</span>
+    <h2>Без этих трёх линий Эрнест превращается в то, против чего создан.</h2>
+    <div class="lines">
+      <div class="line-item">
+        <div class="mark">!</div>
+        <div><h3>Anti-farming</h3><p>Эрнест делает трейдера лучше и <strong>доказывает</strong> готовность — не проходит challenge за него. Challenge-passing services пропы банят как account-farming. Перейдёшь — affiliate/prop-отношения умирают. Training Challenge — твоя защита: он доказывает, что трейдер сам умеет.</p></div>
+      </div>
+      <div class="line-item">
+        <div class="mark">!</div>
+        <div><h3>Регуляторка</h3><p>«coaching / analysis service», flat-fee, <strong>никаких гарантий исхода</strong>, vetted-пропы only. «Get funded» маркетируем как мечту — продаём сервис. Success-fee запрещён (и регуляторка, и реинтродукция volume-конфликта).</p></div>
+      </div>
+      <div class="line-item">
+        <div class="mark">!</div>
+        <div><h3>Dark-pattern</h3><p>Реактивируем только coachable-когорту; нефиту честно «уйди». Психология сама валит — Эрнесту не надо инженерить retry. И честность здесь — <strong>механизм роста</strong>: «Эрнест сказал, что я не готов» = сигнал доверия в категории, кишащей скамом.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section id="now">
+  <div class="wrap reveal">
+    <span class="sec-no">10 — Где мы и что дальше</span>
+    <h2>Стратегия провалидирована насквозь. Дальше — исполнение.</h2>
+    <p>Пять раундов ресёрча закрыли каждую несущую посылку:</p>
+    <ul class="clean">
+      <li><strong>Категория</strong> — открыта (стандарт = MCP на connectivity; Kels отложена).</li>
+      <li><strong>Wedge</strong> — открыт и валидирован (proactive behavioral для крипто-перпов).</li>
+      <li><strong>Монетизация</strong> — event-based, робастна к churn'у.</li>
+      <li><strong>Юзер</strong> — промежуточный, валится на дисциплине; «get funded» = хук.</li>
+      <li><strong>Beachhead</strong> — HL-нативный проп, PMF доказан, нативный edge.</li>
+    </ul>
+    <div class="callout">
+      <p>Ресёрч сделал свою работу. Оставшийся риск — чисто исполнительский: <strong>дистрибуция + билд</strong>. Это нельзя нагуглить — только сделать. Артефакты: <span style="font-family:var(--mono);font-size:14px">docs/GTM_get_funded.md</span> + Forgejo epic <span style="font-family:var(--mono);font-size:14px">tracker/ernest#48</span> (Wave 1: F1–F7).</p>
+    </div>
+    <div style="margin-top:24px">
+      <span class="pill dead">Kels marketplace — отложено</span>
+      <span class="pill dead">prop-B2B-SaaS — закрыто</span>
+      <span class="pill dead">anchoring / regime / калибровка — H2</span>
+      <span class="pill open">F1–F7 — Wave 1 MVP</span>
+      <span class="pill open">HL-beachhead — go</span>
+    </div>
+  </div>
+</section>
+
+<!-- sources -->
+<section id="sources" class="src">
+  <div class="wrap reveal">
+    <span class="sec-no">Источники · фактчек</span>
+    <h2 style="font-size:24px">Данные из 5 раундов веб-ресёрча (2025–2026)</h2>
+    <ol>
+      <li id="s1"><span class="num">1</span> Hummingbot Condor — open-source harness для quants/devs. <a href="https://hummingbot.org/blog/introducing-condor-the-open-source-harness-for-trading-agents/">hummingbot.org</a>; <a href="https://finestel.com/blog/hummingbot-review/">Finestel review 2026</a></li>
+      <li id="s2"><span class="num">2</span> MCP — 97M загрузок/мес, crypto-инфра. <a href="https://news.bitcoin.com/mcp-in-2026-97-million-downloads-and-growing-crypto-infrastructure-from-bitgo-to-coingecko/">Bitcoin.com News 2026</a></li>
+      <li id="s3"><span class="num">3</span> Binance AI Pro (бета, 03.2026). <a href="https://www.zawya.com/en/press-release/companies-news/binance-beta-launches-binance-ai-pro-bringing-ai-agentic-trading-to-users-hai6rpca">Zawya</a>; <a href="https://blog.kraken.com/news/industry-news/announcing-the-kraken-cli">Kraken CLI</a>; <a href="https://www.coindesk.com/tech/2026/03/03/okx-jumps-into-ai-agent-race-with-new-onchainos-toolkit">OKX OnchainOS, CoinDesk</a></li>
+      <li id="s4"><span class="num">4</span> ai16z class-action / коллапс. <a href="https://www.claimdepot.com/cases/ai16z-class-action-alleges-founders-faked-ai-agent-misled-investors-in-26b-crypto-scheme">ClaimDepot</a>; <a href="https://www.openaitoolshub.org/en/blog/ai-agent-crypto-tokens-guide">AIXBT, OpenAIToolsHub</a></li>
+      <li id="s5"><span class="num">5</span> 0xA1 — крипто behavioral-журнал. <a href="https://0xa1.ai/">0xa1.ai</a>; <a href="https://www.tradezella.com/zella-ai">TradeZella Zella AI</a></li>
+      <li id="s6"><span class="num">6</span> Hyperliquid 2025 metrics; 83.5% в минусе, 40% quit. <a href="https://cryptobriefing.com/hyperliquid-strong-growth-2025-revenue-metrics/">CryptoBriefing</a>; <a href="https://medium.com/@envyprotocol/i-analyzed-10-000-hyperliquid-traders-the-results-are-brutal-a29adcca8c2a">ENVY Protocol (10K traders)</a></li>
+      <li id="s7"><span class="num">7</span> TradesViz HL-native, журнальный WTP. <a href="https://www.tradesviz.com/brokers/Hyperliquid">TradesViz</a>; <a href="https://www.tradesviz.com/blog/state-of-journaling-2025/">State of Journaling 2025</a></li>
+      <li id="s8"><span class="num">8</span> Демография проп-аспирантов. <a href="https://statistics.ge/prop-firm-statistics/">statistics.ge</a>; <a href="https://www.tradersdna.com/prop-firm-challenges-explained-how-to-get-a-funded-trading-account-in-2026/">TradersDNA 2026</a></li>
+      <li id="s9"><span class="num">9</span> 90% провалов = дисциплина; 75% в 10 дней; PipFarm survey n=2,777. <a href="https://www.financemagnates.com/forex/analysis/60-of-prop-traders-juggle-multiple-firms-while-40-battle-mental-challenges-study-finds/">Finance Magnates</a>; <a href="https://velotrade.com/blog/why-traders-fail-prop-challenges">Velotrade</a></li>
+      <li id="s10"><span class="num">10</span> Fee-farming модель; My Forex Funds (CFTC); A-book vs B-book. <a href="https://axcera.io/blog/the-future-of-prop-trading-is-not-challenges-it-is-retention">Axcera (retention)</a>; <a href="https://veritaschain.org/blog/posts/2025-12-28-prop-trading-reckoning/">VeritasChain</a></li>
+      <li id="s11"><span class="num">11</span> CEX-проп backend = Bybit. <a href="https://www.hyrotrader.com/blog/bybit-prop-trading/">HyroTrader×Bybit</a>; <a href="https://www.financemagnates.com/forex/klein-funding-prop-firm-partners-with-worlds-third-largest-crypto-exchange/">Klein×Bybit</a></li>
+      <li id="s12"><span class="num">12</span> HL-native проп: SizeProp, Hypernova, Propr. <a href="https://www.theblock.co/press-releases/401892/sizeprop-raises-pre-seed-round-led-by-igloo-inc-to-build-the-infrastructure-for-crypto-prop-trading">SizeProp (The Block)</a>; <a href="https://cryptobriefing.com/hypernova-raises-3m-prop-trading-hyperliquid/">Hypernova</a>; <a href="https://proptradingvibes.com/state-of-prop-trading">State of Prop Q2 2026</a></li>
+    </ol>
+    <p class="sub">Цифры верны на дату ресёрча (май–июнь 2026); часть источников — пресс-релизы и отраслевые обзоры, не первичные аудиты. Прямых данных о пересечении Hyperliquid ↔ prop-challenge нет — вывод индуктивный (SizeProp как прямое доказательство существования сегмента).</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>Ernest · AI trading companion · внутренний стратегический документ</div>
+    <div>2026-06-01 · GTM_get_funded.md · tracker/ernest#48</div>
+  </div>
+</footer>
+
+<script>
+  // lightweight reveal-on-scroll
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
