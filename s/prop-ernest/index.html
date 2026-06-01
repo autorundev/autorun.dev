@@ -152,12 +152,47 @@
   .pill.dead{color:var(--red);border-color:rgba(214,92,82,.3)}
   .pill.open{color:var(--teal);border-color:rgba(70,184,154,.3)}
 
+  /* channels (ranked) */
+  .chan{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;padding:22px 24px;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:14px}
+  .chan .rk{font-family:var(--serif);font-size:30px;font-weight:600;color:var(--gold);line-height:1;min-width:30px}
+  .chan h3{font-size:17px}
+  .chan h3 .lev{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--teal);border:1px solid rgba(70,184,154,.3);border-radius:999px;padding:3px 8px;margin-left:10px;vertical-align:middle}
+  .chan p{font-size:14px;margin-top:8px;max-width:64ch}
+
+  /* viral loop */
+  .loop{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:30px;
+    padding:24px;border:1px solid var(--line2);border-radius:14px;
+    background:linear-gradient(135deg,rgba(70,184,154,.06),rgba(20,23,28,.4))}
+  .loopnode{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:13.5px;color:var(--txt)}
+  .loopnode b{color:var(--gold-soft);font-weight:650}
+  .looparr{color:var(--gold);font-family:var(--mono);font-size:15px}
+
+  /* phases */
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+  .phase{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;position:relative}
+  .phase .ph{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+  .phase h3{font-size:16px;margin-top:7px}
+  .phase p{font-size:13.5px;margin-top:8px}
+
+  /* kpi */
+  .kpi{margin-top:26px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .kpirow{display:grid;grid-template-columns:1fr 1.6fr;border-top:1px solid var(--line)}
+  .kpirow:first-child{border-top:none}
+  .kpirow>div{padding:12px 18px}
+  .kpirow>div:first-child{font-family:var(--mono);font-size:12px;color:var(--gold);letter-spacing:.04em;border-right:1px solid var(--line)}
+  .kpirow>div:last-child{font-size:14px;color:var(--txt2)}
+
   .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
   .reveal.in{opacity:1;transform:none}
 
   @media(max-width:820px){
     body{font-size:16px}
-    .g2,.g3,.g4,.feat,.versus{grid-template-columns:1fr}
+    .g2,.g3,.g4,.feat,.versus,.phases{grid-template-columns:1fr}
+    .kpirow{grid-template-columns:1fr}
+    .kpirow>div:first-child{border-right:none;border-bottom:1px solid var(--line)}
+    .chan{grid-template-columns:auto 1fr}
     .stats{grid-template-columns:repeat(2,1fr)}
     .strow{grid-template-columns:1fr}
     .strow>div{border-left:none;border-top:1px solid var(--line)}
@@ -407,9 +442,75 @@
 </section>
 
 <!-- 9 -->
+<section id="gtm">
+  <div class="wrap reveal">
+    <span class="sec-no">09 — Go-to-market · первые 100</span>
+    <h2>Продукт впереди, дистрибуция в нуле. Значит — занимай чужую воронку.</h2>
+    <p>Не строить аудиторию с нуля. ЦА уже агрегирована и уже платит за challenge'и — нужно встать в её поток. Три канала по убыванию leverage.</p>
+
+    <div class="chan">
+      <div class="rk">1</div>
+      <div>
+        <h3>Borrow the prop's funnel<span class="lev">самый тёплый</span></h3>
+        <p>SizeProp / Hypernova / Propr уже собрали ровно твою ЦА. Эрнест <strong>бесплатен их юзерам</strong> (readiness-read + training challenge), монетизируется downstream (Pass + affiliate + sub). Для пропа: выше pass-rate = лучше маркетинг + здоровее A-book. Это <strong>дистрибуционная сделка, не SaaS-продажа.</strong></p>
+      </div>
+    </div>
+    <div class="chan">
+      <div class="rk">2</div>
+      <div>
+        <h3>Founder-led X — honesty-as-marketing<span class="lev">компаундится</span></h3>
+        <p>Verified track record («три книги»). Behavioral teardown публичных HL-кошельков, data-треды («почему 83.5% в минусе»), reveal readiness-карточек, build-in-public. Виральная единица — shareable readiness card.</p>
+      </div>
+    </div>
+    <div class="chan">
+      <div class="rk">3</div>
+      <div>
+        <h3>Prop / HL комьюнити<span class="lev">high-intent</span></h3>
+        <p>Не спам — ценность: бесплатный readiness-read, teardown-треды, «прогнал бесплатный мок, вот что поймал». Хук: «бесплатный тренировочный challenge, который спасёт от слива $579 вслепую». r/propfirms крипто, HypurrCollective, Hyperliquid Daily.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:40px;font-size:18px">Виральная петля · 100 → 1000</h3>
+    <div class="loop">
+      <span class="loopnode">free readiness read</span>
+      <span class="looparr">→</span>
+      <span class="loopnode"><b>shareable card</b> (fingerprint, не P&L)</span>
+      <span class="looparr">→</span>
+      <span class="loopnode">пост в X</span>
+      <span class="looparr">→</span>
+      <span class="loopnode">другие хотят свою</span>
+      <span class="looparr">↺</span>
+    </div>
+    <p class="sub">После первых funded — <strong>«I got funded with Ernest» milestone card</strong> = сильнейшая единица: аспирационно, не стыдно. Каждый зафандившийся производит proof, рекрутящий N новых (K-factor).</p>
+
+    <h3 style="margin-top:40px;font-size:18px">Фазы</h3>
+    <div class="phases">
+      <div class="phase"><div class="ph">Phase 0 · pre-launch</div><h3>Инструментовать</h3><p>Free readiness-read (F1) + 1 training-challenge шаблон (F2+F3) + shareable card (F6). Подписан <strong>1 vetted проп-партнёр</strong> (SizeProp/Hypernova).</p></div>
+      <div class="phase"><div class="ph">Phase 1 · первые 20–30</div><h3>Валидировать гипотезу</h3><p>Seed через воронку партнёра + X-teardowns. Manual, high-touch. Цель — <strong>мок→real→pass→sub</strong>, не масштаб.</p></div>
+      <div class="phase"><div class="ph">Phase 2 · до 100</div><h3>Включить петлю</h3><p>Виральная петля карточек + комьюнити-присутствие + контент-каденс. Измерять конверсии и share-rate.</p></div>
+    </div>
+
+    <h3 style="margin-top:40px;font-size:18px">KPI воронки</h3>
+    <div class="kpi">
+      <div class="kpirow"><div>TOFU</div><div>readiness reads начато</div></div>
+      <div class="kpirow"><div>Activation</div><div>training challenges запущено</div></div>
+      <div class="kpirow"><div>Aha</div><div>% получивших real-time interrupt и подтвердивших его</div></div>
+      <div class="kpirow"><div>Conversion</div><div>% купивших Get-Funded Pass / взявших referral</div></div>
+      <div class="kpirow"><div>Outcome</div><div>% зафандившихся (proof + affiliate)</div></div>
+      <div class="kpirow"><div>Loop</div><div>share-rate карточки (K-factor)</div></div>
+      <div class="kpirow"><div>Retention</div><div>funded→subscription + D30</div></div>
+    </div>
+
+    <div class="callout">
+      <p>Связывающее ограничение — <strong>не рынок, а дистрибуция</strong>: зависимость от проп-партнёра (→ 2-3 vetted, не 1), медленный founder-контент (упирается в аппетит основателя), и cold-start самой петли (нужен живой продукт + первые победы для seed). Это нельзя нагуглить — только сделать.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 10 -->
 <section id="lines">
   <div class="wrap reveal">
-    <span class="sec-no">09 — Линии, которые нельзя пересекать</span>
+    <span class="sec-no">10 — Линии, которые нельзя пересекать</span>
     <h2>Без этих трёх линий Эрнест превращается в то, против чего создан.</h2>
     <div class="lines">
       <div class="line-item">
@@ -431,7 +532,7 @@
 <!-- 10 -->
 <section id="now">
   <div class="wrap reveal">
-    <span class="sec-no">10 — Где мы и что дальше</span>
+    <span class="sec-no">11 — Где мы и что дальше</span>
     <h2>Стратегия провалидирована насквозь. Дальше — исполнение.</h2>
     <p>Пять раундов ресёрча закрыли каждую несущую посылку:</p>
     <ul class="clean">
