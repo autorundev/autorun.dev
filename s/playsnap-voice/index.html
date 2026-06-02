@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Голос дроида — PlaySnap · вижн</title>
+<meta name="description" content="PlaySnap Droid Voice System: каждый дроид живой и звучит по-своему. Семейства, душа, поведение в матче, trio chemistry, экономика, лор. Концепт v1.1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'JBMono';src:url('/fonts/JetBrainsMono-Medium.woff2') format('woff2');font-weight:500;font-display:swap}
+  @font-face{font-family:'JBMono';src:url('/fonts/JetBrainsMono-ExtraBold.woff2') format('woff2');font-weight:800;font-display:swap}
+
+  :root{
+    --void:#07080c; --bg:#0a0c11; --surface:#11141b; --surface2:#171b24;
+    --line:#212634; --line2:#2d3442;
+    --txt:#edeff3; --txt2:#a9afbc; --muted:#6c7382;
+    --robot:#1ae3ff; --synth:#a974ff; --perc:#f2a93b; --vocal:#ff5fa2; --snap:#37e27a; --gold:#e7c56b;
+    --maxw:920px;
+    --sans:'Rubik',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --mono:'JBMono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{background:var(--void);color:var(--txt);font-family:var(--sans);
+    line-height:1.66;font-size:17.5px;letter-spacing:.002em;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:var(--robot);color:#001014}
+  a{color:var(--robot);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
+  section{padding:62px 0;border-top:1px solid var(--line)}
+
+  /* ── top bar ── */
+  .bar{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(7,8,12,.72);border-bottom:1px solid var(--line)}
+  .bar .wrap{display:flex;align-items:center;justify-content:space-between;height:54px}
+  .brand{font-family:var(--mono);font-weight:800;font-size:13px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--txt)}
+  .brand b{color:var(--robot)}
+  .barstatus{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);
+    border:1px solid var(--line2);border-radius:999px;padding:4px 11px}
+
+  /* ── hero ── */
+  .hero{position:relative;padding:66px 0 40px;text-align:center;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:-20% 0 0 0;pointer-events:none;
+    background:radial-gradient(720px 420px at 50% 8%,rgba(26,227,255,.13),transparent 62%),
+               radial-gradient(520px 360px at 78% 30%,rgba(169,116,255,.10),transparent 60%),
+               radial-gradient(480px 340px at 16% 36%,rgba(255,95,162,.07),transparent 60%)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--robot);margin-bottom:30px}
+  .soul-wrap{position:relative;width:230px;height:230px;margin:0 auto 38px}
+  #soul{width:230px;height:230px;display:block;border-radius:50%;
+    box-shadow:0 0 0 1px rgba(255,255,255,.07),0 24px 80px -20px rgba(26,227,255,.45),
+               0 0 120px -30px rgba(169,116,255,.5)}
+  h1{font-weight:700;font-size:clamp(40px,8vw,76px);line-height:1.02;letter-spacing:-.025em;
+    color:#fff;margin:0 auto;max-width:14ch}
+  h1 em{font-style:normal;
+    background:linear-gradient(100deg,var(--robot),var(--synth) 55%,var(--vocal));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .lede{font-size:clamp(18px,2.6vw,22px);color:var(--txt2);max-width:54ch;
+    margin:28px auto 0;line-height:1.55}
+  .chips{margin-top:34px;display:flex;flex-wrap:wrap;gap:9px;justify-content:center;
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--muted)}
+  .chips span{border:1px solid var(--line2);border-radius:999px;padding:6px 13px}
+  .chips .live{color:var(--snap);border-color:rgba(55,226,122,.35)}
+  .chips .warn{color:var(--perc);border-color:rgba(242,169,59,.35)}
+
+  /* ── headings ── */
+  .sec-no{font-family:var(--mono);font-size:12.5px;color:var(--robot);letter-spacing:.2em;
+    display:block;margin-bottom:14px}
+  h2{font-weight:700;font-size:clamp(26px,4.4vw,38px);line-height:1.12;letter-spacing:-.018em;
+    color:#fff;max-width:22ch}
+  h3{font-size:18px;font-weight:600;color:#fff;letter-spacing:-.01em;margin:0 0 4px}
+  p{color:var(--txt2);max-width:66ch;margin-top:17px}
+  p.lead{font-size:19.5px;color:var(--txt);max-width:60ch}
+  strong{color:var(--txt);font-weight:600}
+  em{color:#fff;font-style:italic}
+
+  /* ── pull quote ── */
+  .pull{margin:8px auto 0;max-width:60ch;text-align:center;
+    font-size:clamp(20px,3vw,27px);line-height:1.4;font-weight:500;color:#fff;letter-spacing:-.01em}
+  .pull .g{background:linear-gradient(100deg,var(--robot),var(--synth));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .quote-sec{text-align:center;background:
+     radial-gradient(600px 240px at 50% 50%,rgba(26,227,255,.06),transparent 70%)}
+
+  /* ── family cards ── */
+  .fam{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:30px}
+  .fcard{border:1px solid var(--line);border-radius:16px;padding:20px;background:var(--surface);
+    position:relative;overflow:hidden}
+  .fcard::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--c)}
+  .fcard .ico{width:34px;height:34px;border-radius:50%;margin-bottom:13px;
+    background:radial-gradient(circle at 38% 32%,var(--c),transparent 72%);
+    box-shadow:0 0 22px -2px var(--c)}
+  .fcard h3{color:var(--c)}
+  .fcard p{font-size:14.5px;margin-top:8px;color:var(--txt2);max-width:none}
+  .fcard .ref{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:11px;
+    letter-spacing:.04em}
+
+  /* ── param strip ── */
+  .params{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+    margin-top:28px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .pcell{background:var(--surface);padding:16px 16px 18px}
+  .pcell .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--robot)}
+  .pcell .v{font-size:14.5px;color:var(--txt2);margin-top:7px}
+
+  /* ── temper list ── */
+  .temper{margin-top:26px;display:flex;flex-direction:column;gap:0;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .trow{display:grid;grid-template-columns:130px 1fr;gap:18px;padding:15px 18px;
+    border-top:1px solid var(--line);background:var(--surface)}
+  .trow:first-child{border-top:none}
+  .trow .name{font-weight:700;color:#fff;font-size:15px;letter-spacing:.01em}
+  .trow .name small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--muted);
+    font-weight:500;letter-spacing:.08em;margin-top:3px;text-transform:uppercase}
+  .trow .d{color:var(--txt2);font-size:14.5px;line-height:1.55}
+
+  /* ── reactions grid ── */
+  .react{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:28px}
+  .rcard{border:1px solid var(--line);border-radius:13px;padding:15px 16px;background:var(--surface)}
+  .rcard .ev{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--snap);text-transform:uppercase}
+  .rcard .ev.cold{color:var(--robot)} .rcard .ev.hot{color:var(--vocal)} .rcard .ev.sad{color:var(--synth)}
+  .rcard p{font-size:14px;margin-top:8px;max-width:none}
+
+  /* ── generic two-col ── */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px 34px;margin-top:28px}
+  .cols .blk h3{margin-bottom:6px}
+  .cols .blk p{margin-top:8px;font-size:15px}
+
+  /* ── layers ── */
+  .layers{margin-top:28px;display:flex;flex-direction:column;gap:12px}
+  .layer{border:1px solid var(--line);border-left:3px solid var(--c);border-radius:0 13px 13px 0;
+    padding:16px 20px;background:var(--surface)}
+  .layer .n{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--c);text-transform:uppercase}
+  .layer h3{margin:6px 0 0}
+  .layer p{margin-top:6px;font-size:15px}
+
+  /* ── lore ── */
+  .lore{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .lcard{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--surface)}
+  .lcard b{color:#fff;font-weight:600}
+  .lcard p{margin-top:6px;font-size:14.5px}
+
+  /* ── status ── */
+  .status{background:linear-gradient(180deg,rgba(242,169,59,.05),transparent);}
+  .statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:26px}
+  .stat{border:1px solid var(--line);border-radius:13px;padding:16px;background:var(--surface)}
+  .stat .s{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .stat .b{font-weight:600;color:#fff;margin-top:7px;font-size:15px}
+  .stat .b.ok{color:var(--snap)} .stat .b.no{color:var(--vocal)} .stat .b.hid{color:var(--perc)}
+
+  /* ── footer ── */
+  footer{border-top:1px solid var(--line);padding:54px 0 70px;text-align:center}
+  .fline{font-size:clamp(19px,3vw,26px);font-weight:500;color:#fff;letter-spacing:-.01em}
+  .fline .g{background:linear-gradient(100deg,var(--robot),var(--synth));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .fmeta{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:22px;line-height:1.9;letter-spacing:.03em}
+
+  @media(max-width:620px){
+    .cols{grid-template-columns:1fr}
+    .trow{grid-template-columns:1fr;gap:6px}
+    section{padding:48px 0}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="wrap">
+  <div class="brand">Play<b>Snap</b> · Droid Voice</div>
+  <div class="barstatus">вижн · v1.1</div>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">PlaySnap · Droid Voice System</div>
+  <div class="soul-wrap"><canvas id="soul" width="230" height="230" aria-label="Душа дроида"></canvas></div>
+  <h1>Твой дроид — <em>живой</em>.</h1>
+  <p class="lede">У него есть голос, характер и душа. Он пиликает, поёт, кричит и грустит. Два дроида не звучат одинаково — как два человека не говорят одним голосом.</p>
+  <div class="chips">
+    <span>Концепт v1.1</span>
+    <span class="live">R&D-проверено · 8 прототипов</span>
+    <span class="warn">ещё не в игре</span>
+  </div>
+</div></header>
+
+<section class="quote-sec"><div class="wrap">
+  <p class="pull">На поле ты видишь диск. Но это не фишка — это маленький круглый робот со своей личностью.<br><span class="g">Snap — момент, когда твой дроид кричит.</span></p>
+</div></section>
+
+<section><div class="wrap">
+  <span class="sec-no">01 — Одна идея</span>
+  <h2>Звук — это не SFX. Это характер.</h2>
+  <p class="lead">PlaySnap назван в честь звука. Snap без звука — оксюморон. Поэтому косметика здесь не визуальная, а <strong>звуковая</strong>: у каждого игрока — свой голос дроида, и его слышно.</p>
+  <p>Шесть дисков на поле, матч за полторы минуты, пять голов. В этой каше ты <em>узнаёшь, кто ударил</em> — не по иконке, не по цвету, а по звуку. «Это snap Артёма, я знаю его bell-тембр». Голос — это идентичность, которую невозможно подделать и нельзя купить «сильнее»: только своя.</p>
+</div></section>
+
+<section><div class="wrap">
+  <span class="sec-no">02 — Из чего собран голос</span>
+  <h2>Шесть генов, и ни один не влияет на геймплей.</h2>
+  <p>Голос дроида — это набор параметров. Вместе они дают неповторимый тембр, мелодию и манеру. Базовый характер задаёт <strong>семейство</strong>:</p>
+
+  <div class="fam">
+    <div class="fcard" style="--c:var(--robot)"><div class="ico"></div>
+      <h3>ROBOT</h3>
+      <p>Короткие отрывистые звуки с portamento. Пиликает, свистит, трещит. Как R2D2, BB-8, WALL-E. Суетливый, энергичный.</p>
+      <div class="ref">R2-D2 → BB-8 → WALL-E</div>
+    </div>
+    <div class="fcard" style="--c:var(--synth)"><div class="ico"></div>
+      <h3>SYNTH</h3>
+      <p>Длинные плавные ноты с pad-хвостами. Напевает, тянет. Как синтезаторы Blade Runner и Tron. Задумчивый, меланхоличный.</p>
+      <div class="ref">BLADE · TRON · DREAM</div>
+    </div>
+    <div class="fcard" style="--c:var(--perc)"><div class="ico"></div>
+      <h3>PERC</h3>
+      <p>Металлические щелчки, тональные удары. Не мелодия, а ритм-машина. Чёткий, жёсткий, механический.</p>
+      <div class="ref">CLICK · BELL · METAL</div>
+    </div>
+    <div class="fcard" style="--c:var(--vocal)"><div class="ico"></div>
+      <h3>VOCAL</h3>
+      <p>Формантный синтез, гласные звуки. Дроид буквально «поёт» и «говорит». Как EVE. Мелодичный, тёплый, почти человечный.</p>
+      <div class="ref">HUM · CHOIR · ALIEN</div>
+    </div>
+  </div>
+
+  <div class="params">
+    <div class="pcell"><div class="k">Variant</div><div class="v">Оттенок внутри семейства — осциллятор и envelope.</div></div>
+    <div class="pcell"><div class="k">Motif</div><div class="v">Фирменная фраза: 4 интервала в пентатонике. Рисунок snap-крика.</div></div>
+    <div class="pcell"><div class="k">Pulse</div><div class="v">Ритм из 8 шагов: как часто дроид «болтает».</div></div>
+    <div class="pcell"><div class="k">Drift</div><div class="v">Манера мелодии: rise / fall / wave / flat / jump.</div></div>
+  </div>
+
+  <h2 style="margin-top:46px;font-size:clamp(22px,3.4vw,28px)">Темперамент — мета-ген поверх всех.</h2>
+  <p>Не отдельный звук, а то, <em>как</em> дроид пользуется голосом. Меняет характер целиком — один и тот же гол звучит у каждого по-своему.</p>
+  <div class="temper">
+    <div class="trow"><div class="name">SHOWMAN<small>экстраверт</small></div><div class="d">Болтливый, громкий, мелодичный. Не может молчать. Snap — развёрнутая ария, гол — праздник на полминуты.</div></div>
+    <div class="trow"><div class="name">SIDEKICK<small>дружелюбный</small></div><div class="d">Отзывчивый, мягкий, всегда вторит тиммейтам. Лучший в DUO — его call/response самый чёткий. Идеальный напарник.</div></div>
+    <div class="trow"><div class="name">THINKER<small>аналитик</small></div><div class="d">Сухой, точный, минималистичный. Мало нот, но каждая на месте. Snap — один чёткий звук, никаких украшений.</div></div>
+    <div class="trow"><div class="name">GREMLIN<small>хаотик</small></div><div class="d">Непредсказуемый, игривый. Рандомизация всего — каждый snap чуть другой. Наслаждается столкновением.</div></div>
+    <div class="trow"><div class="name">GHOST<small>интроверт</small></div><div class="d">Тихий, почти незаметный, но с глубиной. Длинные паузы, усиленный reverb. Раскрывается только на голе.</div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <span class="sec-no">03 — Душа дроида</span>
+  <h2>То, как он выглядит изнутри.</h2>
+  <p class="lead">Если голос — это как дроид <em>звучит</em>, то душа — как он <em>выглядит изнутри</em>. Каждый параметр голоса рисует себя сам (та живая штука над заголовком — она и есть).</p>
+  <div class="cols">
+    <div class="blk"><h3>Форма ← Motif</h3><p>Органический blob из 64 точек. Cheerful-мотив → мягкая симметрия, wild → острая асимметрия.</p></div>
+    <div class="blk"><h3>Цвет ← Voice</h3><p>Три оттенка, перетекающие друг в друга. Холодные синие у BELL, тёплые красные у WARM. Цвет души = цвет характера.</p></div>
+    <div class="blk"><h3>Кольцо ← Pulse</h3><p>Светящиеся arc-сегменты. Плотный пульс — почти замкнутое кольцо. Это «сердцебиение» дроида.</p></div>
+    <div class="blk"><h3>Движение ← Drift</h3><p>Rise парит, fall покачивается, wave дышит, flat вращается, jump дёргается.</p></div>
+    <div class="blk"><h3>Энергетика ← Temper</h3><p>Интенсивность всего: SHOWMAN — ярко и быстро, GHOST — полупрозрачно и медленно, как дым.</p></div>
+    <div class="blk"><h3>Корпус ← стекло</h3><p>Душа живёт за линзой (Liquid Glass) и преломляется ей. «Заглянуть внутрь» — через карточку профиля.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <span class="sec-no">04 — Голос в матче</span>
+  <h2>Два слоя: фон, который дышит, и события, которые кричат.</h2>
+  <p><strong>Ambient Engine</strong> — непрерывный нижний слой. Pad-аккорды и лёгкий ритм, управляемые <em>сглаженной</em> интенсивностью (расстояние шайбы от центра). У центра спокойно (BPM 92), у ворот напряжённо (BPM 130). Никаких рывков — фон плавно догоняет игру.</p>
+  <p><strong>Event Engine</strong> — дискретный верхний слой. Каждое событие озвучивается голосом дроида-участника:</p>
+  <div class="react">
+    <div class="rcard"><div class="ev cold">IDLE</div><p>Тихо мурлычет, редкие ноты. Ждёт.</p></div>
+    <div class="rcard"><div class="ev cold">MOVE</div><p>Болтает на ходу. Весело бежит.</p></div>
+    <div class="rcard"><div class="ev hot">SPRINT</div><p>Восходящий визг, нарастающий темп. Возбуждён.</p></div>
+    <div class="rcard"><div class="ev hot">SNAP</div><p>Мотив сжат в 200мс — фирменный крик. Его подпись.</p></div>
+    <div class="rcard"><div class="ev">PASS</div><p>Окликает тиммейта → тот отвечает. Call &amp; response.</p></div>
+    <div class="rcard"><div class="ev sad">CLASH</div><p>Дрожит, заикается. Два голоса сталкиваются.</p></div>
+    <div class="rcard"><div class="ev hot">GOAL</div><p>Восходящий каскад из 8 нот. Визжит от счастья.</p></div>
+    <div class="rcard"><div class="ev sad">CONCEDE</div><p>Нисходящая грустная фраза. Свистит печально.</p></div>
+  </div>
+  <div class="cols" style="margin-top:30px">
+    <div class="blk"><h3>Voice Budget</h3><p>Максимум 2–3 голоса разом. Владелец шайбы «говорит», ближайший «слушает» эхом, остальные молчат до события. Как микрофон на конференции.</p></div>
+    <div class="blk"><h3>Масштабируемые голы</h3><p>Первый за 10 секунд — полный каскад, «ГООООЛ!». Пятый за минуту — короткий кивок. Как живой комментатор.</p></div>
+    <div class="blk"><h3>DUO / CLASH / SYNC</h3><p>Тиммейты рядом — переговариваются. Противники у шайбы — спорят (диссонанс). Двое в атаке — поют хором.</p></div>
+    <div class="blk"><h3>Темперамент решает</h3><p>Один GOAL: у SHOWMAN — 8 нот с вибрато, у THINKER — один аккорд и тишина, у GHOST — эхо на 3 секунды. Событие одно, характер разный.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <span class="sec-no">05 — Trio Chemistry</span>
+  <h2>Хорошая тройка не просто играет вместе — она звучит вместе.</h2>
+  <p>3v3 значит три дроида в команде. Их совместимость считается из параметров голоса — и влияет <strong>только на звук</strong>, никогда на скорость или силу. Принцип no pay-to-win нерушим.</p>
+  <div class="cols">
+    <div class="blk"><h3>Регистровый баланс</h3><p>Идеал — бас + середина + верх. Три дроида в одном регистре перебивают друг друга.</p></div>
+    <div class="blk"><h3>Комплементарность пульсов</h3><p>Три пульса должны покрыть все 8 шагов — тогда грув плотный и цельный.</p></div>
+    <div class="blk"><h3>Тембральное разнообразие</h3><p>ROBOT + SYNTH + VOCAL звучит богаче, чем три одинаковых семейства.</p></div>
+    <div class="blk"><h3>Совместимость характеров</h3><p>SHOWMAN + SIDEKICK + любой = золото. Три SHOWMAN = хаос. SIDEKICK адаптируется и поднимает score.</p></div>
+  </div>
+  <p style="margin-top:24px">Высокий chemistry: пасы «звенят», совместные snap-ы складываются в аккорд, фон раскладывается на три чистых слоя. И социальный эффект — <em>«нам нужен VOCAL в low register»</em> — это повод искать и звать друзей с правильными голосами.</p>
+</div></section>
+
+<section><div class="wrap">
+  <span class="sec-no">06 — Экономика</span>
+  <h2>Один дроид навсегда. Монетизация — как он звучит, не замена его.</h2>
+  <p>Стартовый дроид выдаётся при регистрации — случайный, но гармоничный (пентатоника гарантирует). Дальше голос растёт вместе с игроком:</p>
+  <div class="cols">
+    <div class="blk"><h3>Прогрессия игрой</h3><p>Новые Variant и Family за победы и достижения, фрагменты мотива в дроп, редкий Drift за стрик, темперамент за веху. Каждый анлок меняет и звук, и душу.</p></div>
+    <div class="blk"><h3>Telegram Stars</h3><p>Дизайнерские паки: Tron, Lo-Fi, Aggro, сезонные. 50–250★ за тройку голосов. Платный дроид не «лучше» — он <em>иначе</em>.</p></div>
+    <div class="blk"><h3>Telegram Gifts</h3><p>Голос — живой подарок: анимированная душа + 3-секундное аудио-превью. Получил → экипировал → звучишь по-новому.</p></div>
+    <div class="blk"><h3>Торговля</h3><p>Маркетплейс в боте, обмен через Gift API. Без блокчейна и кошельков. Редкость: дроп < крафт < турнир < сезон < Founder.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <span class="sec-no">07 — Вирусность</span>
+  <h2>Каждый звук хочется показать.</h2>
+  <div class="cols">
+    <div class="blk"><h3>Matchtone</h3><p>Каждый матч генерит уникальный саундтрек из 6 голосов. Звуковой слепок момента, невоспроизводимый дважды — скачай и расшарь.</p></div>
+    <div class="blk"><h3>Snap Card</h3><p>На perfect snap — мгновенная карточка: душа дроида + его крик. «Послушай этот snap».</p></div>
+    <div class="blk"><h3>«Собери трио»</h3><p>Неполная тройка — главный триггер инвайта. Структурный K-фактор: каждый <em>должен</em> привести двоих.</p></div>
+    <div class="blk"><h3>Мемогенерация</h3><p>Talk Pad, Draw Melody, текст-в-речь: набери <span style="font-family:var(--mono);color:var(--robot)">GoAL_GoAL</span> на R2D2, запиши, кинь в чат. Каждый мем — ссылка на бота.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <span class="sec-no">08 — Три слоя глубины</span>
+  <h2>Для 90% это просто хоккей. Остальное — опционально.</h2>
+  <div class="layers">
+    <div class="layer" style="--c:var(--robot)"><div class="n">Слой 1</div><h3>Просто играй</h3><p>Музыка работает сама, дефолтный дроид звучит хорошо. Ты даже не знаешь про голосовую систему — и тебе кайфово.</p></div>
+    <div class="layer" style="--c:var(--synth)"><div class="n">Слой 2</div><h3>Настрой своего</h3><p>Зашёл в редактор, покрутил параметры, нашёл «свой» snap. Или нарисовал мелодию, или набрал фразу. 5 минут, один раз — и дроид твой.</p></div>
+    <div class="layer" style="--c:var(--vocal)"><div class="n">Слой 3</div><h3>Оптимизируй трио</h3><p>Подбираешь голоса под тиммейтов, мониторишь chemistry, трейдишь и коллекционируешь редких. Для хардкора.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <span class="sec-no">09 — Лор</span>
+  <h2>У дроидов есть внутренняя логика.</h2>
+  <div class="lore">
+    <div class="lcard"><b>Диск = корпус.</b><p>Круглый, как BB-8. Катится, сталкивается, бьёт. Физическое тело.</p></div>
+    <div class="lcard"><b>Голос = язык.</b><p>Не слова — пиликание, свист, пение. Игроки учатся узнавать «речь» тиммейтов.</p></div>
+    <div class="lcard"><b>Душа = внутренний мир.</b><p>Органическая форма с переливами — то, что внутри корпуса.</p></div>
+    <div class="lcard"><b>Snap = крик.</b><p>Момент идеального удара — максимум характера. Поэтому snap у каждого свой.</p></div>
+    <div class="lcard"><b>Темперамент = личность.</b><p>Не что говорит, а как живёт. Его нельзя «надеть» как скин — он меняет всё.</p></div>
+    <div class="lcard"><b>Шайба = общий объект.</b><p>Не живая. Центр, вокруг которого дроиды ведут свою «беседу».</p></div>
+  </div>
+</div></section>
+
+<section class="status"><div class="wrap">
+  <span class="sec-no">10 — Где это сейчас</span>
+  <h2>Честно: это вижн, а не релиз.</h2>
+  <p class="lead">Концепт зрелый и проверенный в R&D — но в игре голоса пока нет. И это <em>осознанно</em>: пообещать голос и не дать услышать — самый дорогой первый провал для F2P. Поэтому из текстов бота и онбординга упоминания убраны до релиза.</p>
+  <div class="statgrid">
+    <div class="stat"><div class="s">Концепт</div><div class="b ok">v1.1, 10 разделов</div></div>
+    <div class="stat"><div class="s">Прототипы</div><div class="b ok">8 рабочих (Tone.js)</div></div>
+    <div class="stat"><div class="s">В продукте</div><div class="b no">не реализован</div></div>
+    <div class="stat"><div class="s">В копи бота</div><div class="b hid">скрыт до релиза</div></div>
+    <div class="stat"><div class="s">Роль</div><div class="b">заявленный USP</div></div>
+    <div class="stat"><div class="s">Масштаб</div><div class="b">многоволновой эпик</div></div>
+  </div>
+  <p>Что построено в R&D: голос-конфигуратор, поле-как-инструмент, взаимодействие дроидов (DUO/CLASH/SYNC), визуализация души, двухслойный движок, 8 реакций, Talk Pad и формантная речь. Что впереди — синтез-движок на Tone.js, душа, слоты ДНК, экономика, и двухступенчатый coming-out, когда фича выйдет: «play your sound» возвращается как момент, не как «наконец-то выкатили».</p>
+</div></section>
+
+<footer><div class="wrap">
+  <p class="fline">Snap — это звук. PlaySnap — <span class="g">играй свой звук</span>. Голос дроида — твой звук.</p>
+  <p class="fmeta">PlaySnap · Droid Voice System — концепт-документ v1.1<br>сведено из размышлений и R&amp;D-прототипов, 2026 · внутренний вижн</p>
+</div></footer>
+
+<script>
+(function(){
+  var cv=document.getElementById('soul');
+  if(!cv) return;
+  var ctx=cv.getContext('2d');
+  var DPR=Math.min(window.devicePixelRatio||1,2);
+  function fit(){ var s=cv.clientWidth||230; cv.width=Math.round(s*DPR); cv.height=Math.round(s*DPR); }
+  fit(); window.addEventListener('resize',fit);
+
+  // family-coloured blobs orbiting + pulsing inside the lens
+  var blobs=[
+    {c:[26,227,255],  ph:0.0, sp:0.26, orb:0.34, r:0.46}, // robot
+    {c:[169,116,255], ph:2.1, sp:0.21, orb:0.30, r:0.42}, // synth
+    {c:[242,169,59],  ph:4.2, sp:0.17, orb:0.36, r:0.36}, // perc
+    {c:[255,95,162],  ph:1.0, sp:0.30, orb:0.28, r:0.34}, // vocal
+    {c:[55,226,122],  ph:3.3, sp:0.24, orb:0.24, r:0.30}  // snap accent
+  ];
+  var raf=0, running=false;
+  function frame(now){
+    if(!running) return;
+    var t=now/1000, R=cv.width/2;
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.save();
+    ctx.beginPath(); ctx.arc(R,R,R*0.97,0,Math.PI*2); ctx.clip();
+    ctx.fillStyle='#06070b'; ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.globalCompositeOperation='lighter';
+    for(var i=0;i<blobs.length;i++){
+      var b=blobs[i];
+      var cx=R+Math.sin(t*b.sp+b.ph)*R*b.orb;
+      var cy=R+Math.cos(t*b.sp*0.8+b.ph*1.3)*R*b.orb;
+      var rr=R*b.r*(1+0.22*Math.sin(t*b.sp*1.5+b.ph*2));
+      var g=ctx.createRadialGradient(cx,cy,0,cx,cy,rr);
+      g.addColorStop(0,'rgba('+b.c[0]+','+b.c[1]+','+b.c[2]+',0.50)');
+      g.addColorStop(1,'rgba('+b.c[0]+','+b.c[1]+','+b.c[2]+',0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,rr,0,Math.PI*2); ctx.fill();
+    }
+    // pulse ring (pulse gene)
+    ctx.globalCompositeOperation='source-over';
+    var pr=R*0.80, seg=8, gap=0.22;
+    for(var k=0;k<seg;k++){
+      var a0=k/seg*Math.PI*2 + t*0.15;
+      var lit=0.35+0.65*Math.max(0,Math.sin(t*2.2+k*0.8));
+      ctx.strokeStyle='rgba(26,227,255,'+(0.10+0.30*lit)+')';
+      ctx.lineWidth=R*0.022;
+      ctx.beginPath(); ctx.arc(R,R,pr,a0,a0+(Math.PI*2/seg)*(1-gap)); ctx.stroke();
+    }
+    // consciousness dot
+    var dr=R*0.05*(1+0.25*Math.sin(t*1.6));
+    var dg=ctx.createRadialGradient(R,R,0,R,R,dr*2.4);
+    dg.addColorStop(0,'rgba(255,255,255,0.95)'); dg.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=dg; ctx.beginPath(); ctx.arc(R,R,dr*2.4,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+    // glass rim
+    var rim=ctx.createLinearGradient(0,0,cv.width,cv.height);
+    rim.addColorStop(0,'rgba(255,255,255,0.55)'); rim.addColorStop(0.5,'rgba(255,255,255,0.04)'); rim.addColorStop(1,'rgba(255,255,255,0.30)');
+    ctx.strokeStyle=rim; ctx.lineWidth=R*0.03;
+    ctx.beginPath(); ctx.arc(R,R,R*0.97,0,Math.PI*2); ctx.stroke();
+    raf=requestAnimationFrame(frame);
+  }
+  function start(){ if(running) return; running=true; raf=requestAnimationFrame(frame); }
+  function stop(){ running=false; if(raf) cancelAnimationFrame(raf); raf=0; }
+  // run only while visible (perf + battery)
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ es[0].isIntersecting?start():stop(); },{threshold:0.05})
+      .observe(cv);
+  } else { start(); }
+  document.addEventListener('visibilitychange',function(){ document.hidden?stop():start(); });
+})();
+</script>
+</body>
+</html>
