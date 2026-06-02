@@ -88,6 +88,18 @@
   .quote-sec{text-align:center;background:
      radial-gradient(600px 240px at 50% 50%,rgba(26,227,255,.06),transparent 70%)}
 
+  /* ── cultural anchor callout ── */
+  .anchor{margin-top:32px;border:1px solid var(--line2);border-left:3px solid var(--vocal);
+    border-radius:0 16px 16px 0;padding:22px 24px;
+    background:linear-gradient(100deg,rgba(255,95,162,.07),var(--surface) 62%)}
+  .anchor .aeye{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--vocal);margin-bottom:11px}
+  .anchor h3{font-size:20px;margin:0 0 4px;letter-spacing:-.01em}
+  .anchor p{max-width:64ch}
+  .anchor .amini{font-size:15px;color:var(--muted);margin-top:12px}
+  .kbd{font-family:var(--mono);font-size:.86em;color:var(--robot);
+    background:rgba(26,227,255,.08);border:1px solid var(--line2);border-radius:6px;padding:1px 7px}
+
   /* ── family cards ── */
   .fam{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:30px}
   .fcard{border:1px solid var(--line);border-radius:16px;padding:20px;background:var(--surface);
@@ -196,6 +208,13 @@
   <h2>Звук — это не SFX. Это характер.</h2>
   <p class="lead">PlaySnap назван в честь звука. Snap без звука — оксюморон. Поэтому косметика здесь не визуальная, а <strong>звуковая</strong>: у каждого игрока — свой голос дроида, и его слышно.</p>
   <p>Шесть дисков на поле, матч за полторы минуты, пять голов. В этой каше ты <em>узнаёшь, кто ударил</em> — не по иконке, не по цвету, а по звуку. «Это snap Артёма, я знаю его bell-тембр». Голос — это идентичность, которую невозможно подделать и нельзя купить «сильнее»: только своя.</p>
+
+  <div class="anchor">
+    <div class="aeye">Культурный якорь · 2026</div>
+    <h3>Это уже сняли в кино — и оно работает.</h3>
+    <p>В «Project Hail Mary» каменный инопланетянин <strong>Рокки</strong> говорит музыкальными нотами: смысл и эмоция без единого слова — и становится самым любимым персонажем фильма. Это <em>ровно</em> тот звук, что вышел у нас в R&amp;D-прототипе формантной речи (<span class="kbd">disc-speaks</span>): голос как язык, характер как тембр. Не вдохновение — совпавший результат.</p>
+    <p class="amini">Разница одна: Рокки прописан вручную и звучит для всех одинаково. Дроид — генеративный, твой, навсегда, и он играет вместе с тобой. Кино доказало, что идея резонирует с миллионами. Осталось отгрузить.</p>
+  </div>
 </div></section>
 
 <section><div class="wrap">
@@ -221,7 +240,7 @@
     </div>
     <div class="fcard" style="--c:var(--vocal)"><div class="ico"></div>
       <h3>VOCAL</h3>
-      <p>Формантный синтез, гласные звуки. Дроид буквально «поёт» и «говорит». Как EVE. Мелодичный, тёплый, почти человечный.</p>
+      <p>Формантный синтез, гласные звуки. Дроид буквально «поёт» и «говорит». Как EVE — и как Рокки из «Project Hail Mary». Мелодичный, тёплый, почти человечный.</p>
       <div class="ref">HUM · CHOIR · ALIEN</div>
     </div>
   </div>
