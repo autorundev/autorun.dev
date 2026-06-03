@@ -126,7 +126,11 @@
     font-variant-ligatures:none;
     font-feature-settings:'liga' 0,'calt' 0;
     margin:0;
-    padding:calc(var(--lh)*2) max(1ch,4vw);
+    padding:calc(var(--lh)*2) max(1ch,4vw) 50vh;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:safe center;
     -webkit-font-smoothing:antialiased;
     transition:background .3s ease-out,color .3s ease-out;
   }
@@ -249,14 +253,10 @@ if (!isMobile) {
   });
 }
 function scrollToBottom() {
-  if (isMobile) {
-    // on iOS, keyboard covers bottom — scroll input above keyboard
-    const rect = inputLine.getBoundingClientRect();
-    const target = window.scrollY + rect.top - window.innerHeight * 0.55;
-    window.scrollTo(0, Math.max(0, target));
-  } else {
-    inputLine.scrollIntoView({block:'nearest'});
-  }
+  // keep the input around 40% from the top so there's free space below
+  const rect = inputLine.getBoundingClientRect();
+  const target = window.scrollY + rect.top - window.innerHeight * (isMobile ? 0.45 : 0.4);
+  window.scrollTo(0, Math.max(0, target));
 }
 function forceFollow() {
   isFollowing = true;
@@ -272,8 +272,27 @@ const bootLines = [
   {bootSequence: true},
   {html: '<div class="line"><span class="st st-presence">[:]</span> <span class="dim">agents online:</span> 3</div>', color: 'var(--fg-2)'},
   {html: '<div class="line"><span class="st st-presence">[:]</span> <span class="dim">type</span> <span class="cmd">help</span> <span class="dim">to see available commands.</span></div>', color: 'var(--fg-2)'},
+  {eggsCounter: true},
   {noType: true},
 ];
+
+// ── easter egg counter (live) ─────────────────────
+let eggsTotal = 57;
+const eggsFound = new Set(JSON.parse(localStorage.getItem('autorun-eggs') || '[]'));
+let eggsLineEl = null;
+
+function renderEggsLine() {
+  if (!eggsLineEl) return;
+  eggsLineEl.innerHTML = `<span class="st st-presence">[:]</span> <span class="dim">easter eggs:</span> ${eggsFound.size} / ${eggsTotal} <span class="dim">found</span>`;
+}
+
+// fetch real total in the background
+fetch('/api/stats').then(r => r.json()).then(d => {
+  if (d && typeof d.total === 'number') {
+    eggsTotal = d.total;
+    renderEggsLine();
+  }
+}).catch(() => {});
 
 async function renderBoot() {
   for (const line of bootLines) {
@@ -306,6 +325,30 @@ async function renderBoot() {
       // ok
       await sleep(reducedMotion ? 0 : 300);
       el.innerHTML = '<span class="st st-idle">[.]</span> <span class="dim">booting autorun.dev ...</span> <span class="st st-live">ok</span>';
+      if (isFollowing) scrollToBottom();
+      await sleep(LINE_PAUSE);
+      continue;
+    }
+    if (line.eggsCounter) {
+      const el = document.createElement('div');
+      el.className = 'line';
+      el.style.whiteSpace = 'pre-wrap';
+      el.style.color = 'var(--fg-2)';
+      term.insertBefore(el, inputLine);
+      const prefix = '[:] easter eggs: ';
+      for (const ch of prefix) {
+        el.textContent += ch;
+        if (isFollowing) scrollToBottom();
+        await sleep(CHAR_DELAY);
+      }
+      const tail = `${eggsFound.size} / ${eggsTotal} found`;
+      for (const ch of tail) {
+        el.textContent += ch;
+        if (isFollowing) scrollToBottom();
+        await sleep(CHAR_DELAY);
+      }
+      eggsLineEl = el;
+      renderEggsLine();
       if (isFollowing) scrollToBottom();
       await sleep(LINE_PAUSE);
       continue;
@@ -458,7 +501,7 @@ const commands = {
     '    who ship end-to-end - design, code, growth,\n' +
     '    ops.\n' +
     '&nbsp;\n' +
-    '    founder:  <span style="color:var(--fg-0)">anton frolov</span>\n' +
+    '    founder:  <span style="color:var(--fg-0)">anton</span>\n' +
     '              vibe coder (unironically)\n' +
     '&nbsp;\n' +
     '    crew:     engineers, designers, degens\n' +
@@ -687,6 +730,11 @@ input.addEventListener('keydown', async e => {
         await renderLines(backendData.lines);
       } else if (!backendData.effect) {
         renderNotFound(val);
+      }
+      if (backendData && backendData.isEgg && backendData.key && !eggsFound.has(backendData.key)) {
+        eggsFound.add(backendData.key);
+        try { localStorage.setItem('autorun-eggs', JSON.stringify([...eggsFound])); } catch {}
+        renderEggsLine();
       }
     } catch {
       renderNotFound(val);
@@ -1112,6 +1160,7 @@ async function fxReboot() {
 
   // clear everything except input line
   while (term.firstChild !== inputLine) term.removeChild(term.firstChild);
+  eggsLineEl = null;
   inputLine.classList.add('hidden');
   window.scrollTo(0, 0);
   isFollowing = true;

@@ -1,0 +1,367 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Roller Odds8</title><link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;0,7..72,700;1,7..72,400;1,7..72,500;1,7..72,600&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;color:#cfcfcf;font-family:'IBM Plex Sans',-apple-system,sans-serif;font-size:18px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:0 32px}
+section{padding:90px 0;border-bottom:1px solid #1f1f1f}
+section.hero{padding:140px 0 110px;border-bottom:1px solid #2a2a2a}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#e8712a;margin-bottom:28px}
+h1{font-family:'Literata',Georgia,serif;font-weight:600;font-size:60px;line-height:1;letter-spacing:-.03em;color:#f5f5f5;margin-bottom:28px}
+h1 em{font-style:italic;color:#e8a878}
+.hero-sub{font-family:'Literata',Georgia,serif;font-style:italic;font-size:24px;line-height:1.45;color:#b8b0a0;max-width:720px;font-weight:400}
+h2{font-family:'Literata',Georgia,serif;font-weight:600;font-size:38px;line-height:1.15;letter-spacing:-.02em;color:#f5f5f5;margin-bottom:32px;max-width:720px}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:#e8712a;letter-spacing:.2em;margin-bottom:20px;text-transform:uppercase}
+p{margin-bottom:20px;max-width:720px}
+strong{font-weight:600;color:#f5f5f5}
+em{font-style:italic;color:#c4875a}
+code{font-family:'JetBrains Mono',monospace;font-size:.88em;color:#e8a878;background:#1a1a1a;padding:2px 6px;border-radius:3px}
+.big-line{font-family:'Literata',Georgia,serif;font-size:30px;line-height:1.4;color:#f0e8dc;font-weight:500;letter-spacing:-.01em;max-width:820px}
+.big-line em{font-style:italic;color:#e8a878}
+.grid4{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:44px}
+.card{background:#181716;border:1px solid #2a2826;border-radius:8px;padding:22px 24px;transition:border-color .2s}
+.card:hover{border-color:#3a3530}
+.card .n{font-family:'JetBrains Mono',monospace;font-size:11px;color:#e8712a;letter-spacing:.15em;margin-bottom:12px}
+.card h3{font-family:'Literata',Georgia,serif;font-weight:600;font-size:20px;color:#f5f5f5;margin-bottom:8px;letter-spacing:-.01em}
+.card .why{color:#b8b0a0;font-size:14px;margin-bottom:12px;line-height:1.5}
+.card .what{color:#e8e8e8;font-size:14px;line-height:1.5;padding-top:12px;border-top:1px solid #26241f}
+svg.blocks-diagram{display:block;margin:40px 0 28px;max-width:100%;height:auto}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:36px}
+.mode{background:#181716;border:1px solid #2a2826;border-radius:8px;padding:24px 28px}
+.mode .tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:#e8712a;letter-spacing:.1em;margin-bottom:10px}
+.mode h4{font-family:'Literata',Georgia,serif;font-size:22px;color:#f5f5f5;margin-bottom:14px;font-weight:600}
+.mode dl{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:14px;color:#b8b0a0}
+.mode dt{color:#777;font-family:'JetBrains Mono',monospace;font-size:12px}
+.mode dd{color:#e4e4e4}
+svg.vault-flow,svg.exit-flow{display:block;margin:36px auto;max-width:100%;height:auto}
+table{width:100%;border-collapse:collapse;margin-top:32px;font-size:15px}
+th{text-align:left;padding:14px 20px;border-bottom:1px solid #2a2826;color:#888;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+td{padding:16px 20px;border-bottom:1px solid #1f1e1c;color:#d8d4c8}
+td:first-child{color:#f5f5f5;font-weight:500}
+td.accent{color:#e8a878;font-family:'JetBrains Mono',monospace;font-size:13px}
+.unique{list-style:none;padding:0;margin-top:28px}
+.unique li{padding:18px 0;border-bottom:1px solid #1f1f1f;display:flex;gap:24px;align-items:baseline}
+.unique li:last-child{border-bottom:none}
+.unique .num{font-family:'JetBrains Mono',monospace;font-size:11px;color:#e8712a;letter-spacing:.15em;flex-shrink:0;min-width:36px}
+.unique .txt{color:#e4e4e4;font-size:17px;line-height:1.55}
+.unique .txt strong{color:#f5f5f5}
+.tech{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px}
+.tech-item{background:#181716;border:1px solid #2a2826;border-radius:6px;padding:18px 20px}
+.tech-item .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:#666;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.tech-item .val{color:#e8a878;font-family:'JetBrains Mono',monospace;font-size:14px}
+footer{padding:70px 0 90px;text-align:center}
+@media(max-width:760px){
+.wrap{padding:0 22px}
+section{padding:56px 0}
+section.hero{padding:80px 0 60px}
+h1{font-size:44px}
+.hero-sub{font-size:19px}
+h2{font-size:28px;margin-bottom:22px}
+.big-line{font-size:22px}
+.grid4,.modes,.tech{grid-template-columns:1fr}
+.tech{grid-template-columns:1fr 1fr}
+table{font-size:14px}
+th,td{padding:12px 14px}
+body{font-size:17px}
+}
+
+@media(max-width:720px){}
+
+table.compare{font-size:14px}
+table.compare th{font-size:10px;padding:14px 10px;text-align:center}
+table.compare th:first-child{text-align:left}
+table.compare td{padding:14px 10px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:20px}
+table.compare td:first-child{text-align:left;font-family:'IBM Plex Sans',sans-serif;font-size:14px;color:#e4e4e4;font-weight:500}
+table.compare td.yes{color:#6fbd8f;font-weight:500}
+table.compare td.no{color:#555}
+table.compare td.partial{color:#c4875a;font-size:11px;font-family:'IBM Plex Sans',sans-serif;font-style:italic}
+table.compare tbody tr:nth-child(even){background:#14131290}
+ol.steps{list-style:none;padding:0;margin-top:32px;counter-reset:step}
+ol.steps li{display:flex;gap:24px;padding:22px 0;border-bottom:1px solid #1f1f1f;align-items:flex-start}
+ol.steps li:last-child{border-bottom:none}
+ol.steps .st{font-family:'JetBrains Mono',monospace;font-size:11px;color:#e8712a;letter-spacing:.15em;min-width:36px;flex-shrink:0;padding-top:4px}
+ol.steps li div{color:#d8d4c8;font-size:16px;line-height:1.6;max-width:720px}
+ol.steps li strong{color:#f5f5f5}
+@media(max-width:760px){table.compare{font-size:11px}table.compare th,table.compare td{padding:8px 6px}ol.steps li{gap:14px}ol.steps li div{font-size:15px}}
+
+@media(min-width:860px){}
+.editor-note{font-family:'Literata',Georgia,serif;font-style:italic;font-size:15px;color:#888;line-height:1.6;margin-top:28px;padding:16px 20px;background:#16151360;border-left:2px solid #3a3530;max-width:720px;border-radius:0 4px 4px 0}
+@media(max-width:760px){.editor-note{font-size:14px;padding:14px 16px}}
+
+.back-cta{margin:0 auto;display:block;max-width:760px}
+.cta-btn{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;column-gap:24px;row-gap:4px;align-items:center;padding:26px 32px;background:linear-gradient(135deg,#1a1917 0%,#161412 100%);border:1px solid #3a3530;border-radius:10px;text-decoration:none;transition:all .25s ease;position:relative;overflow:hidden}
+.cta-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(232,113,42,.08),transparent 60%);opacity:0;transition:opacity .25s}
+.cta-btn:hover{border-color:#e8712a;transform:translateY(-2px);box-shadow:0 12px 32px -12px rgba(232,113,42,.25)}
+.cta-btn:hover::before{opacity:1}
+.cta-btn:hover .cta-arr{color:#ffaa70}
+@media(max-width:720px){.cta-btn{padding:22px 24px;column-gap:16px}.cta-label{font-size:20px}.cta-sub{font-size:12px}.cta-arr{font-size:24px}}
+
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:40px 0}
+.cmp{background:#181716;border:1px solid #2a2826;border-radius:8px;padding:24px 26px;transition:border-color .2s}
+.cmp:hover{border-color:#3a3530}
+.cmp-dim{font-family:'JetBrains Mono',monospace;font-size:11px;color:#e8712a;letter-spacing:.15em;margin-bottom:18px;text-transform:uppercase;font-weight:500}
+.cmp-row{font-size:14px;line-height:1.6;color:#d0d0c8;padding:14px 0;border-top:1px solid #26241f}
+.cmp-row:first-of-type{border-top:none;padding-top:0}
+.cmp-label{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:#888;letter-spacing:.1em;margin-bottom:8px;text-transform:uppercase;font-weight:500}
+.sub-h{font-family:'Literata',Georgia,serif;font-weight:600;font-size:22px;color:#f5f5f5;margin:40px 0 18px;letter-spacing:-.01em;max-width:720px}
+@media(max-width:760px){.cmp-grid{grid-template-columns:1fr}.cmp{padding:20px 22px}.cmp-row{font-size:13px}}
+
+.hero-meta{margin-top:36px;border-left:1px solid #2a2826;padding:4px 0 4px 24px;display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;max-width:360px}
+.hero-meta dt{color:#666;text-transform:uppercase;letter-spacing:.12em;font-size:10px;align-self:center}
+.hero-meta dd{color:#c4875a;letter-spacing:.02em}
+
+.cta-label{font-family:'Literata',Georgia,serif;font-size:24px;font-weight:600;color:#f5f5f5;letter-spacing:-.015em;position:relative;z-index:1}
+.cta-sub{font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:#888;position:relative;z-index:1}
+.cta-arr{font-family:'IBM Plex Sans',sans-serif;font-size:28px;color:#e8712a;font-weight:300;align-self:center;transition:all .25s;position:relative;z-index:1}
+.cta-btn:not(.back){grid-template-columns:1fr auto}
+.cta-btn:not(.back) .cta-label{grid-column:1;grid-row:1}
+.cta-btn:not(.back) .cta-sub{grid-column:1;grid-row:2}
+.cta-btn:not(.back) .cta-arr{grid-column:2;grid-row:1/3}
+.cta-btn.back{grid-template-columns:auto 1fr}
+.cta-btn.back .cta-arr{grid-column:1;grid-row:1/3}
+.cta-btn.back .cta-label{grid-column:2;grid-row:1}
+.cta-btn.back .cta-sub{grid-column:2;grid-row:2}
+.cta-btn.back:hover{transform:translateY(-2px) translateX(-2px);border-color:#e8712a}
+.cta-btn.back:hover .cta-arr{transform:translateX(-6px);color:#ffaa70}
+::selection{background:#e8712a;color:#111}
+</style></head><body>
+
+<section class="hero"><div class="wrap">
+<div class="kicker">Антон Фролов · апрель 2026 · продуктовое описание · черновик</div>
+<h1>Roller <em>Odds8</em></h1>
+<p class="hero-sub">Двухсегментный on-chain prediction market на Solana и BSC. Fast mode для дофаминовых ставок, trader mode для осознанного прогнозного трейдинга, общий vault для LP и маркет-мейкеров.</p>
+</div></section>
+
+
+
+<section><div class="wrap">
+<div class="sec-num">01 · Аудитории</div>
+<h2>Четыре группы, одна инфраструктура</h2>
+<p>Продукт работает одновременно для четырёх непересекающихся сегментов. У каждого свой мотив входа, свой способ монетизации, своя метрика успеха. Общая у них только инфраструктура&nbsp;— контракт, оракул, vault, UI.</p>
+<div class="grid4">
+<div class="card"><div class="n">01 · GAMBLER</div><h3>Гэмблер</h3><p class="why">Приходит за дофаминовым циклом&nbsp;— быстрые ставки, мгновенный результат, минимум трения.</p><p class="what">Получает fast mode: 30-секундные блоки, session keys без подтверждений, тап-тап-тап. Паритет UX как у бинарных опционов, но on-chain.</p></div>
+<div class="card"><div class="n">02 · TRADER</div><h3>Трейдер</h3><p class="why">Приходит за осознанным прогнозом&nbsp;— фиксированный payout, возможность выйти раньше, параллельные позиции.</p><p class="what">Получает trader mode: 5–15-минутные блоки, живой P&L, ранний выход через P2P или vault. Этого нет больше нигде на on-chain.</p></div>
+<div class="card"><div class="n">03 · LP</div><h3>Поставщик ликвидности</h3><p class="why">Приходит за real yield&nbsp;— реальная доходность из комиссий и P&L против лузеров, без эмиссии токенов.</p><p class="what">Кладёт SOL в vault, получает lp-токен, видит breakdown доходности. В любой момент выход.</p></div>
+<div class="card"><div class="n">04 · BOT</div><h3>Маркет-мейкер</h3><p class="why">Приходит за предсказуемым edge&nbsp;— детерминированные формулы, permissionless crank, maker rebate.</p><p class="what">Арбитражит перекосы блоков, балансирует стороны, собирает ребейты. Снимает направленный риск с vault'а.</p></div>
+</div>
+<p class="editor-note">Четыре группы не пересекаются по мотиву, но пересекаются по инфраструктуре. Один контракт монетизируется четырьмя независимыми потоками&nbsp;— в этом экономика продукта.</p>
+</div></section>
+
+<section><div class="wrap">
+<div class="sec-num">02 · Rolling-блоки</div>
+<h2>Блоки идут нахлёстом</h2>
+<p>Новый блок стартует непрерывно, с фиксированным интервалом. Окно сбора ставок&nbsp;— короткая первая часть блока, экспирация&nbsp;— всё остальное. Поскольку окно сбора короче полной длительности, <strong>блоки живут параллельно друг с другом</strong>: пока один только открылся для ставок, следующий уже в середине экспирации, а третий вот-вот закроется.</p>
+<svg class="blocks-diagram" viewBox="0 0 900 290" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="bet2" x1="0" x2="1"><stop offset="0" stop-color="#e8712a" stop-opacity=".9"/><stop offset="1" stop-color="#e8712a" stop-opacity=".55"/></linearGradient>
+<linearGradient id="exp2" x1="0" x2="1"><stop offset="0" stop-color="#3a3530" stop-opacity=".95"/><stop offset="1" stop-color="#2a2620" stop-opacity=".5"/></linearGradient>
+</defs>
+<g font-family="JetBrains Mono" font-size="9" fill="#e8a878">
+<text x="44" y="45">BLOCK 01 · closing</text>
+<text x="177" y="90">BLOCK 02 · mid-expiry</text>
+<text x="311" y="135">BLOCK 03 · early expiry</text>
+<text x="444" y="180">BLOCK 04 · accepting bets</text>
+</g>
+<rect x="40" y="52" width="133" height="30" fill="url(#bet2)" rx="3"/><rect x="173" y="52" width="400" height="30" fill="url(#exp2)" rx="3"/>
+<rect x="173" y="97" width="134" height="30" fill="url(#bet2)" rx="3"/><rect x="307" y="97" width="400" height="30" fill="url(#exp2)" rx="3"/>
+<rect x="307" y="142" width="133" height="30" fill="url(#bet2)" rx="3"/><rect x="440" y="142" width="400" height="30" fill="url(#exp2)" rx="3"/>
+<rect x="440" y="187" width="133" height="30" fill="url(#bet2)" rx="3"/><rect x="573" y="187" width="267" height="30" fill="url(#exp2)" rx="3"/>
+<line x1="440" y1="30" x2="440" y2="230" stroke="#e8a878" stroke-width="1.5" stroke-dasharray="4,4" opacity=".75"/>
+<rect x="364" y="12" width="152" height="22" fill="#e8712a" rx="3"/>
+<text x="440" y="27" font-family="JetBrains Mono" font-size="10" fill="#111" text-anchor="middle" font-weight="600">NOW · 4 blocks live</text>
+<g font-family="JetBrains Mono" font-size="10" fill="#555">
+<line x1="40" y1="245" x2="840" y2="245" stroke="#2a2826"/>
+<line x1="40" y1="240" x2="40" y2="250" stroke="#555"/>
+<line x1="173" y1="240" x2="173" y2="250" stroke="#555"/>
+<line x1="307" y1="240" x2="307" y2="250" stroke="#555"/>
+<line x1="440" y1="240" x2="440" y2="250" stroke="#555"/>
+<line x1="573" y1="240" x2="573" y2="250" stroke="#555"/>
+<line x1="707" y1="240" x2="707" y2="250" stroke="#555"/>
+<line x1="840" y1="240" x2="840" y2="250" stroke="#555"/>
+<text x="40" y="265" text-anchor="middle">t=0</text>
+<text x="173" y="265" text-anchor="middle">30s</text>
+<text x="307" y="265" text-anchor="middle">60s</text>
+<text x="440" y="265" text-anchor="middle">90s</text>
+<text x="573" y="265" text-anchor="middle">120s</text>
+<text x="707" y="265" text-anchor="middle">150s</text>
+<text x="840" y="265" text-anchor="middle">180s</text>
+</g>
+<g font-family="IBM Plex Sans" font-size="10" fill="#999">
+<rect x="40" y="280" width="12" height="8" fill="url(#bet2)" rx="1"/><text x="58" y="288">betting window (30s)</text>
+<rect x="200" y="280" width="12" height="8" fill="url(#exp2)" rx="1"/><text x="218" y="288">expiration phase (90s)</text>
+<line x1="380" y1="284" x2="392" y2="284" stroke="#e8a878" stroke-width="1.5" stroke-dasharray="3,3"/><text x="398" y="288">current time</text>
+</g>
+</svg>
+<div class="modes">
+<div class="mode"><div class="tag">FAST MODE</div><h4>Дофаминовые ставки</h4><dl><dt>сбор</dt><dd>30 секунд</dd><dt>длительность</dt><dd>2 минуты</dd><dt>активных блоков</dt><dd>4 одновременно</dd><dt>целевой сегмент</dt><dd>гэмблерский ретейл</dd></dl></div>
+<div class="mode"><div class="tag">TRADER MODE</div><h4>Осознанный трейдинг</h4><dl><dt>сбор</dt><dd>1 минута</dd><dt>длительность</dt><dd>10 минут</dd><dt>активных блоков</dt><dd>10 одновременно</dd><dt>целевой сегмент</dt><dd>прогнозные трейдеры</dd></dl></div>
+</div>
+</div></section>
+
+<section><div class="wrap">
+<div class="sec-num">03 · Vault</div>
+<h2>Vault как контрагент</h2>
+<p>Вместо того чтобы юзеры делили между собой общий пул ставок, они торгуют против <strong>vault'а</strong>&nbsp;— пула ликвидности, в который LP кладут SOL и получают реальную доходность. Коэффициенты внутри блока формируются по публичной детерминированной формуле от текущего перекоса: чем сильнее перевес одной стороны, тем привлекательнее противоположная. Payout фиксирован в момент клика. Это бинарный опцион, лотерея остаётся в pari-mutuel.</p>
+<svg class="vault-flow" viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg">
+<g font-family="JetBrains Mono" font-size="11" fill="#888">
+<rect x="30" y="120" width="150" height="80" rx="8" fill="#181716" stroke="#2a2826"/>
+<text x="105" y="148" text-anchor="middle" fill="#e8a878" font-size="12" font-weight="600">USERS</text>
+<text x="105" y="167" text-anchor="middle" font-size="9">гэмблеры + трейдеры</text>
+<text x="105" y="183" text-anchor="middle" font-size="9">ставки UP/DOWN</text>
+
+<rect x="280" y="60" width="200" height="200" rx="10" fill="#1a1816" stroke="#e8712a" stroke-width="1.5"/>
+<text x="380" y="100" text-anchor="middle" fill="#e8a878" font-size="14" font-weight="600">VAULT</text>
+<text x="380" y="118" text-anchor="middle" font-size="9" fill="#888">pool liquidity · real yield</text>
+<line x1="300" y1="135" x2="460" y2="135" stroke="#26241f"/>
+<text x="380" y="156" text-anchor="middle" font-size="9" fill="#aaa">коэффициент = f(перекос)</text>
+<text x="380" y="174" text-anchor="middle" font-family="Literata" font-style="italic" font-size="13" fill="#c4875a">k = f(bull / bear)</text>
+<line x1="300" y1="195" x2="460" y2="195" stroke="#26241f"/>
+<rect x="300" y="210" width="80" height="20" fill="#e8712a" opacity=".6" rx="2"/>
+<rect x="380" y="210" width="80" height="20" fill="#3a3530" rx="2"/>
+<text x="340" y="224" text-anchor="middle" font-size="9" fill="#111" font-weight="500">BULL 50</text>
+<text x="420" y="224" text-anchor="middle" font-size="9" fill="#999">BEAR 50</text>
+<text x="380" y="248" text-anchor="middle" font-size="8" fill="#666">current pool balance</text>
+
+<rect x="580" y="120" width="150" height="80" rx="8" fill="#181716" stroke="#2a2826"/>
+<text x="655" y="148" text-anchor="middle" fill="#e8a878" font-size="12" font-weight="600">LPs</text>
+<text x="655" y="167" text-anchor="middle" font-size="9">real yield</text>
+<text x="655" y="183" text-anchor="middle" font-size="9">без эмиссии токенов</text>
+
+<path d="M180 145 L275 145" stroke="#e8712a" stroke-width="2" fill="none" marker-end="url(#ar3)"/>
+<text x="227" y="138" text-anchor="middle" font-size="10">bet</text>
+<path d="M275 175 L180 175" stroke="#888" stroke-width="1.5" fill="none" marker-end="url(#ar4)"/>
+<text x="227" y="192" text-anchor="middle" font-size="10">payout</text>
+<path d="M580 145 L485 145" stroke="#888" stroke-width="1.5" fill="none" marker-end="url(#ar4)"/>
+<text x="532" y="138" text-anchor="middle" font-size="10">deposit</text>
+<path d="M485 175 L580 175" stroke="#e8712a" stroke-width="2" fill="none" marker-end="url(#ar3)"/>
+<text x="532" y="192" text-anchor="middle" font-size="10">yield</text>
+</g>
+<defs><marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#e8712a"/></marker><marker id="ar4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#888"/></marker></defs>
+</svg>
+<p>Следствие: поскольку payouts формульные, <strong>оператор для расчётов не нужен</strong>. Его роль сводится к permissionless crank'у&nbsp;— триггеру закрытия раунда, который может вызвать любой адрес. Трастовая дыра с контролем timing раундов из security аудита закрывается самой архитектурой.</p>
+</div></section>
+
+<section><div class="wrap">
+<div class="sec-num">04 · Ранний выход</div>
+<h2>Гибридный exit: P2P + vault</h2>
+<p>В любой момент до экспирации юзер может закрыть позицию или долить. Система работает в два шага: сначала ищет P2P-контрагента внутри блока (кого-то, кто хочет долиться на ту же сторону&nbsp;— это чистое перераспределение без нагрузки на vault), затем остаток закрывается через vault по формульной цене. Bid vault'а на несколько процентов хуже P2P&nbsp;— это одновременно спред, комиссия и стимул искать контрагента.</p>
+<svg class="exit-flow" viewBox="0 0 720 260" xmlns="http://www.w3.org/2000/svg">
+<g font-family="JetBrains Mono" font-size="10" fill="#666">
+<line x1="60" y1="200" x2="660" y2="200" stroke="#2a2826"/>
+<line x1="60" y1="40" x2="60" y2="210" stroke="#2a2826"/>
+<text x="60" y="225" text-anchor="middle">t=0</text>
+<text x="660" y="225" text-anchor="middle">expiry</text>
+<text x="40" y="200" text-anchor="end">0</text>
+<text x="40" y="45" text-anchor="end">1.0</text>
+<text x="360" y="240" text-anchor="middle" fill="#888" font-size="10">time →</text>
+<text x="30" y="125" text-anchor="middle" fill="#888" font-size="10" transform="rotate(-90 30 125)">exit price</text>
+</g>
+<polyline points="60,180 200,162 420,108 600,62 660,50" stroke="#e8712a" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M60 180 L660 180" stroke="#555" stroke-width="1" stroke-dasharray="4,4" opacity=".4"/>
+<circle cx="200" cy="162" r="4.5" fill="#e8712a" stroke="#111" stroke-width="1"/>
+<text x="200" y="146" font-family="JetBrains Mono" font-size="9" fill="#e8a878" text-anchor="middle">раннее: низкая</text>
+<circle cx="420" cy="108" r="4.5" fill="#e8712a" stroke="#111" stroke-width="1"/>
+<text x="420" y="92" font-family="JetBrains Mono" font-size="9" fill="#e8a878" text-anchor="middle">в движении: растёт</text>
+<circle cx="600" cy="62" r="4.5" fill="#e8712a" stroke="#111" stroke-width="1"/>
+<text x="600" y="46" font-family="JetBrains Mono" font-size="9" fill="#e8a878" text-anchor="middle">к концу: близко к payout</text>
+<text x="360" y="195" font-family="Literata" font-style="italic" font-size="11" fill="#888" text-anchor="middle">формульная цена exit = f(время до expiry, расстояние до страйка)</text>
+</svg>
+<p>Ранний выход работает осмысленно только на длинных блоках, где цена позиции имеет динамику. Именно поэтому trader mode живёт в 5–15-минутных блоках&nbsp;— там exit превращается в настоящий инструмент управления позицией&nbsp;— короткие блоки дают только закрытие за секунды до settlement.</p>
+</div></section>
+
+<section><div class="wrap">
+<div class="sec-num">05 · Комиссии</div>
+<h2>Комиссия как инструмент управления</h2>
+<p>Комиссионная структура работает как активный инструмент: отсекает токсичное поведение, стимулирует полезное. Дифференцируется по типу действия, плюс мейкер-тейкер модель внутри каждого блока.</p>
+<table><thead><tr><th>Действие</th><th>Комиссия</th><th>Логика</th></tr></thead><tbody>
+<tr><td>Открытие позиции</td><td class="accent">~0.1%</td><td>Минимальный барьер на входе</td></tr>
+<tr><td>Мейкер (слабая сторона)</td><td class="accent">ребейт</td><td>Прямой платёж за балансировку</td></tr>
+<tr><td>Тейкер (перевешенная сторона)</td><td class="accent">полная</td><td>Плата за ликвидность мейкера</td></tr>
+<tr><td>Ранний выход через P2P</td><td class="accent">~0.1%</td><td>Стимул разгружать vault</td></tr>
+<tr><td>Ранний выход через vault</td><td class="accent">~0.4–0.5%</td><td>Spread + защита от микро-арбитража</td></tr>
+</tbody></table>
+</div></section>
+
+<section><div class="wrap">
+<div class="sec-num">06 · Сравнение</div>
+<h2>Чего нет у конкурентов</h2>
+<p>Позиционирование продукта через то, что есть у него и нет у остальных. Сравнение по ключевым характеристикам.</p>
+<table class="compare"><thead><tr><th>Фича</th><th>PCS Prediction</th><th>Polymarket</th><th>Drift BET</th><th>Olymptrade</th><th>Roller Odds8</th></tr></thead><tbody>
+<tr><td>Фиксированный payout</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+<tr><td>Ранний выход до экспирации</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="partial">частично</td><td class="yes">✓</td></tr>
+<tr><td>Нахлёст блоков (нет ожидания)</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+<tr><td>On-chain settlement</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">—</td><td class="yes">✓</td></tr>
+<tr><td>LP vault с real yield</td><td class="no">—</td><td class="no">—</td><td class="partial">частично</td><td class="no">—</td><td class="yes">✓</td></tr>
+<tr><td>Session keys (без подтверждений)</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+<tr><td>Два сегмента на одной платформе</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+</tbody></table>
+</div></section>
+
+<section><div class="wrap">
+<div class="sec-num">07 · Стратегическая позиция</div>
+<h2>Почему блочная модель, а не Polymarket-подход</h2>
+
+<p>Естественный вопрос: если Polymarket делает prediction markets непрерывными&nbsp;— вход в любой момент, выход в любой момент, цена фиксируется рынком&nbsp;— почему Roller Odds8 идёт в сторону фиксированных блоков? Причина&nbsp;— в другой экономике продукта.</p>
+
+<p>Polymarket использует CLOB (central limit order book): юзер покупает YES/NO shares события, цена share сходится к оценке вероятности по мере притока информации. Это работает для event markets (выборы, матчи, макро-события), где есть внешний якорь&nbsp;— факт события, который определённо произойдёт. Для прогнозов цены в непрерывной модели каждая комбинация (strike × expiry) становится отдельным рынком со своим стаканом.</p>
+
+<p>Сравнение по четырём измерениям показывает, что это принципиально разные продукты.</p>
+
+<div class="cmp-grid">
+
+<div class="cmp">
+<div class="cmp-dim">01 · Природа сигнала для юзера</div>
+<div class="cmp-row"><span class="cmp-label">Polymarket (CLOB)</span>Цена share&nbsp;— непрерывный сигнал, дёргается от сделки к сделке. Для трейдера информативно, для гэмблера&nbsp;— белый шум: ничего не происходит между сделками, нет чёткого момента «раунд начался / закончился».</div>
+<div class="cmp-row"><span class="cmp-label">Roller (блоки)</span>Каждый блок&nbsp;— кинематографический опыт: старт, напряжение экспирации, разрешение. Дофаминовый цикл, на котором держится гэмблерский сегмент, возможен только при этой структуре.</div>
+</div>
+
+<div class="cmp">
+<div class="cmp-dim">02 · Что покупает юзер в момент клика</div>
+<div class="cmp-row"><span class="cmp-label">Polymarket</span>Share с плавающим P&L&nbsp;— цена будет меняться под влиянием потока. Payout при экспирации либо 1, либо 0. Это позиция, которую надо мониторить.</div>
+<div class="cmp-row"><span class="cmp-label">Roller</span>Зафиксированный payout в момент клика&nbsp;— сумма, которую получишь при выигрыше, известна сразу и не переосмыслится чужими ордерами. Для retail аудитории это радикально понятнее: не «0.42 за share», а «поставил 10, получу 18».</div>
+</div>
+
+<div class="cmp">
+<div class="cmp-dim">03 · Концентрация ликвидности</div>
+<div class="cmp-row"><span class="cmp-label">Polymarket</span>Ликвидность фрагментируется по всем (strike × expiry) парам. Работает для event markets (десятки активных событий), проблематично для прогнозов цены&nbsp;— тысячи тонких стаканов, большинство со смертельными спредами.</div>
+<div class="cmp-row"><span class="cmp-label">Roller</span>Ликвидность концентрируется в 2–3 типах блоков (fast / trader), внутри каждого&nbsp;— один vault как единый контрагент. Плотный рынок с первого дня, не требует десятков маркет-мейкеров в каждом тонком стакане.</div>
+</div>
+
+<div class="cmp">
+<div class="cmp-dim">04 · Экономика vault и LP</div>
+<div class="cmp-row"><span class="cmp-label">Polymarket</span>Vault-like механизм в непрерывной модели превращается в перпетуальный AMM с LVR-проблемой (loss-versus-rebalancing, знакомая у всех AMM). Решаемо, но сложнее и менее предсказуемо для LP.</div>
+<div class="cmp-row"><span class="cmp-label">Roller</span>Чётко определённые окна экспозиции vault'а. LP считает ожидаемый P&L на известном горизонте. Модель ближе к классическому букмекерскому балансированию, где edge понятен и воспроизводим.</div>
+</div>
+
+</div>
+
+<h3 class="sub-h">Что из этого следует</h3>
+
+<p>Блочная модель и continuous CLOB&nbsp;— <strong>разные продукты для разных аудиторий</strong>. Разная экономика, разные требования к ликвидности. Polymarket&nbsp;— это order book trading для тех, кто умеет торговать. Roller Odds8&nbsp;— игра с фиксированным payout для тех, кто хочет почувствовать трейдинг, не становясь трейдером.</p>
+
+<p>Если odds8 перейдёт в continuous модель, он столкнётся с тремя проблемами одновременно. Первое&nbsp;— конкуренция с Polymarket на его домашнем поле, где у них кратное преимущество по ликвидности и бренду. Второе&nbsp;— потеря гэмблерского сегмента, который Polymarket структурно не может обслуживать: именно этот сегмент монетизируется лучше всего в вертикали. Третье&nbsp;— потеря собственного нарратива: «первый on-chain продукт с нахлёстом блоков, ранним выходом и vault-контрагентом» превращается в «ещё один CLOB для прогнозов, только на Solana».</p>
+
+<p>Блочная модель с нахлёстом&nbsp;— <strong>стратегическая ставка на продукт с другой экономикой и другой аудиторией</strong>. Это сознательный выбор, который не стоит «апгрейдить» в Polymarket-like continuous&nbsp;— тогда исчезнет сама причина существования продукта как отдельной сущности.</p>
+
+<p class="editor-note">Trader mode с ранним выходом уже встраивает часть удобства continuous markets внутрь блочной структуры: позиция имеет плавающую стоимость, выйти можно в любой момент через P2P или vault. Этого достаточно для трейдерского UX без сдачи собственного позиционирования. Если через год-два продукт захочет расширяться в event markets (политика, спорт, макро)&nbsp;— continuous модель там уместна, потому что у событий есть внешний якорь. Но это будет <em>второй продукт</em> поверх той же инфраструктуры, не замена блоков.</p>
+
+</div></section>
+
+<section><div class="wrap">
+<div class="sec-num">08 · Как запускать</div>
+<h2>Порядок построения</h2>
+<p>Граф зависимостей, не roadmap с датами&nbsp;— что от чего зависит, и с чего начинать, чтобы не переделывать позже.</p>
+<p class="editor-note">Каждый следующий шаг опирается на предыдущие. Порядок можно ускорять или растягивать по времени, но не менять местами&nbsp;— математика архитектуры сама его подсказывает.</p>
+<ol class="steps">
+<li><span class="st">01</span><div><strong>Credible commitments контракта.</strong> Multisig на upgrade authority, verified build, публикация Anchor IDL, внешний аудит. Без этого профессиональный капитал в vault не придёт&nbsp;— и команде самой страшно будет вливать seed-ликвидность. Предусловие для всего остального.</div></li>
+<li><span class="st">02</span><div><strong>Session keys и fast mode.</strong> Локальный апгрейд контракта под делегированные подписи, UI без подтверждений. Даёт паритет UX с бинарными опционами на существующем функционале ставок. Не требует vault'а&nbsp;— можно выкатить отдельно.</div></li>
+<li><span class="st">03</span><div><strong>Vault-контрагент и формульные коэффициенты.</strong> Замена pari-mutuel на LP-pool с публичной формулой. Параллельно&nbsp;— permissionless crank для settlement. Это открывает trader mode и снимает trust-дыру с оператора.</div></li>
+<li><span class="st">04</span><div><strong>Rolling-блоки с нахлёстом.</strong> Переход от последовательных раундов к непрерывному потоку блоков. Работает только вместе с vault'ом&nbsp;— pari-mutuel плохо совместим с перекрывающимися окнами.</div></li>
+<li><span class="st">05</span><div><strong>Ранний выход через P2P + vault.</strong> Самая сложная механика: P2P-матчинг внутри блока плюс формульная цена через vault как fallback. Требует готового vault'а и rolling-блоков.</div></li>
+<li><span class="st">06</span><div><strong>Maker rebate и дифференцированные комиссии.</strong> Финальный слой&nbsp;— превращение комиссионной структуры в инструмент управления поведением. Калибровка делается уже на живых данных после запуска vault'а.</div></li>
+</ol>
+</div></section>
+
+<footer><div class="wrap">
+<div class="back-cta"><a href="odds8_after_audit.html" class="cta-btn back"><span class="cta-arr">←</span><span class="cta-label">Заметки после аудитов</span><span class="cta-sub">как этот концепт сложился</span></a></div>
+</div></footer>
+
+</body></html>

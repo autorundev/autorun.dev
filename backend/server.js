@@ -25,7 +25,8 @@ const PRD_C = 0.03;
 let prdCounter = 0;
 
 // track found easter eggs per IP
-const totalEggs = Object.keys(commands).length;
+// +1 accounts for `deploy` which lives in its own module (deploy_scenarios)
+const totalEggs = Object.keys(commands).length + 1;
 const foundEggs = new Map(); // ip -> Set of found commands
 
 const SYSTEM_PROMPT = `You are a hidden presence inside autorun.dev terminal. You only appear when someone keeps typing random nonsense instead of using \`help\`.
@@ -97,6 +98,8 @@ app.use('/api/*', async (c, next) => {
 
 app.get('/api/health', (c) => c.json({ status: 'ok', ts: Date.now() }));
 
+app.get('/api/stats', (c) => c.json({ total: totalEggs }));
+
 app.post('/api/log', async (c) => {
   const body = await c.req.json().catch(() => ({}));
   const input = String(body.input || '').trim();
@@ -144,7 +147,7 @@ app.post('/api/cmd', async (c) => {
         : [{ mark: '[!]', text: `scenario: ${result.id} (stub — coming soon)` }]),
     ];
     found.add('deploy');
-    return c.json({ lines });
+    return c.json({ lines, isEgg: true, key: 'deploy' });
   }
 
   // Look up in easter egg registry.
@@ -194,6 +197,8 @@ app.post('/api/cmd', async (c) => {
     effect:  payload.effect  || null,
     unlocks: payload.unlocks || null,
     delay:   payload.delay   || null,
+    isEgg:   true,
+    key:     key,
   });
 });
 
