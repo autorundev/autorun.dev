@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Ernest — «Get Funded» wedge · стратегия</title>
-<meta name="description" content="Ernest: single-player wedge, выход на рынок через prop-challenge аспирантов. Стратегия, воронка, фичи, $1M-стек. Фактчек 2026.">
+<meta name="description" content="Ernest: single-player wedge, выход на рынок через prop-challenge аспирантов. Стратегия, воронка, фичи, $1M-стек. Что уже в проде: сценарии и примеры. Фактчек 2026.">
 <style>
   :root{
     --bg:#0a0b0d; --bg2:#101216; --surface:#14171c; --surface2:#1b1f26;
@@ -184,6 +184,56 @@
   .kpirow>div:first-child{font-family:var(--mono);font-size:12px;color:var(--gold);letter-spacing:.04em;border-right:1px solid var(--line)}
   .kpirow>div:last-child{font-size:14px;color:var(--txt2)}
 
+  /* ── shipped status + examples (added 2026-06-03) ── */
+  .ship{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--teal);border:1px solid rgba(70,184,154,.32);border-radius:999px;padding:2px 8px}
+  .ship.soon{color:var(--muted);border-color:var(--line2)}
+  .fcard .ship{margin-top:10px}
+  .featgroup{grid-column:1/-1;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+  .featgroup:first-child{margin-top:0;padding-top:0;border-top:none}
+
+  /* example chat exchanges */
+  .chat{margin-top:28px;display:grid;gap:14px}
+  .exch{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .exch.hl{border-color:var(--line2);background:linear-gradient(180deg,var(--surface2),var(--surface))}
+  .bub{font-size:14.5px;line-height:1.58}
+  .bub .who{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:6px}
+  .bub.u{color:var(--txt2)} .bub.u .who{color:var(--blue)}
+  .bub.e{margin-top:15px;padding-top:14px;border-top:1px solid var(--line);color:var(--txt);white-space:pre-line}
+  .bub.e.solo{margin-top:0;padding-top:0;border-top:none}
+  .bub.e .who{color:var(--gold)}
+  .bub.e b{color:#fff;font-weight:650}
+  .exch .why{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:13px;padding-top:11px;
+    border-top:1px dashed var(--line2);line-height:1.5;white-space:normal}
+  .scn{margin-top:30px}
+  .scn .lbl{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--gold);text-transform:uppercase}
+  .scn h3{margin-top:8px;font-size:18px}
+  .scn>p{margin-top:8px}
+
+  /* what Ernest does NOT do */
+  .nope{margin-top:30px;display:grid;gap:12px}
+  .nope-item{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:18px 20px;
+    background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:0 12px 12px 0}
+  .nope-item .mark{font-family:var(--serif);font-size:20px;color:var(--teal);line-height:1.2}
+  .nope-item h3{font-size:15.5px}
+  .nope-item p{font-size:13.5px;margin-top:5px}
+
+  /* readiness card mock */
+  .rcard{margin:30px auto 0;max-width:420px;background:#0E1116;border:1px solid var(--line2);border-radius:24px;padding:26px 26px 22px}
+  .rcard-top{display:flex;justify-content:space-between;align-items:center}
+  .rcard-mark{font-family:var(--mono);font-size:13px;letter-spacing:.2em;color:#fff;font-weight:700}
+  .rcard-tag{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--gold);border:1px solid var(--line2);border-radius:999px;padding:3px 9px}
+  .rcard-verdict{font-family:var(--serif);font-size:34px;color:var(--gold-soft);margin-top:22px;letter-spacing:-.01em}
+  .rbars{margin-top:20px;display:grid;gap:9px}
+  .rbar{display:grid;grid-template-columns:84px 1fr;gap:12px;align-items:center}
+  .rbar .rl{font-size:12px;color:var(--txt2)}
+  .rbar .rt{height:7px;border-radius:999px;background:#1b2330;overflow:hidden}
+  .rbar .rf{display:block;height:100%;background:#58a6ff;border-radius:999px}
+  .rcard-metrics{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:20px;letter-spacing:.02em}
+  .rcard-cta{margin-top:16px;font-size:13px;color:var(--gold-soft)}
+  .rcard-note{text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:14px}
+
   .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
   .reveal.in{opacity:1;transform:none}
 
@@ -208,7 +258,7 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="eyebrow">Ernest · стратегический разбор · 2026-06-01</div>
+    <div class="eyebrow">Ernest · стратегический разбор · 2026-06-01 · обновлено 2026-06-03</div>
     <h1>Эрнест доводит трейдера до <em>funded</em> — и зарабатывает на этом пути.</h1>
     <p class="lede">Не «ещё один торговый бот» и не платформа-стандарт. Single-player инструмент, который читает тебя там, где это <strong>измеряется в деньгах</strong> — и встраивается в момент, когда трейдер пытается получить funded-капитал.</p>
     <div class="hero-meta">
@@ -216,6 +266,7 @@
       <span>HL-native beachhead</span>
       <span>event-based монетизация</span>
       <span>путь к $1M ARR</span>
+      <span>F1–F6 в проде</span>
     </div>
   </div>
 </header>
@@ -406,20 +457,20 @@
 <!-- 6 -->
 <section id="features">
   <div class="wrap reveal">
-    <span class="sec-no">07 — Что добавить Эрнесту</span>
-    <h2>Фичи MVP — почти всё переиспользует уже построенное.</h2>
-    <p>Продукт впереди рынка: тяжёлый tech (поведенческий движок, NT, проактивность, HL-native) уже есть. MVP — рекомбинация, не новый фундамент.</p>
+    <span class="sec-no">07 — Что добавили Эрнесту</span>
+    <h2>Фичи MVP — почти всё переиспользовало уже построенное. И отгружено.</h2>
+    <p>Продукт впереди рынка: тяжёлый tech (поведенческий движок, NT, проактивность, HL-native) уже был. MVP — рекомбинация, не новый фундамент. <strong>F1–F6 закрыты и в проде</strong> — детально, со сценариями и примерами, в §13–15.</p>
     <div class="feat">
-      <div class="fcard"><div class="fid">F1</div><h3>Funding Readiness Read</h3><p>История HL → fingerprint + вердикт «готов / гэп». Топ воронки, discovery, data-моат.</p><div class="reuse">↺ patterns.py · stats.py · mfe</div></div>
-      <div class="fcard"><div class="fid">F2</div><h3>Prop-rule ruleset engine</h3><p>Параметризовать challenge: target / max-DD / daily-loss / min-days.</p><div class="reuse">↺ rules.py · risk.py</div></div>
-      <div class="fcard"><div class="fid">F3</div><h3>Training Challenge runner</h3><p>Мок-eval на HL (paper/малый размер) под прокативным контролем.</p><div class="reuse">↺ NautilusTrader · paper P&L · position monitor</div></div>
-      <div class="fcard"><div class="fid">F4</div><h3>Real-time discipline interrupt</h3><p>Перехват tilt/revenge/over-size в challenge-окне. Главный value, max ROI на 7–10 день.</p><div class="reuse">↺ detectors_a/b/cde · heartbeat</div></div>
-      <div class="fcard"><div class="fid">F5</div><h3>Readiness gate verdict</h3><p>Data-grounded «готов / вот гэп». Anti-farming линия.</p><div class="reuse">↺ F1 + F3 агрегат</div></div>
-      <div class="fcard"><div class="fid">F6</div><h3>Shareable readiness card</h3><p>Виральный механизм: behavioral fingerprint, не P&L.</p><div class="reuse">↺ journey viz</div></div>
-      <div class="fcard"><div class="fid">F7</div><h3>Prop referral + affiliate tracking</h3><p>Ручной MVP: линк + промокод, без платформы.</p><div class="reuse">↺ —</div></div>
+      <div class="fcard"><div class="fid">F1</div><h3>Funding Readiness Read</h3><p>История HL → fingerprint + вердикт «готов / гэп». Топ воронки, discovery, data-моат.</p><div class="reuse">↺ patterns.py · stats.py · mfe</div><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">F2</div><h3>Prop-rule ruleset engine</h3><p>Параметризовать challenge: target / max-DD / daily-loss / min-days. N-фазный ruleset.</p><div class="reuse">↺ rules.py · risk.py</div><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">F3</div><h3>Live Challenge runner</h3><p>Челлендж-eval на реальном HL под проактивным контролем. Live-only — paper отменён (реальные деньги = реальный тильт).</p><div class="reuse">↺ NautilusTrader · position monitor</div><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">F4</div><h3>Real-time discipline interrupt</h3><p>Перехват tilt/revenge/over-size в challenge-окне. Нудж в моменте, не блок. Главный value.</p><div class="reuse">↺ detectors_a/b/cde · heartbeat</div><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">F5</div><h3>Readiness gate verdict</h3><p>Data-grounded «готов / вот гэп» + честный step-back. Anti-farming линия.</p><div class="reuse">↺ F1 + F3 агрегат</div><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">F6</div><h3>Shareable readiness card</h3><p>Виральный механизм: behavioral fingerprint, никогда не P&amp;L.</p><div class="reuse">↺ journey viz</div><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">F7</div><h3>Prop referral + affiliate tracking</h3><p>Ручной MVP: линк + промокод, без платформы. Следующая волна.</p><div class="reuse">↺ —</div><span class="ship soon">отложено</span></div>
       <div class="fcard l2"><div class="fid">F8 · layer 2</div><h3>Multi-exchange CSV import</h3><p>Bybit/Binance история для mass-рынка — после HL-beachhead.</p><div class="reuse">↺ parser</div></div>
     </div>
-    <p class="sub">НЕ в MVP: marketplace, Agent Definition Format, Bitcoin anchoring, regime classifier, калибровка-движок — всё это пост-PMF / H2.</p>
+    <p class="sub">Сверх плана §07 отгружены ещё <strong>Kelly position-sizing</strong> и <strong>R-cluster</strong> (market pulse, точность прогнозов, приватные виджеты) — см. §13. НЕ в MVP: marketplace, Agent Definition Format, Bitcoin anchoring, regime classifier, калибровка-движок — всё это пост-PMF / H2.</p>
   </div>
 </section>
 
@@ -510,7 +561,7 @@
     <div class="loop">
       <span class="loopnode">free readiness read</span>
       <span class="looparr">→</span>
-      <span class="loopnode"><b>shareable card</b> (fingerprint, не P&L)</span>
+      <span class="loopnode"><b>shareable card</b> (fingerprint, не P&amp;L)</span>
       <span class="looparr">→</span>
       <span class="loopnode">пост в X</span>
       <span class="looparr">→</span>
@@ -569,7 +620,7 @@
 <section id="now">
   <div class="wrap reveal">
     <span class="sec-no">12 — Где мы и что дальше</span>
-    <h2>Стратегия провалидирована насквозь. Дальше — исполнение.</h2>
+    <h2>Стратегия провалидирована насквозь. Исполнение уже пошло.</h2>
     <p>Пять раундов ресёрча закрыли каждую несущую посылку:</p>
     <ul class="clean">
       <li><strong>Категория</strong> — открыта (стандарт = MCP на connectivity; Kels отложена).</li>
@@ -579,14 +630,218 @@
       <li><strong>Beachhead</strong> — HL-нативный проп, PMF доказан, нативный edge.</li>
     </ul>
     <div class="callout">
-      <p>Ресёрч сделал свою работу. Оставшийся риск — чисто исполнительский: <strong>дистрибуция + билд</strong>. Это нельзя нагуглить — только сделать. Артефакты: <span style="font-family:var(--mono);font-size:14px">docs/prop/</span> + Forgejo epic <span style="font-family:var(--mono);font-size:14px">tracker/ernest#48</span> (Wave 1: F1–F7).</p>
+      <p>Ресёрч сделал свою работу — и билд уже пошёл: <strong class="accent">wedge F1–F6 отгружен и в проде</strong> на живом Hyperliquid. Что именно работает, со сценариями и примерами того, что видит трейдер — <a href="#shipped">§13 «Это уже работает» →</a>. Оставшийся риск — <strong>дистрибуция</strong>: её нельзя нагуглить, только сделать. Артефакты: <span style="font-family:var(--mono);font-size:14px">docs/prop/</span> + Forgejo <span style="font-family:var(--mono);font-size:14px">tracker/ernest</span> (milestone #9 · #40–#61).</p>
     </div>
     <div style="margin-top:24px">
+      <span class="pill open">F1–F6 wedge — отгружено ✓</span>
+      <span class="pill open">Kelly + R-cluster — в проде ✓</span>
+      <span class="pill open">HL-beachhead — go</span>
+      <span class="pill">F7 referral · auto-flatten · R1.x/R2.x — дальше</span>
       <span class="pill dead">Kels marketplace — отложено</span>
       <span class="pill dead">prop-B2B-SaaS — закрыто</span>
       <span class="pill dead">anchoring / regime / калибровка — H2</span>
-      <span class="pill open">F1–F7 — Wave 1 MVP</span>
-      <span class="pill open">HL-beachhead — go</span>
+    </div>
+  </div>
+</section>
+
+<!-- 13 -->
+<section id="shipped">
+  <div class="wrap reveal">
+    <span class="sec-no">13 — Это уже работает</span>
+    <h2>От плана к проду: wedge закрыт, а не на роадмапе.</h2>
+    <p class="lead-after">§07 описывал, что добавить. С тех пор добавили. Get-Funded wedge (F1–F6) закрыт, в проде и работает на живом Hyperliquid. <strong>47 инструментов</strong>, один агент — single-brain, без вторичных классификаторов. Ниже — что именно умеет Эрнест сегодня, с границей у каждой фичи.</p>
+    <div class="feat">
+      <div class="featgroup">Готовность</div>
+      <div class="fcard"><div class="fid">F1</div><h3>Чтение готовности</h3><p>Реальная история закрытых сделок → поведенческий отпечаток + код-вердикт «готов / пробел». Free — счётчики, Pro — паттерны и конкретные пробелы.</p><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">F5</div><h3>Честный вердикт + step-back</h3><p>Тот же отпечаток → тот же вердикт на любом тарифе (нет pay-to-pass). Серия gap-чтений или 3 проваленных мока → «отойди, а не плати за ещё попытку».</p><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">F6</div><h3>Shareable карточка</h3><p>Картинка профиля дисциплины со ссылкой «проверь свою». Никогда не показывает P&amp;L — только вердикт и рисунок привычек.</p><span class="ship">✓ в проде</span></div>
+
+      <div class="featgroup">Челлендж</div>
+      <div class="fcard"><div class="fid">F2</div><h3>Движок проп-правил</h3><p>N-фазный ruleset: цель прибыли, макс. просадка, дневной лимит, мин/макс дни. Детерминированная проверка, статус по каждому лимиту.</p><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">F3</div><h3>Live челлендж-раннер</h3><p>Гоняет челлендж над реальным счётом: якорь на балансе, balance-based просадка, статус по запросу. <strong>Live-only</strong> — не paper, не изолированный аккаунт.</p><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">F4</div><h3>Нудж в моменте</h3><p>Внутри челленджа на входе/доливе называет близость к ближайшему лимиту тут же, в том же ответе. <strong>Нудж, не блок</strong> — решение за тобой.</p><span class="ship">✓ в проде</span></div>
+
+      <div class="featgroup">Дисциплина и риск</div>
+      <div class="fcard"><div class="fid">GATE</div><h3>Entry-gate</h3><p>В момент ордера сверяет его с твоими же правилами и фильтрами — называет нарушение на месте. Гейт по риску в долях счёта, не по плечу.</p><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">SIZE</div><h3>Kelly position-sizing</h3><p>Дробный (¼) Kelly риск-бюджет из твоих собственных сделок. Детерминированная математика, не нейросеть. Риск-% и нотиональный-% — отдельно, никогда не сравниваются.</p><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">DATA</div><h3>Честность по данным</h3><p>«Нет данных» ≠ «ноль». Фандинг / OI / сентимент — только когда реально загрузились. Никаких фантомных «фандинг 0%, готовится сквиз».</p><span class="ship">✓ в проде</span></div>
+
+      <div class="featgroup">Проактив и трек-рекорд</div>
+      <div class="fcard"><div class="fid">PROAC</div><h3>Утренний бриф + субботний взгляд</h3><p>Связывает рынок с твоими живыми позициями и поведением. Тихий день — 2-3 строки; нечего сказать в субботу — молчит.</p><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">R4.1</div><h3>Market pulse</h3><p>Pro: проактивный дайджест, когда рынок делает реально необычное (7 детекторов, код ранжирует). Только текст, без советов и предсказаний.</p><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">R3</div><h3>Точность прогнозов + карточка</h3><p>Честный хит-рейт по разрешённым гипотезам, всегда с выборкой («7 из 10») + resolution-rate против selection-bias. Shareable карточка — без P&amp;L.</p><span class="ship">✓ в проде</span></div>
+      <div class="fcard"><div class="fid">R5.1</div><h3>Приватные виджеты результатов</h3><p>Кривая эквити / календарь PnL / распределение сделок — картинкой в личку. Здесь P&amp;L можно: они приватные, без share-ссылки.</p><span class="ship">✓ в проде</span></div>
+
+      <div class="fcard l2"><div class="fid">F7 · дальше</div><h3>Prop referral + milestone-карточка</h3><p>Реферал в vetted-проп + «I got funded» карточка. Следующая волна.</p><span class="ship soon">отложено</span></div>
+    </div>
+    <p class="sub">Каждая фича отгружена под полным regression-сьютом и задеплоена в прод (Forgejo <span style="font-family:var(--mono);font-size:13px">tracker/ernest</span>, milestone #9 + wedge #40–#55, Kelly #61). Что осталось не-сделанным — честно в §16.</p>
+  </div>
+</section>
+
+<!-- 14 -->
+<section id="scenarios">
+  <div class="wrap reveal">
+    <span class="sec-no">14 — Сценарии трейдера</span>
+    <h2>Один путь к funded-аккаунту — не россыпь инструментов.</h2>
+    <p>Так фичи складываются для трейдера, идущего за капиталом. Все реплики ниже — в реальном регистре Эрнеста: простым языком, цифры по запросу, без лести и без фантомных данных.</p>
+
+    <div class="scn">
+      <span class="lbl">Сценарий 1 · вход в воронку</span>
+      <h3>«Готов ли я заходить в челлендж?»</h3>
+      <p>Трейдер подключил кошелёк. Эрнест читает реальную историю закрытых сделок и отвечает простым языком — а по запросу раскрывает каждую цифру.</p>
+      <div class="chat">
+        <div class="exch">
+          <div class="bub u"><span class="who">Трейдер</span>Эрнест, я готов заходить в челлендж?</div>
+          <div class="bub e"><span class="who">Эрнест</span>Смотрю твою готовность.
+
+Пока нет — данные говорят «следующий шаг». Винрейт у тебя 41%, это ниже порога 45%, и я вижу серию из 5 убытков подряд: на просадке дисциплина выхода ломается. Это два конкретных пробела, не приговор — стат подтянешь, и я перечитаю. Хочешь, распишу по каждому?</div>
+          <div class="why">F1 · вердикт «пробел» из фиксированных порогов (винрейт-флор 45%, макс. серия убытков 5). Ведёт простым языком, предлагает углубиться.</div>
+        </div>
+        <div class="exch">
+          <div class="bub u"><span class="who">Трейдер</span>почему 41%? раскрой</div>
+          <div class="bub e"><span class="who">Эрнест</span>Винрейт 41% — это доля закрытых сделок в плюс по всей твоей истории, не за 30 дней. Порог готовности 45%: ниже него статистика ещё шаткая, чтобы прожить просадку челленджа. Отдельно бьёт серия из 5 убытков подряд — выходишь не по плану, когда минусит. Захват прибыли по сделкам около 60% от максимума хода — не катастрофа, но и не идеально.</div>
+          <div class="why">«Раскрой» запускает per-metric unpack — здесь плотность цифр уместна, потому что её попросили. Это и есть регистр «простым языком, цифры по запросу».</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scn">
+      <span class="lbl">Сценарий 2 · до первой импульсивной сделки</span>
+      <h3>Свежий аккаунт — выставить рамки</h3>
+      <p>У трейдера нет выставленных лимитов. Эрнест не допрашивает — предлагает рамки под Get-Funded и ждёт подтверждения.</p>
+      <div class="chat">
+        <div class="exch">
+          <div class="bub u"><span class="who">Трейдер</span>у меня вообще нет лимитов выставленных</div>
+          <div class="bub e"><span class="who">Эрнест</span>Тогда давай выставим рамки, чтобы челлендж не слить на тильте — максимальное плечо, размер позиции в % от депо, дневной лимит убытка, часы торговли. С каких начнём?</div>
+          <div class="why">Entry-gate + контекст «свежий аккаунт» → предложить выставить правила в Get-Funded рамке, а не ждать, пока трейдер сам спросит.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scn">
+      <span class="lbl">Сценарий 3 · внутри челленджа</span>
+      <h3>Ловит отыгрыш в моменте — и честно разбирает пробой</h3>
+      <p>Челлендж идёт на живом счёте. Трейдер на дневном минусе объявляет revenge-долив. Эрнест называет близость к лимиту тут же — но решение оставляет за трейдером. Если лимит реально пробит, отдельный монитор ловит это за ~15 секунд.</p>
+      <div class="chat">
+        <div class="exch">
+          <div class="bub u"><span class="who">Трейдер</span>минус сегодня уже прилично, добавлю ещё на битке отыграться</div>
+          <div class="bub e"><span class="who">Эрнест</span>Смотрю по челленджу.
+
+Осторожно: ты сегодня уже −3.8% от дневного якоря, дневной лимит 5%. Если зайдёшь ещё одной позицией такого размера — это примерно 0.9% до лимита, и при минусе по ней челлендж сегодня закроется по дневной просадке. Я не могу остановить ордер за тебя, но это вход на отыгрыш, а не по плану. Решай на холодную.</div>
+          <div class="why">F4 нудж · get_challenge_status в том же ходе → запас по дневному лимиту в деньгах. Прямо сказано «не могу остановить ордер за тебя» — нудж, не блок.</div>
+        </div>
+        <div class="exch">
+          <div class="bub e solo"><span class="who">Эрнест · проактивно, после пробоя</span>Челлендж закрыт — ты пробил дневной лимит: −5.2% при лимите 5%. Это провал по дисциплине, не по срокам. День был тяжёлый, разберём что вело к этому, когда будешь готов.</div>
+          <div class="why">Alert-only пробой: движок ставит статус «провален» и пишет — но НЕ трогает позиции и не закрывает кошелёк. Без театра утешения, без «соберись».</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scn">
+      <span class="lbl">Сценарий 4 · честность вместо апселла</span>
+      <h3>«Слил третий мок — давай ещё попробую»</h3>
+      <p>Здесь продукт о дисциплине показывает, что он не dark-pattern: вместо нуджа платить за ещё попытку — честный сигнал отойти.</p>
+      <div class="chat">
+        <div class="exch hl">
+          <div class="bub u"><span class="who">Трейдер</span>слил третий мок за месяц, давай ещё попробую</div>
+          <div class="bub e"><span class="who">Эрнест</span>Понимаю, что хочется отыграться. Но три проваленных челленджа за месяц — это сигнал отойти, а не платить за ещё одну попытку. Сделай паузу, разберись с дисциплиной, и заходи снова уже с другим рисунком. Я не буду подталкивать тебя в четвёртый заход на тех же граблях.</div>
+          <div class="why">F5 step-back · 3 различных проваленных рана за 30 дней (expired не считаются). Никогда не апселл — это и есть линия «no dark-pattern» из §11.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:42px;font-size:18px">Что уходит другу — карточка готовности</h3>
+    <p>Виральная единица: скриншот или пересылка. Профиль дисциплины и ссылка «проверь свою» — но <strong>никогда</strong> P&amp;L. Делиться можно без палева своих цифр.</p>
+    <div class="rcard">
+      <div class="rcard-top"><span class="rcard-mark">ERNEST</span><span class="rcard-tag">READINESS</span></div>
+      <div class="rcard-verdict">Следующий шаг</div>
+      <div class="rbars">
+        <div class="rbar"><span class="rl">Эмоции</span><span class="rt"><span class="rf" style="width:78%"></span></span></div>
+        <div class="rbar"><span class="rl">Когниция</span><span class="rt"><span class="rf" style="width:54%"></span></span></div>
+        <div class="rbar"><span class="rl">Операции</span><span class="rt"><span class="rf" style="width:32%"></span></span></div>
+        <div class="rbar"><span class="rl">Социум</span><span class="rt"><span class="rf" style="width:20%"></span></span></div>
+        <div class="rbar"><span class="rl">Привычки</span><span class="rt"><span class="rf" style="width:46%"></span></span></div>
+      </div>
+      <div class="rcard-metrics">41% точность · порог 45% · 23 сделки · захват 60%</div>
+      <div class="rcard-cta">Узнай свою готовность →</div>
+    </div>
+    <p class="rcard-note">Мок. Длиннее бар = больше работать. Палитра нейтральная — не profit/loss.</p>
+  </div>
+</section>
+
+<!-- 15 -->
+<section id="voice">
+  <div class="wrap reveal">
+    <span class="sec-no">15 — Голос Эрнеста</span>
+    <h2>Аудитор на твоей стороне — прямой, без лести, со своим мнением.</h2>
+    <p class="lead-after">Голос — главный дифференциатор. Эрнест судит сделки честно, но никогда не судит тебя как человека. Финальное решение и подпись под ордером — всегда твои, авто-режима нет.</p>
+    <div class="chat">
+      <div class="exch">
+        <div class="bub u"><span class="who">Трейдер</span>закрыл BTC в плюсе, норм?</div>
+        <div class="bub e"><span class="who">Эрнест</span>Закрыл в плюсе, но вошёл позже, чем планировал — из-за этого забрал $40 вместо $120. Сам вход норм, тайминг подвёл.</div>
+        <div class="why">Анти-лесть. «Отличная сделка!» прямо вне его стиля — признание привязано к конкретике, не пустая похвала.</div>
+      </div>
+      <div class="exch">
+        <div class="bub u"><span class="who">Трейдер</span>что по битку?</div>
+        <div class="bub e"><span class="who">Эрнест</span>BTC валится широким фронтом, твой шорт в плюсе. Пока ничего не трогаю.</div>
+        <div class="why">По умолчанию — простым языком, одна-две несущие мысли. Не таблица метрик.</div>
+      </div>
+      <div class="exch">
+        <div class="bub u"><span class="who">Трейдер</span>почему так думаешь?</div>
+        <div class="bub e"><span class="who">Эрнест</span>Раскрываю. BTC −3.4% за сутки, и падают не только мейджоры — L1/L2 идут следом, это не точечный слив. Фандинг почти ноль — лонги не перегружены, значит топлива на отскок мало. OI держится — позиции не закрывают, давление вниз ещё живо. Вместе это и есть «широкий фронт».</div>
+        <div class="why">Тот же read, но «почему» развернуло каждую метрику. Плотность здесь по запросу — это та же фича, что и реплика выше.</div>
+      </div>
+      <div class="exch">
+        <div class="bub u"><span class="who">Трейдер</span>почему так мало риска? я обычно по 30% захожу</div>
+        <div class="bub e"><span class="who">Эрнест</span>30% — это нотиональный размер позиции, а 10% у меня — риск-бюджет: сколько ты теряешь, если сделка пойдёт против тебя. Это разные вещи, их нельзя сравнивать напрямую — позиция на 10% риска при плече легко станет 50%+ от счёта. Считаю это из твоих же сделок: 62% винрейт, выигрыш к проигрышу 1.8:1, беру четверть Келли для запаса.</div>
+        <div class="why">Kelly · риск-% и нотиональный-% названы отдельно и никогда не ранжируются один против другого. Математика детерминированная, из собственного трек-рекорда.</div>
+      </div>
+      <div class="exch">
+        <div class="bub u"><span class="who">Трейдер</span>что по фандингу на хайпе, сквиз будет?</div>
+        <div class="bub e"><span class="who">Эрнест</span>Фандинг по HYPE сейчас не подгрузился — про перекос лонг/шорт и сквиз сказать нечего. Смотрю на цену и объём, оттуда и буду думать.</div>
+        <div class="why">«Нет данных» ≠ «0%». Эрнест не строит тезис о сквизе на фантомной цифре — это жёсткое правило правдивости.</div>
+      </div>
+      <div class="exch">
+        <div class="bub u"><span class="who">Трейдер</span>что там с биржей, не вижу позиции</div>
+        <div class="bub e"><span class="who">Эрнест</span>Биржу сейчас не вижу, через минуту вернусь — позиции подгружу, как только дотянусь.</div>
+        <div class="why">Эрнест — одно целое, не стек сервисов. Никаких «сервис недоступен / внутренняя ошибка». А упавший проактивный пуш — это тишина, не error-строка ночью.</div>
+      </div>
+      <div class="exch">
+        <div class="bub e solo"><span class="who">Эрнест · утренний бриф</span><b>Портфель</b>
+HYPE шорт, вход $74, в плюсе. Фандинг почти ноль, по марже не капает.
+
+<b>Вчера</b>
+Две сделки, обе в плюс, +$58.
+
+<b>Рынок</b>
+BTC −3% за ночь, тащит всё вниз — твой шорт по HYPE как раз в эту сторону.
+
+<b>Замечаю</b>
+Последние три входа были против тренда. Пока выходит, но рисунок повторяется — держи в голове.</div>
+        <div class="why">Проактивный бриф связывает рынок с живыми позициями и называет поведенческий паттерн из реальных сделок. Открытая позиция = всегда полный бриф; тихий день — 2-3 строки.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 16 -->
+<section id="limits">
+  <div class="wrap reveal">
+    <span class="sec-no">16 — Границы и честность</span>
+    <h2>Чего Эрнест не делает — и почему так честнее.</h2>
+    <p>Продукт о дисциплине и честности обязан быть честным про себя. В финансовом контексте явная граница — не слабость, а доверие.</p>
+    <div class="nope">
+      <div class="nope-item"><div class="mark">—</div><div><h3>Не блокирует и не закрывает ордера за тебя</h3><p>Entry-gate и challenge-нудж — это предупреждение в моменте, не блок. Реальное enforcement на fill-time; авто-flatten намеренно не построен. Подпись под ордером — твоя.</p></div></div>
+      <div class="nope-item"><div class="mark">—</div><div><h3>Челлендж — live, и не изолирован</h3><p>Никакого paper/demo: давление реальных денег = реальный тильт. И челлендж идёт над всей торговлей кошелька — любая несвязанная сделка двигает его equity. Это не отдельный sandbox-аккаунт.</p></div></div>
+      <div class="nope-item"><div class="mark">—</div><div><h3>Не предсказывает цену и не даёт сигналов</h3><p>Проактив (market pulse, субботний взгляд) — это наблюдение и один вопрос. Без «вероятно пробьёт», без входов/выходов, без «прямо сейчас».</p></div></div>
+      <div class="nope-item"><div class="mark">—</div><div><h3>Не показывает P&amp;L на shareable-карточках</h3><p>Карточка готовности и карточка прогнозов банят любые деньги / прибыль / баланс. P&amp;L — только в приватных виджетах, которые уходят тебе в личку и никуда больше.</p></div></div>
+      <div class="nope-item"><div class="mark">—</div><div><h3>Не выдаёт винрейт за гарантию будущего</h3><p>Точность прогнозов — это прошлый трек-рекорд, всегда с выборкой («7 из 10»), никогда «ты угадаешь в следующий раз». Готовность — отпечаток дисциплины, не предсказание исхода.</p></div></div>
+      <div class="nope-item"><div class="mark">—</div><div><h3>Не считает размер позиции нейросетью</h3><p>Kelly — детерминированная математика из твоих же сделок. И риск-% (бюджет потери) никогда не путается с нотиональным-% (размер позиции): это разные единицы.</p></div></div>
+      <div class="nope-item"><div class="mark">—</div><div><h3>Не выдаёт «нет данных» за ноль</h3><p>Фандинг или сентимент, который не загрузился, — это «не знаю», а не «0% / нейтрально». Никаких тезисов о сквизе на фантомных цифрах.</p></div></div>
+      <div class="nope-item"><div class="mark">—</div><div><h3>Не выдаёт чужие проп-правила за официальные</h3><p>Шаблоны конкретных фирм (напр. HashHedge) пока помечены как требующие ревалидации параметров, а не как подтверждённые правила фирмы.</p></div></div>
+    </div>
+    <div class="callout">
+      <p><span class="q">«Эрнест сказал, что я не готов» — в категории, кишащей скамом, это сигнал доверия, а не баг.</span> Честность здесь — механизм роста, а не отказ от продаж.</p>
     </div>
   </div>
 </section>
@@ -618,7 +873,7 @@
 <footer>
   <div class="wrap">
     <div>Ernest · AI trading companion · внутренний стратегический документ</div>
-    <div>2026-06-01 · docs/prop/ · tracker/ernest#48</div>
+    <div>обновлено 2026-06-03 · docs/prop/ · tracker/ernest milestone #9</div>
   </div>
 </footer>
 
