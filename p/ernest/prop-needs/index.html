@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon-32.png">
+<title>Brain for your prop firm — коуч удержания (концепт + решение)</title>
+<meta name="description" content="Brain for your prop firm: сторонний AI-коуч, который превращает второй шанс фирмы в измеримое развитие трейдера — больше квалифицированных ретраев, меньше scam-оттока. Почему это incentive-aligned с B-book, развилка коуч/сертификатор и честный go/no-go.">
+<style>
+  :root{
+    --bg:#0a0b0d; --bg2:#101216; --surface:#14171c; --surface2:#1b1f26;
+    --line:#262b33; --line2:#333a44;
+    --txt:#e9e6df; --txt2:#b4b8bf; --muted:#7e838c;
+    --gold:#cba14e; --gold-soft:#e0c074; --teal:#46b89a; --red:#d65c52; --blue:#5b8fd6;
+    --maxw:1080px;
+    --serif:ui-serif,Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--txt);font-family:var(--sans);line-height:1.62;
+    font-size:17px;letter-spacing:.005em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:var(--gold-soft);text-decoration:none}
+  a:hover{text-decoration:underline}
+  ::selection{background:var(--teal);color:#000}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  section{padding:60px 0;border-top:1px solid var(--line)}
+  section:first-of-type{border-top:none}
+
+  .hero{position:relative;padding:96px 0 60px;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(900px 500px at 78% -10%,rgba(70,184,154,.15),transparent 60%),
+               radial-gradient(700px 400px at 8% 25%,rgba(203,161,78,.07),transparent 55%);
+    pointer-events:none}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--teal);margin-bottom:22px}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,5.4vw,58px);line-height:1.05;
+    letter-spacing:-.02em;color:#fff;max-width:18ch}
+  h1 em{font-style:italic;color:var(--teal)}
+  .lede{font-size:clamp(18px,2.4vw,22px);color:var(--txt2);max-width:64ch;margin-top:26px;line-height:1.55}
+  .hero-meta{margin-top:34px;display:flex;flex-wrap:wrap;gap:10px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .hero-meta span{border:1px solid var(--line2);border-radius:999px;padding:6px 13px}
+  .verdict-chip{display:inline-flex;align-items:center;gap:10px;margin-top:30px;font-family:var(--mono);
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);
+    border:1px solid rgba(70,184,154,.4);border-radius:999px;padding:8px 16px;background:rgba(70,184,154,.06)}
+  .verdict-chip b{color:#fff}
+
+  h2{font-family:var(--serif);font-weight:600;font-size:clamp(26px,3.8vw,38px);line-height:1.1;
+    letter-spacing:-.015em;color:#fff;max-width:26ch}
+  .sec-no{font-family:var(--mono);font-size:13px;color:var(--gold);letter-spacing:.18em;margin-bottom:14px;display:block}
+  h3{font-size:19px;font-weight:650;color:#fff;margin:0 0 6px;letter-spacing:-.01em}
+  p{color:var(--txt2);max-width:70ch;margin-top:16px}
+  p.tight{margin-top:10px}
+  strong{color:var(--txt);font-weight:650}
+  .accent{color:var(--gold-soft)}
+  .em-red{color:var(--red)}
+  .em-teal{color:var(--teal)}
+  .em-blue{color:var(--blue)}
+  .sub{font-size:14px;color:var(--muted);max-width:70ch;margin-top:14px}
+  .lead-after{font-size:19px;color:var(--txt);max-width:64ch}
+
+  .grid{display:grid;gap:16px;margin-top:32px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .card.hl{border-color:var(--line2);background:linear-gradient(180deg,var(--surface2),var(--surface))}
+  .card p{margin-top:8px;font-size:14.5px;max-width:none}
+  .card h3{font-size:17px}
+  .card .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:8px}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:32px}
+  .stat{background:var(--bg2);padding:22px 18px}
+  .stat .n{font-family:var(--serif);font-size:clamp(24px,3.4vw,34px);font-weight:600;color:#fff;letter-spacing:-.02em;line-height:1.05}
+  .stat .n.gold{color:var(--gold-soft)} .stat .n.red{color:var(--red)} .stat .n.teal{color:var(--teal)}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.4}
+
+  .versus{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
+  .vbox{border:1px solid var(--line);border-radius:14px;padding:24px;background:var(--surface)}
+  .vbox.bad{border-color:rgba(214,92,82,.32)}
+  .vbox.good{border-color:rgba(70,184,154,.34)}
+  .vbox.gold{border-color:rgba(203,161,78,.34)}
+  .vtag{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:12px}
+  .bad .vtag{color:var(--red)} .good .vtag{color:var(--teal)} .gold .vtag{color:var(--gold-soft)}
+  .vbox h3{font-size:17px}
+  .vbox p{font-size:14.5px;margin-top:10px;max-width:none}
+  .vbox ul{list-style:none;margin-top:12px}
+  .vbox ul li{font-size:14px;color:var(--txt2);padding-left:20px;position:relative;margin-top:9px;line-height:1.5}
+  .vbox.bad ul li::before{content:"✕";position:absolute;left:0;color:var(--red);font-size:12px}
+  .vbox.good ul li::before{content:"✓";position:absolute;left:0;color:var(--teal);font-size:12px}
+  .vbox.gold ul li::before{content:"◆";position:absolute;left:0;color:var(--gold-soft);font-size:11px}
+
+  ul.clean{margin-top:18px;list-style:none;max-width:72ch}
+  ul.clean li{position:relative;padding-left:24px;margin-top:11px;color:var(--txt2);font-size:15.5px}
+  ul.clean li::before{content:"→";position:absolute;left:0;color:var(--gold);font-family:var(--mono)}
+  ul.clean li b{color:#fff;font-weight:650}
+  ul.clean.have li::before{content:"✓";color:var(--teal)}
+
+  .callout{margin-top:28px;padding:26px 28px;border:1px solid var(--line2);border-radius:14px;
+    background:linear-gradient(135deg,rgba(70,184,154,.07),rgba(20,23,28,.4))}
+  .callout p{font-size:18px;color:var(--txt);max-width:68ch;margin-top:0}
+  .callout p + p{margin-top:14px}
+  .callout .q{font-family:var(--serif);font-style:italic;color:var(--teal)}
+  .callout.red{border-color:rgba(214,92,82,.4);background:linear-gradient(135deg,rgba(214,92,82,.09),rgba(20,23,28,.4))}
+  .callout.red .q{color:var(--gold-soft)}
+  .callout.gold{border-color:rgba(203,161,78,.4);background:linear-gradient(135deg,rgba(203,161,78,.08),rgba(20,23,28,.4))}
+  .callout.gold .q{color:var(--gold-soft)}
+
+  .tbl{margin-top:28px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .trow{display:grid;grid-template-columns:1.1fr 1.5fr 1.4fr;border-top:1px solid var(--line)}
+  .trow:first-child{border-top:none;background:var(--bg2);font-family:var(--mono);font-size:11px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .trow>div{padding:15px 18px;border-left:1px solid var(--line);font-size:13.5px;color:var(--txt2)}
+  .trow>div:first-child{border-left:none}
+  .trow .nm{color:#fff;font-weight:650;font-size:14px}
+  .trow.rec{background:linear-gradient(180deg,rgba(70,184,154,.08),var(--surface))}
+  .trow.rec .nm{color:var(--teal)}
+  .trow.garnish{opacity:.7}
+  .trow.garnish .nm{color:var(--muted)}
+
+  .steps{display:grid;gap:12px;margin-top:30px}
+  .step{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 24px;
+    display:grid;grid-template-columns:40px 1fr;gap:20px}
+  .step .sn{font-family:var(--serif);font-size:28px;font-weight:600;color:var(--gold);line-height:1}
+  .step h3{font-size:16.5px}
+  .step .meta{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px}
+  .step p{margin-top:10px;font-size:14px;color:var(--txt2);max-width:none}
+  .signals{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .sig{padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.45}
+  .sig.go{background:rgba(70,184,154,.08);border:1px solid rgba(70,184,154,.28);color:var(--txt2)}
+  .sig.kill{background:rgba(214,92,82,.07);border:1px solid rgba(214,92,82,.28);color:var(--txt2)}
+  .sig .sl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:5px}
+  .sig.go .sl{color:var(--teal)} .sig.kill .sl{color:var(--red)}
+
+  .pill{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+    padding:3px 9px;border-radius:999px;border:1px solid var(--line2);color:var(--txt2);margin:2px 4px 2px 0}
+  .pill.dead{color:var(--red);border-color:rgba(214,92,82,.3)}
+  .pill.open{color:var(--teal);border-color:rgba(70,184,154,.3)}
+  .pill.later{color:var(--gold-soft);border-color:rgba(203,161,78,.3)}
+
+  sup a{font-family:var(--mono);font-size:11px;color:var(--gold);text-decoration:none;padding:0 1px}
+  sup a:hover{text-decoration:underline}
+
+  .diagram{margin-top:32px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .diagram svg{width:100%;height:auto;display:block}
+  .dia-cap{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:14px;text-align:center;letter-spacing:.04em}
+
+  .src{font-size:13px;color:var(--muted)}
+  .src ol{margin-top:18px;padding-left:0;list-style:none;column-count:2;column-gap:36px}
+  .src li{break-inside:avoid;margin-bottom:11px;padding-left:26px;position:relative;line-height:1.45}
+  .src li .num{position:absolute;left:0;font-family:var(--mono);color:var(--gold);font-size:11px}
+  .src li b{color:var(--txt2)}
+
+  footer{padding:48px 0 70px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+
+  @media(max-width:760px){
+    .g2,.g3{grid-template-columns:1fr}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .versus{grid-template-columns:1fr}
+    .trow{grid-template-columns:1fr}
+    .trow>div{border-left:none;border-top:1px solid var(--line)}
+    .trow>div:first-child{border-top:none}
+    .trow:first-child{display:none}
+    .signals{grid-template-columns:1fr}
+    .src ol{column-count:1}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Ernest · B2B-концепт + решение · 2026-06-05</div>
+    <h1>Brain for your prop firm — <em>сторонний коуч</em>, который удерживает трейдера</h1>
+    <p class="lede">Не «отдайте нам риск-деск» и не «поднимем pass-rate». А: AI-коуч, который превращает ваш <strong>второй шанс</strong> в измеримое развитие трейдера — больше квалифицированных, вовлечённых, не-уходящих-в-ярости ретраев и меньше scam-оттока. Удержание, на котором проп зарабатывает.</p>
+    <div class="verdict-chip">вердикт: <b>PARTIALLY VALIDATED</b> · принять как коуч · спрос (N=0) проверить</div>
+    <div class="hero-meta">
+      <span>почему это incentive-aligned с B-book</span>
+      <span>развилка: коуч vs сертификатор</span>
+      <span>грань честности</span>
+      <span>challenge + validate тейка владельца</span>
+    </div>
+  </div>
+</header>
+
+<!-- 00 TL;DR -->
+<section id="tldr">
+  <div class="wrap">
+    <span class="sec-no">00 — Суть на один экран</span>
+    <h2>Проп живёт на повторных продажах. Значит рычаг — удержание, а не дисциплина</h2>
+    <p class="lead-after">Все пропы (включая B-book) зарабатывают не на одном сливе, а на <strong>повторных покупках</strong> (ресеты, ретраи; ~80–95% выручки — плата за попытки, в среднем ~3 попытки на трейдера). Их собственный рычаг — <em>работа с костами/риском</em>, не с психологией трейдера. Поэтому «brain for prop firm» нельзя продавать как «дисциплину-на-проход» (она режет маржу), а как <strong class="em-teal">удержание через настоящее развитие</strong>: трейдер растёт → мотивирован не сдаваться → докупает попытку → дольше живёт + доверие от стороннего care-слоя.</p>
+    <div class="callout">
+      <p><span class="q">Мотивированный докупающий трейдер стоит для той же B-book БОЛЬШЕ, чем ушедший навсегда.</span> И чтобы растить квалифицированные ретраи и резать scam-отток, никому не нужно больше <em>проходить</em> (это и есть анти-маржинальное событие). Дисциплина бьёт по марже B-book — удержание её кормит.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="n teal">≈70%</div><div class="l">тезиса уже на диске Ernest (GTM §7.6, PITCH_hashhedge, CALL_brief §38) — это <b>ре-элевация</b>, не открытие</div></div>
+      <div class="stat"><div class="n gold">≈70%</div><div class="l">продукта уже отгружено: F1 readiness + F3 training-challenge + F4 tilt-interrupt (#40–43, v47)</div></div>
+      <div class="stat"><div class="n red">только до funded</div><div class="l">на funded-стадии возражение <b>возвращается</b> → funded-доход по трейдер-рельсе, не по B-book</div></div>
+      <div class="stat"><div class="n">N=0</div><div class="l">фирм подтвердили спрос — всё на тёплом HashHedge, чья B-book-модель в доках <b>не проверена</b></div></div>
+    </div>
+    <p class="sub">Дальше: расщепление рычага (почему это бьёт `decisions.md:244`) → что покупает фирма → <strong>развилка коуч/сертификатор</strong> → грань честности → что уже построено → бизнес-модель → честный go/no-go.</p>
+  </div>
+</section>
+
+<!-- 01 LEVER UNBUNDLING -->
+<section id="lever">
+  <div class="wrap">
+    <span class="sec-no">01 — Расщепление рычага</span>
+    <h2>Почему это снимает возражение, на котором B2B закрыли</h2>
+    <p class="lead-after">`decisions.md:244` отверг «prop-firm B2B-SaaS» как «incentive обратный» — но он прочитал оффер как <strong>дисциплинарный</strong> рычаг (поднять pass-rate). Это правильно отвергнуто. Но это ровно ОДИН рычаг. Тезис подсовывает <strong>второй</strong>, который решение склеило в один: удержание/LTV. Это ортогональные векторы, не одна ось.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 940 420" role="img" aria-label="Расщепление рычага: дисциплина против маржи B-book vs удержание с маржой">
+        <defs>
+          <marker id="aL" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#7e838c"/></marker>
+          <marker id="aLr" markerWidth="10" markerHeight="10" refX="7.5" refY="3.2" orient="auto"><path d="M0,0 L8,3.2 L0,6.4 Z" fill="#d65c52"/></marker>
+          <marker id="aLt" markerWidth="10" markerHeight="10" refX="7.5" refY="3.2" orient="auto"><path d="M0,0 L8,3.2 L0,6.4 Z" fill="#46b89a"/></marker>
+        </defs>
+        <style>
+          .t3{fill:#e9e6df;font-family:var(--sans);font-size:13.5px;font-weight:600}
+          .ts3{fill:#b4b8bf;font-family:var(--sans);font-size:11.5px}
+          .tm3{fill:#7e838c;font-family:var(--mono);font-size:10px;letter-spacing:.05em}
+          .tred3{fill:#d65c52} .tteal3{fill:#46b89a} .tgold3{fill:#e0c074}
+        </style>
+        <!-- origin -->
+        <rect x="20" y="180" width="190" height="64" rx="11" fill="#14171c" stroke="#333a44" stroke-width="1.4"/>
+        <text class="t3" x="115" y="206" text-anchor="middle">Трейдер сдулся</text>
+        <text class="ts3" x="115" y="226" text-anchor="middle">на челлендже</text>
+
+        <!-- discipline path (up, red) -->
+        <path d="M210,196 C300,196 300,96 360,96" fill="none" stroke="#d65c52" stroke-width="1.8" marker-end="url(#aLr)"/>
+        <rect x="362" y="64" width="250" height="66" rx="10" fill="#1a1010" stroke="#d65c52" stroke-width="1.3"/>
+        <text class="tm3 tred3" x="378" y="86">РЫЧАГ 1 · ДИСЦИПЛИНА-НА-ПРОХОД</text>
+        <text class="ts3" x="378" y="106">↑ pass-rate → ↑ выплаты →</text>
+        <text class="t3" x="378" y="123" fill="#d65c52">✗ режет ~10% маржу B-book</text>
+        <path d="M612,97 L700,97" fill="none" stroke="#d65c52" stroke-width="1.6" marker-end="url(#aLr)"/>
+        <text class="tm3 tred3" x="705" y="86">decisions.md:244</text>
+        <text class="ts3" x="705" y="103">закрыл это</text>
+        <text class="ts3" x="705" y="119">(верно)</text>
+
+        <!-- retention path (down, teal) -->
+        <path d="M210,228 C300,228 300,330 360,330" fill="none" stroke="#46b89a" stroke-width="1.8" marker-end="url(#aLt)"/>
+        <rect x="362" y="296" width="250" height="74" rx="10" fill="#0f1714" stroke="#46b89a" stroke-width="1.4"/>
+        <text class="tm3 tteal3" x="378" y="318">РЫЧАГ 2 · УДЕРЖАНИЕ / РАЗВИТИЕ</text>
+        <text class="ts3" x="378" y="338">мотивирован, не уходит злым →</text>
+        <text class="ts3" x="378" y="355">докупает квалиф. попытку →</text>
+        <text class="t3" x="378" y="372" fill="#46b89a" font-size="11.5">✓ кормит повторные продажи (LTV)</text>
+        <path d="M612,333 L700,333" fill="none" stroke="#46b89a" stroke-width="1.6" marker-end="url(#aLt)"/>
+        <text class="tm3 tteal3" x="705" y="322">incentive-</text>
+        <text class="tm3 tteal3" x="705" y="338">aligned →</text>
+        <text class="ts3" x="705" y="356">новый рычаг</text>
+
+        <!-- middle note -->
+        <text class="tm3" x="300" y="214" text-anchor="middle" fill="#7e838c">ортогонально</text>
+      </svg>
+      <div class="dia-cap">Дисциплина и удержание — не одна ось. 244 закрыл верхний вектор; тезис едет по нижнему. Оффер просто не делает дисциплинарный питч → возражение обходится, а не переоткрывается.</div>
+    </div>
+    <div class="callout gold">
+      <p><span class="q">Граница: это держится ТОЛЬКО на пред-funded петле (челлендж/ресет).</span> На funded-стадии старое возражение не умирает, а <strong>релоцируется</strong>: профитный funded-трейдер режет маржу B-book (~98% уходят за 6 мес, отказы в выплатах — инструмент сброса). Значит «больше квалиф. ретраев + меньше scam-оттока» = aligned; «максимум выживания на funded» = НЕ aligned. Funded-апсайд (builder-code, sub) едет по <strong>трейдер/A-book рельсе</strong>, никогда по рельсе B-book-фирмы.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 02 WHAT FIRM BUYS -->
+<section id="buys">
+  <div class="wrap">
+    <span class="sec-no">02 — Что покупает фирма</span>
+    <h2>«Сторонний AI-care, который делает ваш второй шанс настоящим»</h2>
+    <p class="lead-after">Покупатель — основатель <strong>устойчивой</strong> (не одноразово-фармящей) проп-фирмы. Оффер не про «меньше сливов», а про качество и долготу отношений с трейдером — и про доверие, которое фирма сама о себе создать не может.</p>
+    <div class="grid g3">
+      <div class="card hl">
+        <span class="k">больше квалиф. ретраев</span>
+        <p>Вовлечённость на ретраях, retry-rate квалифицированных, доходимость до конца попытки. Трейдер, который видит прогресс, докупает попытку — это и есть выручка B-book.</p>
+      </div>
+      <div class="card hl">
+        <span class="k">меньше scam-оттока</span>
+        <p>Главный враг устойчивой фирмы — не трейдер, который проходит, а трейдер, который уходит, <strong>чувствуя себя обманутым</strong> (чарджбэки, Trustpilot, сарафан, риск карточной рельсы). Care-слой режет это.</p>
+      </div>
+      <div class="card hl">
+        <span class="k">доверие извне</span>
+        <p>«AI-коуч от Ernest, сторонней компании» — траст-актив, который фирма не может <em>сделать сама</em> (само-забота не убеждает скептика так, как сторонняя). Это <strong>не вердикт о фирме</strong> — это забота о трейдере.</p>
+      </div>
+    </div>
+    <p class="sub">Метрики пилота (уже выбраны в <code>CALL_brief §38</code>): engagement на ретраях · retry-rate квалифицированных · доходимость · scam-отток · days-to-breach как discipline-proxy. <strong>НЕ pass-rate / funded-survival</strong> — они против маржи B-book.</p>
+  </div>
+</section>
+
+<!-- 03 THE FORK -->
+<section id="fork">
+  <div class="wrap">
+    <span class="sec-no">03 — Развилка (которую доки прятали)</span>
+    <h2>Коуч и сертификатор — это два разных плеча. Слить нельзя</h2>
+    <p class="lead-after">Тезис молча сливает «коуча, которому платит фирма» с «нейтральным сертификатором / вторым табло» (концепт прошлого шага — «Ernest Attested»). Те же деньги фирмы, что платят за удержание, <strong>коррумпируют вердикт о фирме</strong> — ловушка рейтинговых агентств 2008. Это надо назвать развилкой.</p>
+    <div class="versus">
+      <div class="vbox good">
+        <div class="vtag">Option A · КОУЧ сейчас (wedge)</div>
+        <h3>Партнёр по развитию, платит фирма</h3>
+        <ul>
+          <li>Поставка = улучшение трейдера; деньги фирмы на retention-KPI</li>
+          <li>Легитимно платить фирме: коуч может «уволить» нефит-клиента (сказать «отступи»)</li>
+          <li>Монетизирует уже отгруженный код (F1/F3/F4) — дёшево</li>
+          <li>Аналоги: responsible-gambling SaaS, customer-success, income-share буткемпы, fitness-коучинг от зала</li>
+          <li class="em-red" style="color:var(--muted)">⚠ отказывается от любого нейтрального вердикта ПРО эту фирму · только пред-funded</li>
+        </ul>
+      </div>
+      <div class="vbox gold">
+        <div class="vtag">Option B · СЕРТИФИКАТОР потом (H2)</div>
+        <h3>Нейтральное «второе табло», вердикт о фирме</h3>
+        <ul>
+          <li>Skill-credible risk-adjusted вердикт об интегрити фирмы — прекондишн амбиции WSCT→TI</li>
+          <li>Долгосрочный траст-моат Ernest</li>
+          <li>Требует net-new инфры (verifiable ledger, OpenTimestamps, registry, decert)</li>
+          <li>Требует <strong>неконфликтного</strong> финансирования (трейдер / отраслевой орган / flat-методология, decoupled от удержания)</li>
+          <li class="em-red" style="color:var(--muted)">⚠ нельзя финансировать деньгами сертифицируемой фирмы</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout red">
+      <p><span class="q">Слить в одном платном контракте = ловушка 2008 с ярлыком «коучинг».</span> `WSCT_ernest.md:64` держит «второе табло» как хребет интегрити (нейтральный вердикт), а `CALL_brief §38` продаёт удержание ТОЙ ЖЕ фирме — доки держат это противоречие латентным. Правильная рамка: <strong>«коуч сейчас, walled-сертификатор потом»</strong> — не «коуч вместо сертификатора» (это разные плечи), и не «сертификатор внутри retention-контракта» (ловушка). Стену проектировать с дня один — дёшево сейчас, дорого ретрофитить.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 ANTI-FARMING LINE -->
+<section id="line">
+  <div class="wrap">
+    <span class="sec-no">04 — Грань честности</span>
+    <h2>Где удержание становится farming — и чем мы это держим</h2>
+    <div class="callout">
+      <p><span class="q">Ernest зарабатывает БОЛЬШЕ, когда трейдер реально прогрессирует, и НОЛЬ, когда его фармят без прогресса.</span> Операционально: день, когда ресет не случился бы без сфабрикованной Ernest надежды — это день, когда удержание стало farming’ом. Поэтому платим за реальный skill-gain + срез scam-оттока, и <strong>никогда за сырое число попыток/ресетов</strong>.</p>
+    </div>
+    <ul class="clean have">
+      <li><b>Гейт «отступи» уже отгружен</b> — <code>check_stepback</code> (<code>readiness.py:360</code>): 3 разных провальных рана ИЛИ 3 gap-чтения → честный шаг назад (expired-раны исключены). Детерминированный код, не обещание.</li>
+      <li><b>Это тест «готов потерять продажу».</b> Mock говорит нефиту «уйди» ценой сделки — это одновременно доказательство анти-farming и <strong>фильтр партнёра</strong>: одноразовый фарм-проп откажется от честной фильтрации, долгосрочный — примет (меньше злых уходящих + регуляторная подушка + дифференциация).</li>
+      <li><b>Что НЕ проверено</b> (честно): предиктивная калибровка mock’а на pass-пути — нет числа false-negative (трейдер прошёл mock и слил реал). Гейт на провалах честен; верхний путь пока заявлен, не доказан. <span class="em-red">→ в go/no-go</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 05 ALREADY BUILT -->
+<section id="built">
+  <div class="wrap">
+    <span class="sec-no">05 — Что уже построено</span>
+    <h2>Это продаёт ядро Ernest, а не новый продукт</h2>
+    <p class="lead-after">Главное преимущество coach-рамки над certifier-рамкой: минимальная новая стройка. Коуч продаёт уже отгруженное; сертификатор требует net-new registry/ledger/decert (H2).</p>
+    <ul class="clean have">
+      <li><code>F1 readiness-read</code> — чтение готовности, в проде (#40)</li>
+      <li><code>F3 training-challenge</code> — мок-челлендж на ruleset фирмы, реальное эквити (#42/#43, схема v47)</li>
+      <li><code>F4 tilt-interrupt</code> — real-time перехват тилта, главный value-слой</li>
+      <li><code>check_stepback</code> (<code>readiness.py:360</code>) — детерминированный гейт «отступи»</li>
+      <li><code>cards/render.py</code> — share-safe карточки (SVG→PNG, без сырого P&amp;L) для discovery/отчётов</li>
+      <li>Остаётся построить: B2B/мульти-тенант обвязка + атрибуция/отчётность по retention-KPI для фирмы</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 06 BUSINESS MODEL -->
+<section id="model">
+  <div class="wrap">
+    <span class="sec-no">06 — Бизнес-модель</span>
+    <h2>Хребет — трейдер-оплата. Деньги фирмы — только decoupled от ресетов</h2>
+    <div class="tbl">
+      <div class="trow"><div>Линия</div><div>Механика</div><div>Выравнивание стимула</div></div>
+      <div class="trow rec">
+        <div class="nm">Трейдер-оплата: Get-Funded Pass<br><span class="pill open">хребет</span></div>
+        <div>$79–149/челлендж от трейдера, flat service-fee (не success-fee), только vetted-пропы. Независимо от фирмы.</div>
+        <div>Единственная линия с <strong>автоматическим</strong> выравниванием: платит трейдер → лояльность Ernest куплена тем, кому он служит. Это и делает «коуч-не-рефери» структурно возможным.</div>
+      </div>
+      <div class="trow">
+        <div class="nm">Фирма: flat-ретейнер / fee за активно-коучимого</div>
+        <div>Фикс-ретейнер ИЛИ плата за активно-коучимого трейдера, в контракте <strong>явно decoupled</strong> от числа попыток/ресетов.</div>
+        <div>Платит одинаково при 1 ресете и при 5 → не может вознаграждать фабрикацию ресетов. Как B2B customer-success.</div>
+      </div>
+      <div class="trow">
+        <div class="nm">Фирма: fee за skill-milestone</div>
+        <div>Триггер на <em>верифицированном</em> пороге готовности (mock прошёл калиброванную планку), не на покупке. Как income-share в edtech.</div>
+        <div>Структурно не может вознаградить фарм нефита: нет прогресса → нет fee. Оговорка: трётся о позицию «flat-fee, без гарантий исхода» → юрист до прайсинга.</div>
+      </div>
+      <div class="trow">
+        <div class="nm">Фирма: бонус за срез scam-оттока</div>
+        <div>Бонус привязан к улучшению dispute-rate / angry-quit / Trustpilot.</div>
+        <div>Метрику двигает только хорошее обращение с трейдерами — фарм гонит её не туда. Линия, которая <strong>наказывает</strong> dark-pattern.</div>
+      </div>
+      <div class="trow">
+        <div class="nm">Funded-апсайд: builder-code / sub<br><span class="pill open">трейдер-рельса</span></div>
+        <div>Builder-code + funded-подписка — по трейдер/A-book рельсе, НИКОГДА по B-book-фирме.</div>
+        <div>Lifetime-aligned: трейдер выживает, только если реально хорош. Off-B-book, потому что на funded интерес фирмы расходится с трейдером.</div>
+      </div>
+      <div class="trow garnish">
+        <div class="nm">Prop-affiliate / rev-share на попытках</div>
+        <div>Recurring affiliate как гарнир (GTM: ~$30–100K @10K active, $1M лишь @~50K). Лучше на A-book.</div>
+        <div>Слабейшее выравнивание — платит за ресеты независимо от прогресса. Доки уже демоутят («гарнир, не двигатель»). Никогда не двигатель.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 GO/NO-GO -->
+<section id="decision">
+  <div class="wrap">
+    <span class="sec-no">07 — Идти или нет</span>
+    <h2>Вердикт: PARTIALLY VALIDATED — принять как коуч, спрос проверить</h2>
+    <p class="lead-after">Тезис верный по сути и чисто бьёт `decisions.md:244` — но узко (только пред-funded, только идентичность «коуч»), молча сливает коуча с сертификатором, переоценивает новизну (≈70% на диске) и стоит на N=0 / одной непроверенной тёплой B-book.</p>
+
+    <div class="versus">
+      <div class="vbox good">
+        <div class="vtag">что выжило под скепсисом</div>
+        <ul>
+          <li>Экономика верна и уже на диске (GTM §7.6 таблица рычагов, PITCH §27/§32, CALL_brief §38)</li>
+          <li>Minimal-build реален: F1+F3+F4 отгружены; сертификатор требует net-new инфры (H2)</li>
+          <li>Контр-аргумент «acquire-farm-reacquire» падает против <em>устойчивой</em> B-book (CAC&gt;retention, ~3 попытки/трейдер)</li>
+          <li>Гейт «отступи» не вода — <code>check_stepback</code> отгружен</li>
+        </ul>
+      </div>
+      <div class="vbox bad">
+        <div class="vtag">что не выжило «как заявлено»</div>
+        <ul>
+          <li>Новизна: это ре-элевация закопанной рамки, не открытие — энергию соразмерить</li>
+          <li>Слияние коуч/сертификатор: те же деньги фирмы коррумпируют вердикт (2008) — доки не называют развилку</li>
+          <li>Спрос: HashHedge-модель в доках помечена непроверенной; готовность репозиционироваться — OPEN; N=0 подписано</li>
+          <li>Калибровка mock на pass-пути не измерена; атрибуция на N=20–50 без контроля статистически безнадёжна</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout red" style="margin-top:30px">
+      <p><span class="q">Связывающий риск — спрос, а не выполнимость.</span> Вся B-book-теза висит на HashHedge, чью B-book-модель доки сами помечают непроверенной (`00_DOSSIER:104`, `CALL_brief:41`), а готовность фаундера репозиционироваться в «развитие» — открытый вопрос (`CALL_brief item 2`). Это одна тёплая связь, ноль подписано. Без независимой второй B-book это one-customer консалтинг, наряженный платформой.</p>
+    </div>
+
+    <h3 style="margin-top:36px">Что проверить (дёшево, до стройки)</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="sn">1</div>
+        <div>
+          <h3>Звонок HashHedge — самый дешёвый и сильный тест</h3>
+          <div class="meta">тёплый контакт · спросить прямо</div>
+          <p>A-book или B-book? структура маржи? готовность частично репозиционироваться в «развитие трейдера» vs чистый фарм (<code>CALL_brief item 2</code>)? data-access (Binance feed/CSV для метрик пилота, item 4)?</p>
+          <div class="signals">
+            <div class="sig go"><span class="sl">GO</span>да на репозиционирование в развитие + готов дать data-access + назвал retention-KPI как ценность</div>
+            <div class="sig kill"><span class="sl">KILL</span>«нет» на репозиционирование → firm-paid линия мертва до любой стройки; партнёрство схлопывается в чистый фарм (брендово несовместимо)</div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sn">2</div>
+        <div>
+          <h3>Одна НЕ-HashHedge B-book</h3>
+          <div class="meta">отделить рыночный сигнал от тёплой связи</div>
+          <p>Холодно проверить retention-KPI-оффер против одной независимой B-book. Заплатят ли на <strong>decoupled</strong> retention-метриках (ретейнер/skill-milestone/scam-бонус), не на числе ресетов?</p>
+          <div class="signals">
+            <div class="sig go"><span class="sl">GO</span>1+ независимая B-book называет цифру и не вздрагивает от decoupling от ресетов</div>
+            <div class="sig kill"><span class="sl">KILL</span>хотят платить только за объём ресетов (= просят фарм), или все «да» сводятся к HashHedge</div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sn">3</div>
+        <div>
+          <h3>Калибровка mock + дизайн атрибуции (без новой стройки)</h3>
+          <div class="meta">ретроспектива на существующих <code>challenge_runs</code></div>
+          <p>Проверить, коррелирует ли mock-PASS с реальной последующей доходностью → опубликовать false-negative pass-пути. И спроектировать пилот с <strong>контрольной когортой</strong> (не pre/post N=20–50) ДО подписания — иначе «мы подняли retention» недоказуемо (и сам по себе траст-риск для анти-буллшит-бренда).</p>
+          <div class="signals">
+            <div class="sig go"><span class="sl">GO</span>mock-PASS предсказывает реальную доходность лучше шума; контрольный дизайн возможен</div>
+            <div class="sig kill"><span class="sl">KILL</span>mock-PASS = оверфит/шум на малом N → «развитие не фарм» на pass-пути недоказуемо</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout gold" style="margin-top:30px">
+      <p><span class="q">Рекомендация: ПРИНЯТЬ рефрейм — но как коуч, трейдер-оплата = хребет, сертификатор за стеной, и не звать валидированным, пока HashHedge + одна независимая B-book не подтвердят.</span></p>
+      <p class="tight" style="font-size:15px;color:var(--txt2)">Конкретно: (1) поднять удержание/развитие из закопанного гарнира в <strong>главную B-book-тезу</strong>, явно названную «коуч». (2) Амендмент к <code>decisions.md:244</code> одной строкой (ре-вес, не молчаливый переоткрыв): «дисциплина-на-проход остаётся отвергнутой; retention/LTV-рычаг — идентичность коуча, scam-отток+квалиф-ретраи, anti-farming-gated, только пред-funded — incentive-aligned, и это одобренный B-book угол». (3) Хребет = трейдер-оплата; деньги фирмы только на линиях, которые <em>могут стоить</em> плательщику при абузе. (4) Одна идентичность на отношение: firm-paid = коуч, и Ernest публично/контрактно отказывается от нейтрального вердикта о фирме; сертификатор — отдельное H2-плечо со стеной с дня один. (5) Заголовок-удержание — за двумя невыполненными условиями: калибровка mock + дизайн атрибуции.</p>
+    </div>
+    <p class="sub">Несущая однострочка остаётся в заголовке, не в сноске: <strong class="em-teal">Ernest говорит нефит-трейдеру уйти — даже ценой продажи.</strong></p>
+  </div>
+</section>
+
+<!-- SOURCES -->
+<section id="sources">
+  <div class="wrap src">
+    <span class="sec-no">Источники и оговорки</span>
+    <p style="color:var(--muted);max-width:72ch">Веб-ресёрч (2026) + сверка с кодом Ernest и стратегией (`docs/prop/`, `docs/decisions.md`) на 2026-06-05. Отраслевые цифры оценочные. Внутренние цифры HashHedge (4500 трейдеров, $11M, 4.7 Trustpilot, 15% affiliate) — dossier-only, B-book-модель не верифицирована. Аналитика: воркфлоу challenge+validate (3 заземления → стилман ∥ ред-тим → вердикт), поверх двух предыдущих (12-агентного «может ли стать пропом» + 9-агентного «Ernest Attested»).</p>
+    <ol>
+      <li><span class="num">1</span> <b>Расщепление рычага уже на диске</b>: GTM §7.6 (line 167-168) — таблица «Больше pass-rate → угроза марже» vs «Угол оффера → объём квалиф. попыток»; PITCH_hashhedge §27/§32 — «второй шанс = повторная оплата, конкретизировать-не-корраптить»; CALL_brief §38 — пилот-метрики retention, НЕ pass-rate.</li>
+      <li><span class="num">2</span> <b>Экономика проп-фирм</b>: ~80–95% выручки — плата за попытки; в среднем ~3 попытки/трейдер; ~10% маржа B-book; для устойчивой фирмы CAC&gt;retention → удержание выгодно. Reset/retry = recurring SKU.</li>
+      <li><span class="num">3</span> <b>Funded-релокация возражения</b>: ~98% funded-трейдеров «отваливаются» за 6 мес; отказы в выплатах — инструмент сброса прибыльных. На funded интерес B-book расходится с трейдером → funded-доход только по трейдер/A-book рельсе.</li>
+      <li><span class="num">4</span> <b>Развилка коуч/сертификатор</b>: `WSCT_ernest.md:64` — «второе табло» = хребет интегрити (нейтральный вердикт о фирме); `:75` — «Integrity vs B-book» как нерешённый край. Те же деньги фирмы коррумпируют вердикт = ловушка рейтинговых агентств 2008. Доки не называли это развилкой.</li>
+      <li><span class="num">5</span> <b>Аналоги «платит дом, служит игроку»</b>: responsible-gambling SaaS, B2B customer-success, income-share буткемпы, results-paid fitness-коучинг. Коуч (платит фирма) легитимен — поставка = улучшение игрока + право «уволить» нефита; аудитор/рефери (платит фирма) = ловушка 2008.</li>
+      <li><span class="num">6</span> <b>Грань честности / гейт</b>: `check_stepback` (<code>readiness.py:360</code>) — отгружен: 3 разных провальных рана ИЛИ 3 gap-чтения → шаг назад (expired исключены). `decisions.md:249` brand line: «retry инженерить не надо». Не проверено: предиктивная калибровка mock на pass-пути.</li>
+      <li><span class="num">7</span> <b>Отгруженный продукт</b>: F1 (#40), F2/F3 (#41/#42/#43, схема v47), F4 tilt-interrupt, <code>cards/render.py</code>. Coach-рамка = minimal-build; certifier = net-new (registry/ledger/OpenTimestamps/decert), H2.</li>
+      <li><span class="num">8</span> <b>Спрос N=0</b>: `00_DOSSIER:104` + `CALL_brief item 2/item 4` — B-book-модель HashHedge непроверена, готовность репозиционироваться OPEN, data-access открыт. HashHedge: B-book/Binance, ~4500/$11M/4.7, 15% recurring affiliate, тёплый хук Walbi×WSCT сен 2025.</li>
+      <li><span class="num">9</span> <b>Решение</b>: PARTIALLY VALIDATED. Бьёт 244 узко (две оси), только пред-funded. Рекомендация: принять как коуч, трейдер-оплата = хребет, сертификатор за стеной (H2), амендмент к 244, gate спроса на звонке HashHedge + одной независимой B-book.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Ernest · Brain for your prop firm (коуч удержания) — концепт + решение · 2026-06-05</span>
+    <span>autorun.dev/p/ernest/prop-needs</span>
+  </div>
+</footer>
+
+</body>
+</html>

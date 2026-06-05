@@ -11,6 +11,7 @@ services:
       - ./fonts:/usr/share/nginx/html/fonts:ro
       - ./odds8:/usr/share/nginx/html/odds8:ro
       - ./s:/usr/share/nginx/html/s:ro
+      - ./p:/usr/share/nginx/html/p:ro
       - ./robots.txt:/usr/share/nginx/html/robots.txt:ro
       - ./sitemap.xml:/usr/share/nginx/html/sitemap.xml:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
